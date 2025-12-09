@@ -1,0 +1,7 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="mario/mario.vcxproj" Id="9c36f2a0-25a5-4d80-baf7-1308ad60ef72" />
+</Solution>
