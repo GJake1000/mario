@@ -118,10 +118,12 @@ char Point::itemToDispose(Screen& screen, int roomNum) {
 //=========================draw to inventory=================================
 bool Point::drawToInventory(Screen& screen, int roomNum, char item) {
 	if (checkInventory(screen, roomNum) == EMPTY_CELL || item == EMPTY_CELL) {
-		for (int i = 0; i < Screen::NUM_OF_ROOMS; i++) {           // draw item in all rooms' inventories       
-			screen.setChar(inventoryX, inventoryY, i, item);
+		if (diff_x != 0 || diff_y != 0) {
+			for (int i = 0; i < Screen::NUM_OF_ROOMS; i++) {           // draw item in all rooms' inventories       
+				screen.setChar(inventoryX, inventoryY, i, item);
+			}
+			return true;
 		}
-		return true;
 	}
 	return false;
 }

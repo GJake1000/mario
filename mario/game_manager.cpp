@@ -64,7 +64,7 @@ void game_manager::run() {
 			}
 			if (textAppears == true) {
 				output_time++;
-				if(output_time < 150)
+				if(output_time > 150)
 				{
 					output_time = 0;
 					eraseOutput();
@@ -264,13 +264,13 @@ char game_manager::printRiddle0() {
 	return '2';
 }
 
-////=========================riddle 1=================================
+//=========================riddle 1=================================
 char game_manager::printRiddle1() {
 	cls();
 	std::cout << "\n\n\n         Riddle: I exist only when there is light, but direct light kills me.\n                 I grow tall when the sun goes down, but disappear completly in the dark\n                 What am I?\n\n";
 	std::cout << "         (1) A Vampire\n";
 	std::cout << "         (2) A Dream\n";
-	std::cout << "         (3) A Shdow\n";
+	std::cout << "         (3) A Shadow\n";
 	std::cout << "         (4) A Mushroom\n";
 	return '3';
 }
@@ -387,4 +387,6 @@ void game_manager::turnOff(int x, int y, int roomNum) {
 		}
 	}
 	screen.setChar(x, y, roomNum, SWITCH);
+	if (roomNum == 1 && !hasTorch())
+		screen.setDark();
 }
