@@ -21,7 +21,7 @@ private:
 				"W  WWW                     W           W          D    W    WWWWWWWWWWWW       W", // 2
 				"W           WWWWWWW    K   W            WWWWWWWWWWW    W    W           W      W", // 3
 				"W  WW       W  /  W        WWWWWWWWWW             W    W    W   W       W      W", // 4
-				"W   W       W     WWWWWWWWWW            W         W    W    W   W       W      W", // 5
+				"W   W       W     WWWWWWWWWW            W         W    W    W   W       W  @   W", // 5
 				"W   W       W          W     WWW        W         W    W    W   W   WWWWWWWWWWWW", // 6
 				"WWWWW   WWWWWWWWWWW    W         W      W         W    W    W   W              W", // 7
 				"W       W              W         W      W         W         W   WWWWWWWWWWWW   W", // 8
@@ -62,12 +62,12 @@ private:
 				"W  WWW   WWW       WWWW   WW    WW      WWW   WWWWWW   WWWW    WW   WW         W", // 13
 				"W  WWW             WWWW   WW    WW      DDD            WWWW    WW   WW         W", // 14
 				"W  WWW                    WW    WW      WWWWWWWWW      WWWW    WW              W", // 15
-				"WWWWWWWWWWWWWW     WWWW   WW    WW      WWW  ?  W      WWWW    WW   WDDDDDDDDDDW", // 16
+				"WWWWWWWWWWWWWW     WWWW   WW    WWWW  WWWWW  ?  W      WWWW    WW   WDDDDDDDDDDW", // 16
 				"WWWWWWWWWWWWWW     WWWW   WW            WWW  W  W   WWWWWWWWWWWWW   WW         W", // 17
 				"W        /  WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW  W  W   WWWWWWWWWWWWW   WWW        W", // 18
-				"W    WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW  W  W                   WWWWW      W", // 19
-				"W0          WWWWW             WWWWWWWWW      W  WWWWWWWWWWWWWWWWW   WWWWWW    2W", // 20
-				"W0      WW          WWWWWWW                  W                      WWWWWWW   2W", // 21
+				"W    WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW  W  W                   WWWWW    **W", // 19
+				"W0          WWWWW             WWWWWWWWW      W  WWWWWWWWWWWWWWWWW   WWWWWW   *2W", // 20
+				"W0      WW          WWWWWWW                  W                      WWWWWWW  *2W", // 21
 				"WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW", // 22
 				"                                                                                ", // 23
 				"Player &:                            INVENTORY                   Player $:      ", // 24

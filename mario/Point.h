@@ -3,6 +3,7 @@
 #include "utils.h"
 #include "auxThing.h"
 class Screen;
+class game_manager;
 
 class Point {
 	enum { MAX_X = 79, MAX_Y = 24 };
@@ -15,6 +16,7 @@ class Point {
 	Color color;
 	int inventoryX, inventoryY;
 	static bool colorChose;
+	game_manager* gm = nullptr;
 
 public:
 	Point(int x1, int y1, char p, const char(&my_keys)[NUM_KEYS + 1],
@@ -29,6 +31,9 @@ public:
 		y = y1;
 
 	}
+	void setGameManager(game_manager* game) {
+		gm = game;
+	}
 	void draw();
 	void draw(char p);
 	void move(bool canMove);
@@ -37,13 +42,15 @@ public:
 	char itemToDispose(Screen& screen, int roomNum);
 	bool drawToInventory(Screen& screen, int roomNum, char item);
 	char checkInventory(Screen& screen, int roomNum) const;
-	void dispose(Screen& screen, int roomNum);
+	char dispose(Screen& screen, int roomNum);
 	void setPosition(int newX, int newY);
 	char getPlayerChar() const;
 	int getX() const;
 	int getY() const;
 	int getNextX() const;
 	int getNextY() const;
+	int getDifX() const {return diff_x;}
+	int getDifY() const {return diff_y;}
 	static bool isColorChose() {
 		return colorChose;
 	}

@@ -129,6 +129,7 @@
   <ItemGroup>
     <ClCompile Include="game_manager.cpp" />
     <ClCompile Include="mario.cpp" />
+    <ClCompile Include="Obstacle.cpp" />
     <ClCompile Include="Point.cpp" />
     <ClCompile Include="Screen.cpp" />
     <ClCompile Include="utils.cpp" />
@@ -137,6 +138,7 @@
     <ClInclude Include="auxThing.h" />
     <ClInclude Include="DIrection.h" />
     <ClInclude Include="game_manager.h" />
+    <ClInclude Include="Obstacle.h" />
     <ClInclude Include="Point.h" />
     <ClInclude Include="Screen.h" />
     <ClInclude Include="utils.h" />

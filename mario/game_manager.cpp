@@ -12,6 +12,7 @@ void game_manager::newGameStarter()
 	points[0].setPosition(1, 15);
 	points[1].setPosition(1, 17);
 	screen.resetRoom();
+	obsDef();
 }
 
 //=========================game manager constructor=================================
@@ -21,6 +22,9 @@ game_manager::game_manager() : points{
 	Point(1 ,17, '$', STARDARD_PLAYER_2_KEYS, Color::blue, 75)  // i - up, l - right, m - down, j - left, k - stay
 }
 {
+	// set game manager for each point
+	points[0].setGameManager(this);
+	points[1].setGameManager(this);
 }
 
 //=========================run game manager=================================
@@ -38,6 +42,13 @@ void game_manager::run() {
 
 		while (true) {
 			onOffLight(dark);
+
+			// check for bomb activation
+			if (bombDisposalTime != -1 && turn - bombDisposalTime >= 5) {
+				activateBomb(screen, bombX, bombY, bombRoom);
+				bombDisposalTime = -1; // reset bomb timer
+			}
+
 			for (auto& p : points) {
 				char curChar = screen.charAt(p, currentRoom);
 				p.draw(curChar);             // erase previous position
@@ -73,12 +84,12 @@ void game_manager::run() {
 				
 			turn++;	//counts turns in the game
 			Sleep(50);
+
 		}
 	}
 	cls();
 	printCredits();		//end game
 }
-
 
 //=========================load menu=================================
 bool game_manager::loadMenu()
@@ -197,6 +208,14 @@ void game_manager::handleSpacialItem(Point& p, int x, int y, char item) {
 		handleKey(p, x, y);
 		break;
 
+	case BOMB:
+		handleBomb(p, x, y);
+		break;
+
+	case OBSTACLE:
+		handleObstacle(p, x, y);
+		break;
+
 	case DOOR:		//door to 0 (probably does not exist)
 	case '1':		//door to 1
 	case '2':		//door ??? win maybe?
@@ -252,7 +271,6 @@ void game_manager::handleRiddle(Point& p, int x, int y) {
 	}
 }
 
-
 //=========================riddle 0=================================
 char game_manager::printRiddle0() {
 	cls();
@@ -297,18 +315,74 @@ void game_manager::handleKey(Point& p, int x, int y) {
 	}
 }
 
+//=========================handle bomb=================================
+void game_manager::handleBomb(Point& p, int x, int y) {
+	if (p.drawToInventory(screen, currentRoom, BOMB)) {
+		screen.setChar(x, y, currentRoom, EMPTY_CELL); // remove bomb from the room
+	}
+}
+
+//=========================set bomb timer=================================
+void game_manager::setBombTimer(int x, int y, int roomNum) {
+	bombDisposalTime = turn;
+	bombX = x;
+	bombY = y;
+	bombRoom = roomNum;
+}
+
+//=========================activate bomb=================================
+void game_manager::activateBomb(Screen& screen, int x, int y, int roomNum) {
+	// explode bomb at (x,y) in roomNum
+	int radius = 3; // radius of explosion
+	for (int row = y - radius; row <= y + radius; row++) {
+		for (int col = x - radius; col <= x + radius; col++) {
+			int distX = col - x;
+			int distY = row - y;
+			int distanceSquared = distX * distX + distY * distY;
+
+			if (distanceSquared <= radius * radius && screen.charAt(col, row, roomNum) != 'W') { // do not destroy walls
+				screen.setChar(col, row, roomNum, EMPTY_CELL);
+			}
+		}
+	}
+}
+
+//===========================handle obstacle=================================
+void game_manager::handleObstacle(Point& p, int x, int y) {
+	Obstacle* obs = findObs(x, y);
+
+	Point& secPyr = (p.getPlayerChar() == points[0].getPlayerChar()) ? points[1] : points[0];
+	bool secPush = obs->loc(secPyr.getNextX(), secPyr.getNextY(), currentRoom);
+	bool sameDir = (p.getDifX() == secPyr.getDifX() && p.getDifY() == secPyr.getDifY());
+
+	if (secPush && sameDir) { // both players are pushing the obstacle in the same direction
+		obs->tryMove(p.getDifX(), p.getDifY(), screen);
+	}
+}
+
+//===========================find obstacle=================================
+Obstacle* game_manager::findObs(int x, int y) {
+	for (auto& obs : obstacles)
+		if (obs.loc(x, y, currentRoom))
+			return &obs;
+	return nullptr;
+}
+
+//===========================define obstacles=================================
+void game_manager::obsDef() {
+	obstacles.clear();
+	// Define obstacles here if needed
+	obstacles.push_back(Obstacle(36, 16, 2, 1, 1)); // obstacle 1
+	for (const auto& obs : obstacles)
+		obs.draw(screen);
+}
+
 //===========================handle door=================================
 void game_manager::handleDoor(Point& currentPlayer, char doorNum) {
 	char inv1 = '\0', inv2 = '\0';
-	for (const auto& player : points) {
-		if (player.getPlayerChar() == currentPlayer.getPlayerChar()) {
-			inv1 = player.checkInventory(screen, currentRoom);
-			continue;
-		}
-		char secPlayerChar = screen.charAt(player.getX(), player.getY(), currentRoom);
-		inv2 = player.checkInventory(screen, currentRoom);
-		if (secPlayerChar != doorNum)
-			return;
+	if (!bothPlayersAtSameChar(currentPlayer, doorNum, inv1, inv2)) {
+		textAppears = printOutput("Both players must be at the door to enter !");
+		return;
 	}
 
 	if (inv1 != KEY && inv2 != KEY && doorNum - '0' > currentRoom && screen.searchItem(currentRoom, KEY)) {		//if none of the players have a key, the door will not open
@@ -338,6 +412,21 @@ void game_manager::handleDoor(Point& currentPlayer, char doorNum) {
 
 	if (currentRoom == 2)
 		screen.helpLockPlayers();
+}
+
+//===========================both players at same char=================================
+bool game_manager::bothPlayersAtSameChar(Point& pyr1, char checker, char& inv1, char& inv2) {
+	for (const auto& player : points) {
+		if (player.getPlayerChar() == pyr1.getPlayerChar()) {
+			inv1 = player.checkInventory(screen, currentRoom);
+			continue;
+		}
+		char secPlayerChar = screen.charAt(player.getX(), player.getY(), currentRoom);
+		inv2 = player.checkInventory(screen, currentRoom);
+		if (secPlayerChar != checker)
+			return false;
+	}
+	return true;
 }
 
 //==============================on off lights=============================

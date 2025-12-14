@@ -11,6 +11,8 @@ constexpr char KEY = 'K';
 constexpr char RIDDLE = '?';
 constexpr char DOOR = '0';
 constexpr char EMPTY_CELL = ' ';
+constexpr char BOMB = '@';
+constexpr char OBSTACLE = '*';
 
 constexpr int HEB_VAV    = 39;   // ו
 constexpr int HEB_ZAYIN  = 225; // ז
