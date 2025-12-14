@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+
 constexpr char STARDARD_PLAYER_1_KEYS[] = "WDXASE";
 constexpr char STARDARD_PLAYER_2_KEYS[] = "ILMJKO";
 constexpr int DISPOSE_KEY = 5;
@@ -11,6 +12,8 @@ constexpr char KEY = 'K';
 constexpr char RIDDLE = '?';
 constexpr char DOOR = '0';
 constexpr char EMPTY_CELL = ' ';
+constexpr char BOMB = '@';
+constexpr char OBSTACLE = '*';
 
 constexpr int HEB_VAV    = 39;   // ו
 constexpr int HEB_ZAYIN  = 225; // ז

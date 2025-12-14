@@ -1,9 +1,11 @@
 ﻿#include "Point.h"
 #include "Screen.h"
+#include "game_manager.h"
 #include <iostream>
 #include <cctype>
-class Screen;
 
+
+class Screen;
 
 //=========================draw point=================================
 bool Point::colorChose = true;
@@ -69,9 +71,11 @@ void Point::handleKeyPressed(int key, Screen& screen, int roomNum) {
 	size_t index = 0;
 	for (char k : keys) { // check which key was pressed and set direction accordingly
 		if (std::toupper((unsigned char)letter) == std::toupper((unsigned char)k)) {
-			if (index == DISPOSE_KEY)    // DISPOSE
-				dispose(screen, roomNum);
-
+			if (index == DISPOSE_KEY){    // DISPOSE
+				char disposed = dispose(screen, roomNum);
+				if (disposed == BOMB && gm != nullptr) 
+					gm->setBombTimer(x, y, roomNum);
+			}
 			else setDirection((Direction)index);
 			return;
 		}
@@ -134,12 +138,13 @@ char Point::checkInventory(Screen& screen, int roomNum) const {
 }
 
 //=========================dispose=================================
-void Point::dispose(Screen& screen, int roomNum) {
+char Point::dispose(Screen& screen, int roomNum) {
 	char invItem = itemToDispose(screen, roomNum);
 	if (invItem != EMPTY_CELL)
 		if (screen.charAt(x, y, roomNum) == EMPTY_CELL)
 			screen.setChar(x, y, roomNum, invItem); // place item from inventory to current position
 	drawToInventory(screen, roomNum, ' ');
+	return invItem;
 
 }
 

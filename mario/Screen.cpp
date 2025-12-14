@@ -92,7 +92,7 @@ void Screen::draw(int roomNum) const {
 // =========================checks of we are going to bump in to a wall =================================
 bool Screen::isWall(int x, int y, int roomNum) const {
 	if (x >= 0 && x <= MAX_X && y >= 0 && y <= MAX_Y) {
-		return rooms[roomNum][y][x] == 'W' || rooms[roomNum][y][x] == 'D';
+		return rooms[roomNum][y][x] == 'W' || rooms[roomNum][y][x] == 'D' || rooms[roomNum][y][x] == OBSTACLE;
 	}
 	return true; // out of bounds is considered a wall
 }
