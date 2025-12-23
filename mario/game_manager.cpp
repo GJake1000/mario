@@ -229,7 +229,8 @@ void game_manager::handleSpacialItem(Point& p, int x, int y, char item) {
 
 	case DOOR:		//door to 0 (probably does not exist)
 	case '1':		//door to 1
-	case '2':		//door ??? win maybe?
+	case '2':
+	case '3':       //door ??? win maybe?
 		handleDoor(p, item); //only if has key == true
 		break;
 	}
@@ -264,6 +265,7 @@ void game_manager::handleRiddle(Point& p, int x, int y) {
 	while (true) {
 		if (_kbhit()) {
 			char ans = _getch();
+			if ('4' < ans || '0' > ans) continue;  // not in boundries
 			bool wasRight = handleAnswer(correct, ans, p);
 			if (wasRight) screen.setChar(x, y, currentRoom, ' ');
 			cls();
@@ -359,8 +361,8 @@ void game_manager::activateBomb(Screen& screen, int x, int y, int roomNum) {
 			int distX = col - x;
 			int distY = row - y;
 			int distanceSquared = distX * distX + distY * distY;
-
-			if (distanceSquared <= radius * radius && screen.charAt(col, row, roomNum) != 'W') { // do not destroy walls
+			bool isOuterWall = (col == 0 || col == Screen::MAX_X || row == 0 || row == Screen::MAX_Y - 3);
+			if (!isOuterWall && distanceSquared <= radius * radius) { // do not destroy outer walls
 				screen.setChar(col, row, roomNum, EMPTY_CELL);
 			}
 		}
@@ -436,8 +438,13 @@ void game_manager::handleDoor(Point& currentPlayer, char doorNum) {
 		return;
 	}
 
-	if (inv1 != KEY && inv2 != KEY && doorNum - '0' > currentRoom && screen.searchItem(currentRoom, KEY)) {		//if none of the players have a key, the door will not open
+	if (screen.searchItem(currentRoom, KEY) && doorNum - '0' > currentRoom) {		// if not all the keys been collected, the door will not open
 		textAppears = printOutput("Door is locked !");
+		return;
+	}
+
+	if (screen.searchItem(currentRoom, RIDDLE) && doorNum - '0' > currentRoom) {
+		textAppears = printOutput("Must answer correctly to the riddle to enter!");
 		return;
 	}
 
@@ -450,7 +457,7 @@ void game_manager::handleDoor(Point& currentPlayer, char doorNum) {
 	screen.draw(currentRoom);
 	gameLives.draw();
 
-	if (currentRoom == 2)
+	if (currentRoom == 3)
 		screen.helpLockPlayers();
 }
 
@@ -528,6 +535,8 @@ void game_manager::eraseOutput() {
 	gotoxy(0, 23);
 	std::cout << std::string(Screen::MAX_X, ' ');
 	gameLives.draw();
+	gotoxy(35, 23);
+	std::cout << "LIVE | SCORE";
 }
 
 //==============================turn off================================

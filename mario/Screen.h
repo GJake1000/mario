@@ -8,7 +8,7 @@ class Screen {
 public:
 	static constexpr int MAX_X = 79;
 	static constexpr int MAX_Y = 24;
-	static constexpr int NUM_OF_ROOMS = 3; //2 rooms + final end room
+	static constexpr int NUM_OF_ROOMS = 4; //2 rooms + final end room
 	static const char EMPTY_ROW[];
 private:
 	char initialRooms[NUM_OF_ROOMS][MAX_Y + 1][MAX_X + 2]; // +1 for null terminator

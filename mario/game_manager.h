@@ -21,35 +21,53 @@ class game_manager {
 	lives gameLives;
 
 public:
+	//========flow control========
 	game_manager();
 	void run();
 	bool loadMenu();
 	void printInstructionAndKeys();
 	void printCredits() const;
 	bool printPauseScreen();
+
+	//=========game mechanics=========
+	//general mechanics
 	void handleSpacialItem(Point &p, int x, int y, char item);
+	bool printOutput(const char* output);
+	void eraseOutput();
+	bool removeLife();
+
+	//torch mechanics
 	void handleTorch(Point& p, int x, int y);
+	bool hasTorch();
+	void onOffLight(bool& dark);
+
+	//switch mechanics
 	void handleSwitch(int x, int y);
+	void turnOff(int x, int y, int roomNum);
+
+	//riddle mechanics
 	void handleRiddle(Point& p, int x, int y);
 	char printRiddle(int index);
-	void handleKey(Point& p, int x, int y);
+	bool handleAnswer(char correct, char ans, Point& p);
+
+	//bomb mechanics
 	void handleBomb(Point& p, int x, int y);
 	void activateBomb(Screen& screen, int x, int y, int roomNum);
 	bool playerHit(int bombX, int bombY, int radius);
+	void setBombTimer(int x, int y, int roomNum);
+
+	//obstacle mechanics
 	void handleObstacle(Point& p, int x, int y);
 	void moveObstacle(int left, int right, int down, int up);
+
+	//door mechanics
 	void handleDoor(Point& currentPlayer, char doorNum);
+	void handleKey(Point& p, int x, int y);
 	bool bothPlayersAtSameChar(Point& pyr1, char checker, char& inv1, char& inv2);
 	void removeKeyAfterUse(char inv1, char inv2, Point& currentPlayer);
 	void posSetAfterDoor(char doorNum);
-	bool hasTorch();
-	void onOffLight(bool& dark);
-	bool printOutput(const char* output);
-	void eraseOutput();
-	bool handleAnswer(char correct, char ans, Point& p);
-	void turnOff(int x, int y, int roomNum);
-	void setBombTimer(int x, int y, int roomNum);
-	bool removeLife();
+	
+	
 
 private:
 	std::vector<Obstacle> obstacles;

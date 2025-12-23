@@ -42,8 +42,8 @@ void Point::setPosition(int newX, int newY) {
 void Point::handleKeyPressed(int key, Screen& screen, int roomNum) {
 	unsigned char hebrew = (unsigned char)key;
 	char letter = key;
-	gotoxy(0, 0);
-	std::cout << (int)hebrew;
+	/*gotoxy(0, 0);
+	std::cout << (int)hebrew;*/
 	switch (hebrew) { // handle hebrew letters
 		// player 1
 	case HEB_VAV   : letter = 'W'; break; // ו
