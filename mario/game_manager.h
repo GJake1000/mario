@@ -2,6 +2,7 @@
 #include "Screen.h"
 #include "Point.h"
 #include "Obstacle.h"
+#include "Spring.h"
 #include <vector>
 
 
@@ -16,6 +17,7 @@ class game_manager {
 	bool textAppears = false;
 	int bombDisposalTime = -1;
 	int bombX = -1, bombY = -1, bombRoom = -1;
+	
 
 public:
 	game_manager();
@@ -49,4 +51,29 @@ private:
 	std::vector<Obstacle> obstacles;
 	Obstacle* findObs(int x, int y);
 	void obsDef();
+
+	//spring stuff
+	std::vector<Spring> springs;
+	Spring* findSpring(int x, int y);
+	void springDefFromMap(int roomNum);
+	void handleSpring(Point& p, int x, int y);
+
+	std::vector<std::pair<int, int>> hiddenCells[2];  // store (x,y) hidden for each player that stepped on the spring
+	void hideCell(int idx, int x, int y);
+	void restoreHidden(int idx);
+	
+	bool charging[2] = { false, false };
+	int chargeDirX[2] = { 0, 0 };
+	int chargeDirY[2] = { 0, 0 };
+	int chargingCount[2] = { 0, 0 };
+
+	void applyLaunchMovementIfNeeded(Point& p); // called inside the per-player loop
+
+	void tryTriggerSpringRelease(int idx, Point& p, bool canMove);
+
+	void resetSpringState();
+
+	int traverseSpringTowardWallEnd(const Spring& spr, int startX, int startY, Point* pToMove);
+
+
 };

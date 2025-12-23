@@ -164,3 +164,29 @@ int Point::getNextX() const {
 int Point::getNextY() const {
 	return (y + diff_y + MAX_Y) % MAX_Y;
 }
+
+//=========================spring thing=================================
+
+void Point::startSpringEffect(int dx, int dy, int speed)
+{
+	beingLaunched = true;
+	launchDirX = dx;
+	launchDirY = dy;
+	launchSpeed = speed;
+	launchCyclesLeft = speed * speed;
+}
+
+void Point::tickSpringEffect()
+{
+	if (!beingLaunched)
+		return;
+
+	launchCyclesLeft--;
+
+	if (launchCyclesLeft <= 0) {
+		beingLaunched = false;
+		launchDirX = launchDirY = 0;
+		launchSpeed = 0;
+		launchCyclesLeft = 0;
+	}
+}

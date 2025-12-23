@@ -24,20 +24,20 @@ private:
 				"W   W       W     WWWWWWWWWW            W         W    W    W   W       W  @   W", // 5
 				"W   W       W          W     WWW        W         W    W    W   W   WWWWWWWWWWWW", // 6
 				"WWWWW   WWWWWWWWWWW    W         W      W         W    W    W   W              W", // 7
-				"W       W              W         W      W         W         W   WWWWWWWWWWWW   W", // 8
-				"W   WWWWW              WWWWWW    WWWWWWWWWWWWWWWWWWWWW          W              W", // 9
+				"W#      W              W         W      W         W         W   WWWWWWWWWWWW   W", // 8
+				"W#  WWWWW              WWWWWW    WWWWWWWWWWWWWWWWWWWWW          W              W", // 9
 				"W   W   W              W         W          W      W            W              W", // 10
 				"W   W   WWWWWWWWWWW    WWWWWW               W      WWWWWWWWWWWWWWWW    WWWWW   W", // 11
 				"W   W   W    W                                                             W   W", // 12
 				"W       W    WWWWWWWWWWWWWWWWWWWWWWWW       WWWWWWWWWWWWWWWWWWWWWWWWWW     W   W", // 13
-				"W       W                          ?                             W         W   W", // 14
+				"W       W####                      ?                             W         W   W", // 14
 				"W       W              WWWWWWWWWWWWWWWWWWWWWWWWWWWW          W   W         W   W", // 15
-				"W       WWWWWWWWWWW    W                W         W          W   WWWWWWW   W   W", // 16
-				"W                      W        W       W   WWWWWWWWWWW      W   W         W   W", // 17
-				"WWWWWWWWWW   WWWWWWWWWWW        WWWW    W   W                W   W         W   W", // 18
-				"W                 W             W       W   WWW   WWWWWWWWWWWW   W             W", // 19
-				"W                 W             W       W   W                W                1W", // 20
-				"W                               W           W                W                1W", // 21
+				"W       WWWWWWWWWWW   #W#             ##W         W          W   WWWWWWW   W   W", // 16
+				"W                     #W    W   W       W   WWWWWWWWWWW      W   W         W   W", // 17
+				"WWWWWWWWWW   WWWWWWWWWWW    #   WWWW    W   W                W   W         W   W", // 18
+				"W##               W         W   W       W   WWW   WWWWWWWWWWWW   W             W", // 19
+				"WWWW            #WW    #       WWW      W   W                W                1W", // 20
+				"W####                       ####W#          W                W                1W", // 21
 				"WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW", // 22
 				"                                                                                ", // 23
 				"Player &:                             INVENTORY                   Player $:     ", // 24
@@ -47,10 +47,10 @@ private:
 			// =====================================SECOND ROOM=====================================
 			//   01234567890123456789012345678901234567890123456789012345678901234567890123456789
 				"WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW", // 0
-				"W     W                                                                        W", // 2
-				"WWWWWWW                WWWWWWWWWWWWWWWWWWWWW                        WW         W", // 1
-				"W                      WW      WWWWWWWWWWWWW             WWWW       WW         W", // 3
-				"W                      WW  WW  W         WWW             W     WW   WW         W", // 4
+				"W     W                                                                   W#W#WW", // 2
+				"WWWWWWW                WWWWWWWWWWWWWWWWWWWWW                        WW      W#WW", // 1
+				"W                      WW      WWWWWWWWWWWWW             WWWW       WW        WW", // 3
+				"W                      WW  WW  W         WWW             W     WW   WW        WW", // 4
 				"W                      WW  WW  W  !   W  WWWWWWWWWWWWWWWWW   WWWW   WW         W", // 5
 				"W    WWWWWWWWWW            WW  W      W  DDD                WWWWW   WW         W", // 6
 				"W    WWWWWWWWWWWWWWWW  WW  WW  WWWWWWWW  WWW           WWWWW   WW   WW         W", // 7
@@ -64,10 +64,10 @@ private:
 				"W  WWW                    WW    WW      WWWWWWWWW      WWWW    WW              W", // 15
 				"WWWWWWWWWWWWWW     WWWW   WW    WWWW  WWWWW  ?  W      WWWW    WW   WDDDDDDDDDDW", // 16
 				"WWWWWWWWWWWWWW     WWWW   WW            WWW  W  W   WWWWWWWWWWWWW   WW         W", // 17
-				"W        /  WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW  W  W   WWWWWWWWWWWWW   WWW        W", // 18
-				"W    WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW  W  W                   WWWWW    **W", // 19
-				"W0          WWWWW             WWWWWWWWW      W  WWWWWWWWWWWWWWWWW   WWWWWW   *2W", // 20
-				"W0      WW          WWWWWWW                  W                      WWWWWWW  *2W", // 21
+				"W        /  WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW  W  W   WWWWWWWWWWWWW  #WWW        W", // 18
+				"W    WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW  W  W                  #WWWWW    **W", // 19
+				"W0          WWWWW             WWWWWWWWW     #W  WWWWWWWWWWWWWWWWW  #WWWWWW   *2W", // 20
+				"W0      WW          WWWWWWW                 #W                     #WWWWWWW  *2W", // 21
 				"WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW", // 22
 				"                                                                                ", // 23
 				"Player &:                            INVENTORY                   Player $:      ", // 24

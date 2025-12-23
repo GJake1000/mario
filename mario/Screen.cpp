@@ -139,7 +139,6 @@ char Screen::getInitialChar(int x, int y, int roomNum) const {
 	return ' ';
 }
 
-
 // =========================search item=================================
 bool Screen::searchItem(int roomNum, char item) const {
 	for (int col = 0; col <= MAX_X; col++)
