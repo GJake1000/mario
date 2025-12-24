@@ -16,6 +16,8 @@ void game_manager::newGameStarter()
 	gameLives.resetLives();
 	gameLives.draw();
 	screen.resetRoom();
+	resetSpringState();
+	springDefFromMap(currentRoom);
 	obsDef();
 	loadRiddles("riddles.txt");
 }
@@ -67,8 +69,14 @@ void game_manager::run() {
 						handleSpacialItem(p, nextX, nextY, item); // handle item at next position
 					}
 					bool canMove = !screen.isWall(nextX, nextY, currentRoom); // check for wall
+
+					int idx = (p.getPlayerChar() == points[0].getPlayerChar()) ? 0 : 1;
+					tryTriggerSpringRelease(idx, p, canMove);
+
 					p.move(canMove);
 					p.draw();
+
+					applyLaunchMovementIfNeeded(p);
 				}
 				if (_kbhit()) {
 					char key = _getwch();
@@ -81,14 +89,16 @@ void game_manager::run() {
 						}
 					}
 				}
+				//////maybe make into a function somehow/////////
 				if (textAppears == true) {
 					output_time++;
-					if(output_time > 150)
+					if (output_time > 150)
 					{
 						output_time = 0;
 						eraseOutput();
 					}
 				}
+				/////////////////////////////////////////////////
 				
 				turn++;	//counts turns in the game
 				Sleep(50);
@@ -225,6 +235,10 @@ void game_manager::handleSpacialItem(Point& p, int x, int y, char item) {
 
 	case OBSTACLE:
 		handleObstacle(p, x, y);
+		break;
+
+	case SPRING:
+		handleSpring(p, x, y);
 		break;
 
 	case DOOR:		//door to 0 (probably does not exist)
@@ -412,6 +426,280 @@ void game_manager::handleObstacle(Point& p, int x, int y) {
 		obs->tryMove(p.getDifX(), p.getDifY(), screen);
 	}
 }
+
+
+//===========================handle spring=================================
+
+void game_manager::handleSpring(Point& p, int x, int y)
+{
+	Spring* spr = findSpring(x, y);
+	if (!spr)
+		return;
+
+	int idx;	//player 1 or player 2
+
+	if (p.getPlayerChar() == points[0].getPlayerChar())
+		idx = 0;
+	else
+		idx = 1;
+
+	// If player is already being launched, spring tiles behave like normal obstacles/tiles.
+	// (Spec: other rules still apply, but you don't "re-compress" while launched.)
+	if (p.isSpringActive())
+		return;
+
+	// If this is the first spring tile for this compression, initialize compression direction toward wall
+	if (charging[idx] == false) {
+		int twDx = 0, twDy = 0;	//toward wall direction
+		if (!spr->getTowardWallDir(screen, currentRoom, twDx, twDy))
+			return;
+
+		charging[idx] = true;
+		chargeDirX[idx] = twDx;
+		chargeDirY[idx] = twDy;
+		chargingCount[idx] = 0;
+		restoreHidden(idx); // restore any previously hidden cells for this player
+	}
+
+	// Only compress when moving toward the wall
+	if (p.getDifX() == chargeDirX[idx] && p.getDifY() == chargeDirY[idx]) {
+		chargingCount[idx]++;
+		hideCell(idx, x, y); // visually collapse this spring char
+	}
+	// If the player tries to go sideways/back while still on spring tiles,
+	// we do NOT release here; release is triggered centrally by tryTriggerSpringRelease().
+}
+
+Spring* game_manager::findSpring(int x, int y)
+{
+	for (auto& spr : springs)
+		if (spr.contains(x, y, currentRoom))
+			return &spr;
+	return nullptr; // if not found 
+}
+
+void game_manager::springDefFromMap(int roomNum)
+{
+	springs.clear();
+
+	for (int y = 0; y <= Screen::MAX_Y; y++) {
+		for (int x = 0; x <= Screen::MAX_X; x++) {
+			//we care only about coordinates that have a spring in them
+			if (screen.getInitialChar(x, y, roomNum) != SPRING)		
+				continue;
+			
+			//finds if spring has a connection to another springs
+            bool left  = (x > 0 && screen.getInitialChar(x - 1, y, roomNum) == SPRING);
+            bool right = (x < Screen::MAX_X && screen.getInitialChar(x + 1, y, roomNum) == SPRING);
+            bool up    = (y > 0 && screen.getInitialChar(x, y - 1, roomNum) == SPRING);
+            bool down  = (y < Screen::MAX_Y && screen.getInitialChar(x, y + 1, roomNum) == SPRING);
+			int len;
+
+			//pushes to the spring vector all adjacent springs
+			if (!left && right) {
+				len = 1;
+				while (x + len <= Screen::MAX_X && screen.getInitialChar(x + len, y, roomNum) == SPRING)
+					len++;
+				springs.push_back(Spring(x, y, len, roomNum, false));
+			}
+			else if (!up && down) {
+				len = 1;
+				while (y + len <= Screen::MAX_Y && screen.getInitialChar(x, y + len, roomNum) == SPRING)
+					len++;
+				springs.push_back(Spring(x, y, len, roomNum, true));
+			}
+			else if (!left && !right && !up && !down) {
+				len = 1;
+				springs.push_back(Spring(x, y, len, roomNum, false));
+				//what if i add here also vertical spring of len 1?
+				//how do i do that :(
+			}
+		}
+	}
+}
+
+void game_manager::hideCell(int idx, int x, int y)
+{
+	for (const auto& pr : hiddenCells[idx])
+		if (pr.first == x && pr.second == y) 
+			return;
+
+	hiddenCells[idx].push_back({ x, y });
+	screen.setChar(x, y, currentRoom, EMPTY_CELL); // hide it visually
+}
+
+void game_manager::restoreHidden(int idx)
+{
+	for (const auto& pr : hiddenCells[idx]) {
+        screen.setChar(pr.first, pr.second, currentRoom, SPRING);
+    }
+    hiddenCells[idx].clear();
+}
+
+void game_manager::applyLaunchMovementIfNeeded(Point& p)
+{
+	if (!p.isSpringActive())
+		return;
+
+	int dx = p.getSpringDx();
+	int dy = p.getSpringDy();
+	int speed = p.getSpringSpeed();
+
+	Point* otherP;
+
+	if (p.getPlayerChar() == points[0].getPlayerChar())
+		otherP = &points[1];
+	else
+		otherP = &points[0];
+
+	for (int i = 0; i < speed; i++) {
+		int nx = p.getX() + dx;		//new x
+		int ny = p.getY() + dy;		//new y
+
+		if (screen.isWall(nx, ny, currentRoom))
+			break;
+
+		// COLLISION: launched player hits the other player
+		if (nx == otherP->getX() && ny == otherP->getY()) {
+			// give other player the same launch direction and speed
+			otherP->setDirection(Direction::STAY);      // ignore previous direction
+			otherP->startSpringEffect(dx, dy, speed);   // starts speed for speed^2 cycles (your existing API)
+			break; // do not move into the other player's cell
+		}
+
+		// BOUNCE: launched player hits another spring
+		if (screen.getInitialChar(nx, ny, currentRoom) == SPRING) 
+		{	
+			Spring* nextSpr = findSpring(nx, ny); // spring we are about to hit
+			Spring* curSpr = findSpring(p.getX(), p.getY()); // spring under current position (if any)
+
+			// If still moving inside the same spring segment, do NOT bounce.
+			if (nextSpr != nullptr && nextSpr == curSpr) {
+				// continue normally (do nothing special)
+			}
+			else if (nextSpr != nullptr) {
+
+				int compressCount = traverseSpringTowardWallEnd(*nextSpr, nx, ny, &p);
+				int twDx = 0, twDy = 0;
+				nextSpr->getTowardWallDir(screen, currentRoom, twDx, twDy);
+
+				int launchDx = -twDx;
+				int launchDy = -twDy;
+
+				p.setDirection(Direction::STAY);
+				p.startSpringEffect(launchDx, launchDy, compressCount);
+
+				return;
+			}
+		}
+
+		// ERASE CORRECTLY: redraw the underlying map char at current position
+		char under = screen.charAt(p, currentRoom);
+		p.draw(under);
+
+		// move + draw player
+		p.setPosition(nx, ny);
+		p.draw();
+	}
+	p.tickSpringEffect();
+}
+
+void game_manager::tryTriggerSpringRelease(int idx, Point& p, bool canMove)
+{
+	if (!charging[idx])
+		return;
+
+	int dx = p.getDifX();
+	int dy = p.getDifY();
+
+	bool stay = (dx == 0 && dy == 0);
+
+	// "attempts to change direction" (not the compression direction)
+	bool changeDir = !stay && !(dx == chargeDirX[idx] && dy == chargeDirY[idx]);
+
+	// "reaches the wall": moving toward wall but can't move
+	bool hitWall = (dx == chargeDirX[idx] && dy == chargeDirY[idx] && !canMove);
+
+	if (!(stay || changeDir || hitWall))
+		return;
+
+	int speed = chargingCount[idx];
+	int launchDx = -chargeDirX[idx];
+	int launchDy = -chargeDirY[idx];
+
+	// Spring returns to original length within a single cycle
+	restoreHidden(idx);
+
+	// reset compression state
+	charging[idx] = false;
+	chargingCount[idx] = 0;
+	chargeDirX[idx] = 0;
+	chargeDirY[idx] = 0;
+
+	if (speed <= 0)
+		return;
+
+	// prevent the normal move this cycle; movement will come from spring effect
+	p.setDirection(Direction::STAY);
+
+	// launch direction is opposite of compression direction
+    p.startSpringEffect(launchDx, launchDy, speed);
+}
+
+void game_manager::resetSpringState()
+{
+	for (int i = 0; i < 2; i++) {
+		restoreHidden(i);
+		hiddenCells[i].clear();
+		charging[i] = false;
+		chargingCount[i] = 0;
+		chargeDirX[i] = 0;
+		chargeDirY[i] = 0;
+	}
+}
+
+int game_manager::traverseSpringTowardWallEnd(const Spring& spr, int startX, int startY, Point* pToMove)
+{
+	int twDx = 0, twDy = 0;
+	if (!spr.getTowardWallDir(screen, currentRoom, twDx, twDy))
+		return 1;
+
+	int count = 0;
+	int cx = startX, cy = startY;
+
+	while (true) {
+		if (screen.getInitialChar(cx, cy, currentRoom) != SPRING)
+			break;
+
+		// Optional: move+draw player along the spring
+		if (pToMove != nullptr) {
+			char under = screen.charAt(*pToMove, currentRoom);
+			pToMove->draw(under);
+			pToMove->setPosition(cx, cy);
+			pToMove->draw();
+		}
+
+		count++;
+
+		int nx = cx + twDx;
+		int ny = cy + twDy;
+
+		// Stop when the spring hits the wall-end
+		if (screen.isWall(nx, ny, currentRoom))
+			break;
+
+		// Or when spring tiles stop (safety)
+		if (screen.getInitialChar(nx, ny, currentRoom) != SPRING)
+			break;
+
+		cx = nx;
+		cy = ny;
+	}
+
+	return (count > 0) ? count : 1;
+}
+
+
 
 //===========================find obstacle=================================
 Obstacle* game_manager::findObs(int x, int y) {

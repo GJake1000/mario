@@ -1,4 +1,6 @@
 #include "Obstacle.h"
+
+
 //===============================draw===============================
 void Obstacle::draw(Screen& screen) const {
 	for (int i = 0; i < width; ++i) {

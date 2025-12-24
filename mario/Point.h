@@ -2,6 +2,8 @@
 #include "Direction.h"
 #include "utils.h"
 #include "auxThing.h"
+
+
 class Screen;
 class game_manager;
 
@@ -17,6 +19,13 @@ class Point {
 	int inventoryX, inventoryY;
 	static bool colorChose;
 	game_manager* gm = nullptr;
+
+	//spring stuff
+	bool beingLaunched = false;
+	int launchDirX = 0, launchDirY = 0;
+	int launchSpeed = 0;
+	int launchCyclesLeft = 0;
+
 
 public:
 	Point(int x1, int y1, char p, const char(&my_keys)[NUM_KEYS + 1],
@@ -51,10 +60,24 @@ public:
 	int getNextY() const;
 	int getDifX() const {return diff_x;}
 	int getDifY() const {return diff_y;}
+	
+	
+	
 	static bool isColorChose() {
 		return colorChose;
 	}
 	static void setColorChose(bool chose) {
 		colorChose = chose;
 	}
+
+
+	bool isSpringActive() const { return beingLaunched; }
+	int  getSpringDx() const { return launchDirX; }
+	int  getSpringDy() const { return launchDirY; }
+	int  getSpringSpeed() const { return launchSpeed; }
+	int  getSpringCyclesLeft() const { return launchCyclesLeft; }
+
+	void startSpringEffect(int dx, int dy, int speed);
+	void tickSpringEffect();
+
 };

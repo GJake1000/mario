@@ -1,6 +1,6 @@
 #pragma once
-
 #include "auxThing.h"
+
 
 class Point;
 

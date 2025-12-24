@@ -1,5 +1,7 @@
 #pragma once
 #include "Screen.h"
+
+
 class Obstacle {
 	int x, y; // position of the right up corner of obstacle
 	int width, height; // dimensions of the obstacle

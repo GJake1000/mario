@@ -133,6 +133,7 @@
     <ClCompile Include="Obstacle.cpp" />
     <ClCompile Include="Point.cpp" />
     <ClCompile Include="Screen.cpp" />
+    <ClCompile Include="Spring.cpp" />
     <ClCompile Include="utils.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -143,6 +144,7 @@
     <ClInclude Include="Obstacle.h" />
     <ClInclude Include="Point.h" />
     <ClInclude Include="Screen.h" />
+    <ClInclude Include="Spring.h" />
     <ClInclude Include="utils.h" />
   </ItemGroup>
   <ItemGroup>
