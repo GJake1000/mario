@@ -17,12 +17,12 @@ constexpr char OBSTACLE = '*';
 constexpr char SPRING = '#';
 
 
-constexpr int HEB_VAV    = 39;   // ו
+constexpr int HEB_VAV    = 39;  // ו
 constexpr int HEB_ZAYIN  = 225; // ז
-constexpr int HEB_HET    = 210;  // ח
-constexpr int HEB_TET    = 233;  // ט
-constexpr int HEB_GERESH = 211;  // י
-constexpr int HEB_CAF    = 231;  // כ
+constexpr int HEB_HET    = 210; // ח
+constexpr int HEB_TET    = 233; // ט
+constexpr int HEB_GERESH = 211; // י
+constexpr int HEB_CAF    = 231; // כ
 
 constexpr int HEB_LAMED  = 223; // ל
 constexpr int HEB_MEM    = 230; // מ

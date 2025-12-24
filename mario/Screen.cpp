@@ -4,7 +4,32 @@
 #include <iostream>
 #include <windows.h> 
 #include <cstring>
+#include <fstream>
+#include <string>
 
+
+
+//==============================load screens from file==============================
+void Screen::loadScreens(const char* fileName) {
+	std::ifstream file(fileName);
+	if (!file.is_open()) {
+		std::cerr << "Error: Could not open file " << fileName << std::endl;
+		return;
+	}
+	std::string line;
+	for (int roomNum = 0; roomNum < NUM_OF_ROOMS; ++roomNum) {
+		for (int y = 0; y <= MAX_Y; ++y) {
+			if (std::getline(file, line)) {
+				int len = line.length();
+				for (int x = 0; x < len && x < MAX_X + 1; ++x) 
+					initialRooms[roomNum][y][x] = line[x];
+				
+				initialRooms[roomNum][y][len] = '\0'; // null-terminate the string
+			}
+		}
+	}
+	file.close();
+}
 
 //==============================color item==============================
 void Screen::colorItem(char item) const {
@@ -22,6 +47,7 @@ void Screen::colorItem(char item) const {
 	case DOOR:
 	case '1':
 	case '2':
+	case '3':
 		setTextColor(Color::brown);
 		break;
 	case RIDDLE:
@@ -41,6 +67,7 @@ void Screen::colorItem(char item) const {
 
 // =========================Screen constructor=================================
 Screen::Screen() {
+	loadScreens("screens.txt");
 	resetRoom();
 }
 
@@ -99,6 +126,7 @@ bool Screen::isWall(int x, int y, int roomNum) const {
 
 // =========================set character at (x,y) in room=================================
 void Screen::setChar(int x, int y, int roomNum, char ch) {
+	if (x < 0 || x > Screen::MAX_X || y < 0 || y > Screen::MAX_Y) return;
 	if (x >= 0 && x <= MAX_X && y >= 0 && y <= MAX_Y) {
 		rooms[roomNum][y][x] = ch;
 	}
@@ -142,7 +170,7 @@ char Screen::getInitialChar(int x, int y, int roomNum) const {
 // =========================search item=================================
 bool Screen::searchItem(int roomNum, char item) const {
 	for (int col = 0; col <= MAX_X; col++)
-		for (int row = 0; row <= MAX_Y; row++)
+		for (int row = 0; row <= MAX_Y - 2; row++)
 			if (rooms[roomNum][row][col] == item)
 				return true;
 	return false;

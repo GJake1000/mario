@@ -2,6 +2,8 @@
 #include <iostream>
 #include <conio.h>  
 #include <windows.h> 
+#include <string>
+#include <fstream>
 
 
 //=========================new game starter=================================
@@ -11,10 +13,13 @@ void game_manager::newGameStarter()
 	currentRoom = 0;
 	points[0].setPosition(1, 15);
 	points[1].setPosition(1, 17);
+	gameLives.resetLives();
+	gameLives.draw();
 	screen.resetRoom();
 	resetSpringState();
 	springDefFromMap(currentRoom);
 	obsDef();
+	loadRiddles("riddles.txt");
 }
 
 //=========================game manager constructor=================================
@@ -22,7 +27,7 @@ game_manager::game_manager() : points{
 	// initial positions	
 	Point(1 ,15, '&', STARDARD_PLAYER_1_KEYS, Color::red, 10),  // w - up, d - right, x - down, a - left, s - stay
 	Point(1 ,17, '$', STARDARD_PLAYER_2_KEYS, Color::blue, 75)  // i - up, l - right, m - down, j - left, k - stay
-}
+	}, gameLives()
 {
 	// set game manager for each point
 	points[0].setGameManager(this);
@@ -32,68 +37,73 @@ game_manager::game_manager() : points{
 //=========================run game manager=================================
 void game_manager::run() {
 	// main game loop
-	bool isExit = false;
-	isExit = loadMenu();
+	bool displayMenu = true;
+	while (displayMenu) {
+		bool isExit = loadMenu();
 	
-	if (isExit == false)
-	{
-		hideCursor();
-		screen.draw(currentRoom);
+		if (isExit == false)
+		{
+			hideCursor();
+			screen.draw(currentRoom);
+			gameLives.draw();
 
-		bool dark = false;
+			bool dark = false;
 
-		while (true) {
-			onOffLight(dark);
+			while (true) {
+				onOffLight(dark);
+				if (gameLives.getLives() <= 0) break; // game over go to menu
 
-			// check for bomb activation
-			if (bombDisposalTime != -1 && turn - bombDisposalTime >= 5) {
-				activateBomb(screen, bombX, bombY, bombRoom);
-				bombDisposalTime = -1; // reset bomb timer
-			}
-
-			for (auto& p : points) {
-				char curChar = screen.charAt(p, currentRoom);
-				p.draw(curChar);             // erase previous position
-				int nextX = p.getNextX();    // calculate next position
-				int nextY = p.getNextY();
-				char item = screen.charAt(nextX, nextY, currentRoom);
-				if (item != ' ') {
-					handleSpacialItem(p, nextX, nextY, item); // handle item at next position
+				// check for bomb activation
+				if (bombDisposalTime != -1 && turn - bombDisposalTime >= 5) {
+					activateBomb(screen, bombX, bombY, bombRoom);
+					bombDisposalTime = -1; // reset bomb timer
 				}
-				bool canMove = !screen.isWall(nextX, nextY, currentRoom); // check for wall
 
-				int idx = (p.getPlayerChar() == points[0].getPlayerChar()) ? 0 : 1;
-				tryTriggerSpringRelease(idx, p, canMove);
+				for (auto& p : points) {
+					char curChar = screen.charAt(p, currentRoom);
+					p.draw(curChar);             // erase previous position
+					int nextX = p.getNextX();    // calculate next position
+					int nextY = p.getNextY();
+					char item = screen.charAt(nextX, nextY, currentRoom);
+					if (item != ' ') {
+						handleSpacialItem(p, nextX, nextY, item); // handle item at next position
+					}
+					bool canMove = !screen.isWall(nextX, nextY, currentRoom); // check for wall
 
-				p.move(canMove);
-				p.draw();
-				applyLaunchMovementIfNeeded(p);
-			}
-			if (_kbhit()) {
-				char key = _getch();
-				if (key == ESC) {
-					if (printPauseScreen()) break; // pause menu
+					int idx = (p.getPlayerChar() == points[0].getPlayerChar()) ? 0 : 1;
+					tryTriggerSpringRelease(idx, p, canMove);
+
+					p.move(canMove);
+					p.draw();
+
+					applyLaunchMovementIfNeeded(p);
 				}
-				else {
-					for (auto& p : points) {
-						p.handleKeyPressed(key, screen, currentRoom); // update direction based on key press
+				if (_kbhit()) {
+					char key = _getwch();
+					if (key == ESC) {
+						if (printPauseScreen()) break; // pause menu
+					}
+					else {
+						for (auto& p : points) {
+							p.handleKeyPressed(key, screen, currentRoom); // update direction based on key press
+						}
 					}
 				}
-			}
-			
-			//////maybe make into a function somehow/////////
-			if (textAppears == true) {
-				output_time++;
-				if(output_time > 150)
-				{
-					output_time = 0;
-					eraseOutput();
+				//////maybe make into a function somehow/////////
+				if (textAppears == true) {
+					output_time++;
+					if (output_time > 150)
+					{
+						output_time = 0;
+						eraseOutput();
+					}
 				}
-			}
-			/////////////////////////////////////////////////
+				/////////////////////////////////////////////////
+				
+				turn++;	//counts turns in the game
+				Sleep(50);
 
-			turn++;	//counts turns in the game
-			Sleep(50);
+			}
 		}
 	}
 	cls();
@@ -120,11 +130,13 @@ bool game_manager::loadMenu()
 		switch (choice) {
 		case '1': {    //get back to "run" function and start the game
 			Point::setColorChose(false);
+			gameLives.setColor(false);
 			screen.draw(0); // draw first room
 			return false;
 		}
 		case '2': {  //set color chose to true and get back to "run" function and start the game	
 			Point::setColorChose(true);
+			gameLives.setColor(true);
 			screen.draw(0); // draw first room
 			return false;
 		}
@@ -158,10 +170,10 @@ void game_manager::printInstructionAndKeys()
 	for (int i = 0; i < 2; i++)
 	{
 		std::cout << "\n Player " << (i + 1) << " keys:\n";
-		std::cout << "Right           : " << keys[i][0] << "\n";
-		std::cout << "Down            : " << keys[i][1] << "\n";
-		std::cout << "Left            : " << keys[i][2] << "\n";
-		std::cout << "Up              : " << keys[i][3] << "\n";
+		std::cout << "Up              : " << keys[i][0] << "\n";
+		std::cout << "Right           : " << keys[i][1] << "\n";
+		std::cout << "Down            : " << keys[i][2] << "\n";
+		std::cout << "Left            : " << keys[i][3] << "\n";
 		std::cout << "Stay            : " << keys[i][4] << "\n";
 		std::cout << "Dispose element : " << keys[i][5] << "\n";
 	}
@@ -231,7 +243,8 @@ void game_manager::handleSpacialItem(Point& p, int x, int y, char item) {
 
 	case DOOR:		//door to 0 (probably does not exist)
 	case '1':		//door to 1
-	case '2':		//door ??? win maybe?
+	case '2':
+	case '3':       //door ??? win maybe?
 		handleDoor(p, item); //only if has key == true
 		break;
 	}
@@ -262,19 +275,16 @@ void game_manager::handleSwitch(int x, int y) {
 //=========================handle riddle=================================
 void game_manager::handleRiddle(Point& p, int x, int y) {
 	
-	char correct;
-	if (currentRoom == 0)
-		correct = printRiddle0();
-	if (currentRoom == 1)
-		correct = printRiddle1();
-
+	char correct = printRiddle(currentRoom); // for now, always the first riddle
 	while (true) {
 		if (_kbhit()) {
 			char ans = _getch();
+			if ('4' < ans || '0' > ans) continue;  // not in boundries
 			bool wasRight = handleAnswer(correct, ans, p);
 			if (wasRight) screen.setChar(x, y, currentRoom, ' ');
 			cls();
 			screen.draw(currentRoom);
+			gameLives.draw();
 
 			if (currentRoom == 1 && !hasTorch())
 				screen.setDark();
@@ -284,26 +294,37 @@ void game_manager::handleRiddle(Point& p, int x, int y) {
 	}
 }
 
-//=========================riddle 0=================================
-char game_manager::printRiddle0() {
-	cls();
-	std::cout << "\n\n\n         Riddle: To the blind I'm nothing, to the hrveller I'm everything.\n                 I am the sun held in your hand.\n                 Without me, the next room will be your grave.\n\n                 What am I?\n\n";
-	std::cout << "         (1) A Sword\n";
-	std::cout << "         (2) A Torch\n";
-	std::cout << "         (3) The Moon\n";
-	std::cout << "         (4) A Light bulb\n";
-	return '2';
+//===========================load riddles=================================
+void game_manager::loadRiddles(const char* fileName) {
+	std::ifstream file(fileName);
+	if (!file.is_open()) {
+		std::cerr << "Failed to open riddles file: " << fileName << std::endl;
+		return;
+	}
+	riddles.clear();
+	Riddle riddle;
+	std::string line;
+
+	while (std::getline(file, riddle.question)) {
+		for (int i = 0; i < 4; ++i) {
+			std::getline(file, riddle.options[i]);
+		}
+		std::string correct;
+		std::getline(file, correct);
+		if (!correct.empty())
+			riddle.correctOption = correct[0];
+		riddles.push_back(riddle);
+	}
+	file.close();
 }
 
-//=========================riddle 1=================================
-char game_manager::printRiddle1() {
+//=========================print riddle=================================
+char game_manager::printRiddle(int index) {
+	if (index < 0 || index >= riddles.size()) 
+		return '\0'; // invalid index
 	cls();
-	std::cout << "\n\n\n         Riddle: I exist only when there is light, but direct light kills me.\n                 I grow tall when the sun goes down, but disappear completly in the dark\n                 What am I?\n\n";
-	std::cout << "         (1) A Vampire\n";
-	std::cout << "         (2) A Dream\n";
-	std::cout << "         (3) A Shadow\n";
-	std::cout << "         (4) A Mushroom\n";
-	return '3';
+	std::cout << riddles[index];
+	return riddles[index].correctOption;
 }
 
 //================================handle answer====================================
@@ -314,8 +335,10 @@ bool game_manager::handleAnswer(char correct, char ans, Point& p) {
 		return true;
 	}
 	else {
+		bool isDead = removeLife();
 		std::cout << "\n\n\n\n\n\n          WRONG!";
 		Sleep(2000);
+		if (isDead) return false;
 		p.setDirection(Direction::STAY);
 		return false;
 	}
@@ -352,12 +375,43 @@ void game_manager::activateBomb(Screen& screen, int x, int y, int roomNum) {
 			int distX = col - x;
 			int distY = row - y;
 			int distanceSquared = distX * distX + distY * distY;
-
-			if (distanceSquared <= radius * radius && screen.charAt(col, row, roomNum) != 'W') { // do not destroy walls
+			bool isOuterWall = (col == 0 || col == Screen::MAX_X || row == 0 || row == Screen::MAX_Y - 3);
+			if (!isOuterWall && distanceSquared <= radius * radius) { // do not destroy outer walls
 				screen.setChar(col, row, roomNum, EMPTY_CELL);
 			}
 		}
 	}
+	if (playerHit(x, y, radius)) {
+		removeLife();
+	}
+}
+
+//===========================player hit by bomb=================================
+bool game_manager::playerHit(int bombX, int bombY, int radius) {
+	if (bombRoom == currentRoom){
+		for (const auto& p : points) {
+			int dx = p.getX() - bombX;
+			int dy = p.getY() - bombY; 
+			int distanceSquared = dx * dx + dy * dy;
+			if (distanceSquared <= radius * radius) { // radius squared (3*3)
+				return true;
+			
+			}
+		}
+	}
+	return false;
+}
+
+//===========================lose life=================================
+bool game_manager::removeLife() {
+	if (!gameLives.loseLife()) {
+		cls();
+		gotoxy(30, 10);
+		std::cout << "GAME OVER!";
+		Sleep(2000);
+		return true;
+	}
+	return false;
 }
 
 //===========================handle obstacle=================================
@@ -672,35 +726,26 @@ void game_manager::handleDoor(Point& currentPlayer, char doorNum) {
 		return;
 	}
 
-	if (inv1 != KEY && inv2 != KEY && doorNum - '0' > currentRoom && screen.searchItem(currentRoom, KEY)) {		//if none of the players have a key, the door will not open
+	if (screen.searchItem(currentRoom, KEY) && doorNum - '0' > currentRoom) {		// if not all the keys been collected, the door will not open
 		textAppears = printOutput("Door is locked !");
 		return;
 	}
 
-	if (doorNum - '0' < currentRoom) { //go back a floor (as of now it's only possible from floor 1 to floor 0)
-		points[0].setPosition(77, 20);
-		points[1].setPosition(77, 21);
+	if (screen.searchItem(currentRoom, RIDDLE) && doorNum - '0' > currentRoom) {
+		textAppears = printOutput("Must answer correctly to the riddle to enter!");
+		return;
 	}
-	else { 
-		points[0].setPosition(2, 19);
-		points[1].setPosition(2, 21);
-	}
+
+	removeKeyAfterUse(inv1, inv2, currentPlayer); // remove key from inventory if used
+
+	posSetAfterDoor(doorNum); // set players position after door
 
 	currentRoom = doorNum - '0'; //update current room
 	cls();
 	screen.draw(currentRoom);
-	resetSpringState();
-	springDefFromMap(currentRoom);
+	gameLives.draw();
 
-
-	if (inv1 == KEY || inv2 == KEY) { // remove key from inventory if used
-		if (inv1 == KEY)
-			currentPlayer.drawToInventory(screen, currentRoom, EMPTY_CELL);
-		else
-			points[(currentPlayer.getPlayerChar() == points[0].getPlayerChar()) ? 1 : 0].drawToInventory(screen, currentRoom, EMPTY_CELL);
-	}
-
-	if (currentRoom == 2)
+	if (currentRoom == 3)
 		screen.helpLockPlayers();
 }
 
@@ -717,6 +762,28 @@ bool game_manager::bothPlayersAtSameChar(Point& pyr1, char checker, char& inv1, 
 			return false;
 	}
 	return true;
+}
+
+//===========================remove key after use=================================
+void game_manager::removeKeyAfterUse(char inv1, char inv2, Point& currentPlayer) {
+	if (inv1 == KEY || inv2 == KEY) { // remove key from inventory if used
+		if (inv1 == KEY)
+			currentPlayer.drawToInventory(screen, currentRoom, EMPTY_CELL);
+		else
+			points[(currentPlayer.getPlayerChar() == points[0].getPlayerChar()) ? 1 : 0].drawToInventory(screen, currentRoom, EMPTY_CELL);
+	}
+}
+
+//===========================set position after door=================================
+void game_manager::posSetAfterDoor(char doorNum) {
+	if (doorNum - '0' < currentRoom) { //go back a floor (as of now it's only possible from floor 1 to floor 0)
+		points[0].setPosition(77, 20);
+		points[1].setPosition(77, 21);
+	}
+	else {
+		points[0].setPosition(2, 19);
+		points[1].setPosition(2, 21);
+	}
 }
 
 //==============================on off lights=============================
@@ -755,6 +822,9 @@ bool game_manager::printOutput(const char* output) {
 void game_manager::eraseOutput() {
 	gotoxy(0, 23);
 	std::cout << std::string(Screen::MAX_X, ' ');
+	gameLives.draw();
+	gotoxy(35, 23);
+	std::cout << "LIVE | SCORE";
 }
 
 //==============================turn off================================

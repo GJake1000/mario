@@ -128,6 +128,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="game_manager.cpp" />
+    <ClCompile Include="lives.cpp" />
     <ClCompile Include="mario.cpp" />
     <ClCompile Include="Obstacle.cpp" />
     <ClCompile Include="Point.cpp" />
@@ -139,11 +140,16 @@
     <ClInclude Include="auxThing.h" />
     <ClInclude Include="DIrection.h" />
     <ClInclude Include="game_manager.h" />
+    <ClInclude Include="lives.h" />
     <ClInclude Include="Obstacle.h" />
     <ClInclude Include="Point.h" />
     <ClInclude Include="Screen.h" />
     <ClInclude Include="Spring.h" />
     <ClInclude Include="utils.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="riddles.txt" />
+    <Text Include="screens.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
