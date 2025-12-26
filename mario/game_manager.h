@@ -20,11 +20,14 @@ class game_manager {
 	int bombDisposalTime = -1;
 	int bombX = -1, bombY = -1, bombRoom = -1;
 	lives gameLives;
-
 public:
 	//========flow control========
 	game_manager();
 	void run();
+	void initilDefine();
+	void movePlayer(Point& p);
+	void textOpt(bool text, int& time);
+	bool handleKB();
 	bool loadMenu();
 	void printInstructionAndKeys();
 	void printCredits() const;
@@ -56,10 +59,12 @@ public:
 	void activateBomb(Screen& screen, int x, int y, int roomNum);
 	bool playerHit(int bombX, int bombY, int radius);
 	void setBombTimer(int x, int y, int roomNum);
+	void checkBombActivation();
 
 	//obstacle mechanics
 	void handleObstacle(Point& p, int x, int y);
 	void moveObstacle(int left, int right, int down, int up);
+	void drawObs();
 
 	//door mechanics
 	void handleDoor(Point& currentPlayer, char doorNum);

@@ -9,7 +9,7 @@ class lives {
 	int livesY;
 	bool color;
 public:
-	lives(int maxL = 3, int x = 2, int y = 23, bool isColor = true) : count(maxL), maxLives(maxL), livesX(x), livesY(y), color(isColor) {}
+	lives(int maxL = 3, int x = 25, int y = 23, bool isColor = true) : count(maxL), maxLives(maxL), livesX(x), livesY(y), color(isColor) {}
 	void setColor(bool mode) { color = mode; }
 	void resetLives() { count = maxLives; }
 	void draw() const;

@@ -1,5 +1,6 @@
 #pragma once
 #include "auxThing.h"
+#include "utils.h"
 
 
 class Point;
@@ -25,6 +26,7 @@ public:
 	void draw(int roomNum) const;
 	bool isWall(int x, int y, int roomNum) const;
 	void setChar(int x, int y, int roomNum, char ch);
+	void setChar(int x, int y, int roomNum, char ch, Color chClr);
 	void setDark() const;
 	void helpLockPlayers() const;
 	char getInitialChar(int x, int y, int roomNum) const;
