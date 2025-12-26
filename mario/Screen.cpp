@@ -152,14 +152,13 @@ void Screen::setChar(int x, int y, int roomNum, char ch, Color chClr) {
 // =========================set room to dark=================================
 const char Screen::EMPTY_ROW[] = "                                                                                "; // row of spaces
 
-void Screen::setDark() const {
+void Screen::setDark() const
+{
 	for (int col = 0; col <= MAX_Y - 2; col++) {
 		gotoxy(0, col);
 		std::cout << EMPTY_ROW << std::flush; // fill each row with spaces to simulate darkness
 	}
 	gotoxy(20, 23);
-	std::cout << "ROOM IS TOO DARK TO SEE" << std::flush;
-	Sleep(60);
 }
 
 // =========================lock the players in place in final room=================================

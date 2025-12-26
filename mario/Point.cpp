@@ -17,7 +17,7 @@ void Point::draw() {
 void Point::draw(char p) {
 	gotoxy(x, y);
 	if (colorChose)
-		setTextColor(color);
+		setTextColor(color);	
 	else
 		setTextColor(Color::white);
 	std::cout << p << std::flush;

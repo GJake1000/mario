@@ -24,7 +24,7 @@ public:
 	//========flow control========
 	game_manager();
 	void run();
-	bool gameFlow(bool dark);
+	bool gameFlow(bool& dark);
 	void resetPoints();
 	void initilDefine();
 	void movePlayer(Point& p);

@@ -35,11 +35,11 @@ W    WWWWWWWWWWWWWWWW  WW                WWW           WWWW    WW   WW         W
 W    WWWWWWWWWW    DD  WWWWWWWWWWWWWWWWWWWWW       WWWWWWWW    WW   WW         W
 W        WWW       WWWWWWWWWWWWWWWWWWWWWWWWW       WWWWWWWW    WW   WW         W
 W        WWW       WWWW         WW      WWW            WWWW    WW   WW         W
-W  WWW   WWW              WW    WW   K  WWW   WWWWWW   WWWW    WW   WW         W
-W  WWW   WWW       WWWW   WW    WW      WWW   WWWWWW   WWWW    WW   WW         W
-W  WWW             WWWW   WW    WW      DDD            WWWW    WW   WW         W
-W  WWW                    WW    WW      WWWWWWWWW      WWWW    WW              W
-WWWWWWWWWWWWWW     WWWW   WW    WWWW  WWWWW  ?  W      WWWW    WW   WDDDDDDDDDDW
+W  WWW   WWW              WW    WW   K  WWW   WWWWWW   WWWW    WW              W
+W  WWW   WWW       WWWW   WW    WW      WWW   WWWWWW   WWWW    WW              W
+W  WWW             WWWW   WW    WW      DDD            WWWW    WW   WWDDDDDDDDDW
+W  WWW                    WW    WW      WWWWWWWWW      WWWW    WW   WW         W
+WWWWWWWWWWWWWW     WWWW   WW    WWWW  WWWWW  ?  W      WWWW    WW   WW         W
 WWWWWWWWWWWWWW     WWWW   WW            WWW  W  W   WWWWWWWWWWWWW   WW         W
 W        /  WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW  W  W   WWWWWWWWWWWWW   WWWWWWWWWWWW
 W    WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW  W  W                   WWWWW      W
@@ -76,13 +76,13 @@ Player &:                            INVENTORY                   Player $:
 WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW 
 W                                                                              W
 W                                                                              W
-W  WWWWWW  WWWWW  W   W  WWWWW  W           W      WWWWW  W   W  WWWWW  W      W
-W  W         W    WW  W  W   W  W           W      W      W   W  W      W      W
-W  WWWWW     W    W W W  WWWWW  W           W      WWWW   W   W  WWWW   W      W
-W  W         W    W  WW  W   W  W           W      W       W W   W      W      W
-W  W       WWWWW  W   W  W   W  WWWWW       WWWWW  WWWWW    W    WWWWW  WWWWW  W
-W                                                                              W
-W                                                                              W
+W                     WWWWWWWWWW   WW      W   WWWWWW                          W
+W                     W            W W     W   W     WW                        W
+W                     W            W  W    W   W      WW                       W
+W                     WWWWWWWW     W   W   W   W      WW                       W
+W                     W            W    W  W   W      WW                       W
+W                     W            W     W W   W     WW                        W
+W                     WWWWWWWWWW   W      WW   WWWWWW                          W
 W                                                                              W
 W                                                                              W
 W                                                                              W

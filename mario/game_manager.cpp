@@ -202,9 +202,9 @@ void game_manager::textOpt() {
 
 void game_manager::movePlayer(Point& p) {
 	char curChar = screen.charAt(p, currentRoom);
-	p.draw(curChar);             // erase previous position
+	p.draw(curChar);           // erase previous position
 
-	int nextX = p.getNextX();    // calculate next position
+	int nextX = p.getNextX();  // calculate next position
 	int nextY = p.getNextY();
 
 	char item = screen.charAt(nextX, nextY, currentRoom);
@@ -229,7 +229,7 @@ void game_manager::initilDefine() {
 	gameLives.draw();
 }
 
-bool game_manager::gameFlow(bool dark) {
+bool game_manager::gameFlow(bool& dark) {
 	onOffLight(dark);
 	if (gameLives.getLives() <= 0) return false; // game over go to menu
 
@@ -317,7 +317,10 @@ void game_manager::onOffLight(bool& dark) {
 
 	bool darkNow = !hasTorch(); // if niether has torch it will become dark
 	if (darkNow != dark) {      // check about now if anyone has torch
-		if (darkNow) screen.setDark();
+		if (darkNow) {
+			screen.setDark();
+			printOutput("Room is too dark to see!");
+		}
 		else{
 			screen.draw(currentRoom);
 			drawObs();
