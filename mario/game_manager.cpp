@@ -11,8 +11,7 @@ void game_manager::newGameStarter()
 {
 	//reset positions
 	currentRoom = 0;
-	points[0].setPosition(1, 15);
-	points[1].setPosition(1, 17);
+	resetPoints();
 	gameLives.resetLives();
 	gameLives.draw();
 	screen.resetRoom();
@@ -46,29 +45,15 @@ void game_manager::run() {
 		{
 			initilDefine();
 			bool dark = false;
-
-			while (true) {
-				onOffLight(dark);
-				if (gameLives.getLives() <= 0) break; // game over go to menu
-
-				checkBombActivation();
-
-				for (auto& p : points) 
-					movePlayer(p);
-
-				if (handleKB()) break;
-
-				textOpt(textAppears, output_time);
-				
-				turn++;	//counts turns in the game
-				Sleep(50);
-
-			}
+			while (true) 
+				if (!gameFlow(dark)) 
+					break;
 		}
 	}
 	cls();
 	printCredits();		//end game
 }
+
 
 //=========================handle general=================================
 bool game_manager::loadMenu()
@@ -149,7 +134,7 @@ bool game_manager::printPauseScreen()
 {
 	cls();
 	std::cout << "\n\n\n\n\n\n\nGame Paused. Press ESC to continue or H to go back to main menu...\n";
-	char key = _getwch();
+	int key = _getwch();
 	while (key != ESC && key != 'H' && key != 'h' && key != HEB_YOD)
 		key = _getwch();
 
@@ -204,12 +189,12 @@ bool game_manager::handleKB() {
 	return false;
 }
 
-void game_manager::textOpt(bool text, int& time) {
-	if (text == true) {
-		time++;
-		if (time > 150)
+void game_manager::textOpt() {
+	if (textAppears == true) {
+		output_time++;
+		if (output_time > 150)
 		{
-			time = 0;
+			output_time = 0;
 			eraseOutput();
 		}
 	}
@@ -242,6 +227,31 @@ void game_manager::initilDefine() {
 	screen.draw(currentRoom);
 	drawObs();
 	gameLives.draw();
+}
+
+bool game_manager::gameFlow(bool dark) {
+	onOffLight(dark);
+	if (gameLives.getLives() <= 0) return false; // game over go to menu
+
+	checkBombActivation();
+
+	for (auto& p : points)
+		movePlayer(p);
+
+	if (handleKB()) return false;
+
+	textOpt();
+
+	turn++;	//counts turns in the game
+	Sleep(50);
+	return true;
+}
+
+void game_manager::resetPoints() {
+	points[0].setPosition(1, 15);
+	points[1].setPosition(1, 17);
+	points[0].resetInventory(screen);
+	points[1].resetInventory(screen);
 }
 
 //=========================handle spacial item=================================

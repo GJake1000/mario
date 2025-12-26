@@ -137,6 +137,11 @@ char Point::checkInventory(Screen& screen, int roomNum) const {
 	return screen.charAt(inventoryX, inventoryY, roomNum);
 }
 
+void Point::resetInventory(Screen&  screen) {
+	for (int i = 0; i < Screen::NUM_OF_ROOMS; ++i)
+		screen.setChar(inventoryX, inventoryY, i, EMPTY_CELL);	
+}
+
 //=========================dispose=================================
 char Point::dispose(Screen& screen, int roomNum) {
 	char invItem = itemToDispose(screen, roomNum);

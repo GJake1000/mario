@@ -51,6 +51,7 @@ public:
 	char itemToDispose(Screen& screen, int roomNum);
 	bool drawToInventory(Screen& screen, int roomNum, char item);
 	char checkInventory(Screen& screen, int roomNum) const;
+	void resetInventory(Screen& screen);
 	char dispose(Screen& screen, int roomNum);
 	void setPosition(int newX, int newY);
 	char getPlayerChar() const;

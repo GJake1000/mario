@@ -24,9 +24,11 @@ public:
 	//========flow control========
 	game_manager();
 	void run();
+	bool gameFlow(bool dark);
+	void resetPoints();
 	void initilDefine();
 	void movePlayer(Point& p);
-	void textOpt(bool text, int& time);
+	void textOpt();
 	bool handleKB();
 	bool loadMenu();
 	void printInstructionAndKeys();
