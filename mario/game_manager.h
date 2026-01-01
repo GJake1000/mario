@@ -3,6 +3,7 @@
 #include "Point.h"
 #include "Obstacle.h"
 #include "lives.h"
+#include "Score.h"
 #include <iostream>
 #include "Spring.h"
 #include <vector>
@@ -20,6 +21,7 @@ class game_manager {
 	int bombDisposalTime = -1;
 	int bombX = -1, bombY = -1, bombRoom = -1;
 	lives gameLives;
+	Score gameScore;
 public:
 	//========flow control========
 	game_manager();
@@ -31,20 +33,20 @@ public:
 	void textOpt();
 	bool handleKB();
 	bool loadMenu();
-	void printInstructionAndKeys();
+	void printInstructionAndKeys() const;
 	void printCredits() const;
 	bool printPauseScreen();
 
 	//=========game mechanics=========
 	//general mechanics
 	void handleSpacialItem(Point &p, int x, int y, char item);
-	bool printOutput(const char* output);
-	void eraseOutput();
+	bool printOutput(const char* output) const;
+	void eraseOutput() const;
 	bool removeLife();
 
 	//torch mechanics
 	void handleTorch(Point& p, int x, int y);
-	bool hasTorch();
+	bool hasTorch() const;
 	void onOffLight(bool& dark);
 
 	//switch mechanics
@@ -53,13 +55,13 @@ public:
 
 	//riddle mechanics
 	void handleRiddle(Point& p, int x, int y);
-	char printRiddle(int index);
+	char printRiddle(int index) const;
 	bool handleAnswer(char correct, char ans, Point& p);
 
 	//bomb mechanics
 	void handleBomb(Point& p, int x, int y);
 	void activateBomb(Screen& screen, int x, int y, int roomNum);
-	bool playerHit(int bombX, int bombY, int radius);
+	bool playerHit(int bombX, int bombY, int radius) const;
 	void setBombTimer(int x, int y, int roomNum);
 	void checkBombActivation();
 
@@ -71,7 +73,7 @@ public:
 	//door mechanics
 	void handleDoor(Point& currentPlayer, char doorNum);
 	void handleKey(Point& p, int x, int y);
-	bool bothPlayersAtSameChar(Point& pyr1, char checker, char& inv1, char& inv2);
+	bool bothPlayersAtSameChar(Point& pyr1, char checker, char& inv1, char& inv2) const;
 	void removeKeyAfterUse(char inv1, char inv2, Point& currentPlayer);
 	void posSetAfterDoor(char doorNum);
 	
@@ -130,4 +132,4 @@ private:
 	std::vector<Riddle> riddles;
 	void loadRiddles(const char* fileName);
 	char presentRiddle(int riddleIndex);
-};
+}; 

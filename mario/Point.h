@@ -43,16 +43,16 @@ public:
 	void setGameManager(game_manager* game) {
 		gm = game;
 	}
-	void draw();
-	void draw(char p);
+	void draw() const;
+	void draw(char p) const;
 	void move(bool canMove);
 	void handleKeyPressed(int key, Screen& screen, int roomNum);
 	void setDirection(Direction dir);
-	char itemToDispose(Screen& screen, int roomNum);
-	bool drawToInventory(Screen& screen, int roomNum, char item);
-	char checkInventory(Screen& screen, int roomNum) const;
-	void resetInventory(Screen& screen);
-	char dispose(Screen& screen, int roomNum);
+	char itemToDispose(Screen& screen, int roomNum) const;
+	bool drawToInventory(Screen& screen, int roomNum, char item) const;
+	char checkInventory(const Screen& screen, int roomNum) const;
+	void resetInventory(Screen& screen) const;
+	char dispose(Screen& screen, int roomNum) const;
 	void setPosition(int newX, int newY);
 	char getPlayerChar() const;
 	int getX() const;

@@ -11,14 +11,23 @@ void game_manager::newGameStarter()
 {
 	//reset positions
 	currentRoom = 0;
+	turn = 0;
 	resetPoints();
 	gameLives.resetLives();
 	gameLives.draw();
+	gameScore.reset();
 	screen.resetRoom();
 	resetSpringState();
 	springDefFromMap(currentRoom);
 	obsDef();
 	loadRiddles("riddles.txt");
+}
+
+void game_manager::resetPoints() {
+	points[0].setPosition(1, 15);
+	points[1].setPosition(1, 17);
+	points[0].resetInventory(screen);
+	points[1].resetInventory(screen);
 }
 
 //=========================game manager constructor=================================
@@ -105,7 +114,7 @@ bool game_manager::loadMenu()
 	}
 }
 
-void game_manager::printInstructionAndKeys()
+void game_manager::printInstructionAndKeys() const
 {
 	std::string instructions = "instructions of the game: ";// will be long (probably we will take this from some file)
 	std::string keys[2] = { STARDARD_PLAYER_1_KEYS , STARDARD_PLAYER_2_KEYS };
@@ -150,7 +159,7 @@ bool game_manager::printPauseScreen()
 	return false;
 }
 
-bool game_manager::printOutput(const char* output) {
+bool game_manager::printOutput(const char* output) const  {
 	eraseOutput();
 
 	int len = strlen(output);
@@ -166,10 +175,11 @@ bool game_manager::printOutput(const char* output) {
 	return true;
 }
 
-void game_manager::eraseOutput() {
+void game_manager::eraseOutput() const {
 	gotoxy(0, 23);
 	std::cout << std::string(Screen::MAX_X, ' ');
 	gameLives.draw();
+	gameScore.draw(turn, gameLives.getLives());
 	gotoxy(35, 23);
 	std::cout << "LIVE | SCORE";
 }
@@ -239,19 +249,14 @@ bool game_manager::gameFlow(bool& dark) {
 		movePlayer(p);
 
 	if (handleKB()) return false;
+	if (gameScore.calc(turn, gameLives.getLives()) == 0) return false; // game over go to menu
 
 	textOpt();
 
 	turn++;	//counts turns in the game
+	gameScore.draw(turn, gameLives.getLives());
 	Sleep(50);
 	return true;
-}
-
-void game_manager::resetPoints() {
-	points[0].setPosition(1, 15);
-	points[1].setPosition(1, 17);
-	points[0].resetInventory(screen);
-	points[1].resetInventory(screen);
 }
 
 //=========================handle spacial item=================================
@@ -305,7 +310,7 @@ void game_manager::handleTorch(Point& p, int x, int y) {
 	}
 }
 
-bool game_manager::hasTorch() {
+bool game_manager::hasTorch() const {
 	return (points[0].checkInventory(screen, currentRoom) == TORCH || points[1].checkInventory(screen, currentRoom) == TORCH);
 }
 
@@ -378,6 +383,7 @@ bool game_manager::handleAnswer(char correct, char ans, Point& p) {
 	if (ans == correct) {
 		std::cout << "\n\n\n\n\n\n          CORRECT!";
 		Sleep(2000);
+		gameScore.add(150);
 		return true;
 	}
 	else {
@@ -413,7 +419,7 @@ void game_manager::loadRiddles(const char* fileName) {
 	file.close();
 }
 
-char game_manager::printRiddle(int index) {
+char game_manager::printRiddle(int index) const {
 	if (index < 0 || index >= riddles.size())
 		return '\0'; // invalid index
 	cls();
@@ -435,7 +441,7 @@ void game_manager::handleBomb(Point& p, int x, int y) {
 	}
 }
 
-bool game_manager::playerHit(int bombX, int bombY, int radius) {
+bool game_manager::playerHit(int bombX, int bombY, int radius) const  {
 	if (bombRoom == currentRoom) {
 		for (const auto& p : points) {
 			int dx = p.getX() - bombX;
@@ -845,7 +851,7 @@ void game_manager::posSetAfterDoor(char doorNum) {
 	}
 }
 
-bool game_manager::bothPlayersAtSameChar(Point& pyr1, char checker, char& inv1, char& inv2) {
+bool game_manager::bothPlayersAtSameChar(Point& pyr1, char checker, char& inv1, char& inv2) const  {
 	for (const auto& player : points) {
 		if (player.getPlayerChar() == pyr1.getPlayerChar()) {
 			inv1 = player.checkInventory(screen, currentRoom);
