@@ -1,0 +1,202 @@
+﻿#include "Point.h"
+#include "Screen.h"
+#include "game_manager.h"
+#include <iostream>
+#include <cctype>
+
+
+class Screen;
+
+void Point::setKeys(const std::string& my_keys) {
+	for (size_t i = 0; i < NUM_KEYS && i < my_keys.length(); i++)
+		keys[i] = my_keys[i];
+}
+
+//=========================draw point=================================
+bool Point::colorChose = true;
+
+void Point::draw() const {
+	draw(player);
+}
+
+void Point::draw(char p) const  {
+	gotoxy(x, y);
+	if (colorChose)
+		setTextColor(color);	
+	else
+		setTextColor(Color::white);
+	std::cout << p << std::flush;
+	setTextColor(Color::white);
+}
+
+//=========================move point=================================
+void Point::move(bool canMove)
+{
+	if (canMove) { // move only if no wall
+		x = (x + diff_x + MAX_X) % MAX_X;
+		y = (y + diff_y + MAX_Y) % MAX_Y;
+	}
+}
+
+void Point::setPosition(int newX, int newY) {
+	x = newX;
+	y = newY;
+	diff_x = 0;
+	diff_y = 0;
+}
+
+//=========================handle key pressed=================================
+void Point::handleKeyPressed(int key, Screen& screen, int roomNum) {
+	unsigned char hebrew = (unsigned char)key;
+	char letter = key;
+	/*gotoxy(0, 0);
+	std::cout << (int)hebrew;*/
+	switch (hebrew) { // handle hebrew letters
+		// player 1
+	case HEB_VAV   : letter = 'W'; break; // ו
+	case HEB_ZAYIN : letter = 'X'; break; // ז
+	case HEB_HET   : letter = 'D'; break; // ח
+	case HEB_TET   : letter = 'A'; break; // ט'
+	case HEB_GERESH: letter = 'S'; break; // י
+	case HEB_CAF   : letter = 'E'; break; // כ
+		// player 2
+	case HEB_LAMED : letter = 'I'; break; // ל
+	case HEB_MEM   : letter = 'M'; break; // מ
+	case HEB_NUN   : letter = 'L'; break; // נ
+	case HEB_SAMECH: letter = 'J'; break; // ס
+	case HEB_AYIN  : letter = 'K'; break; // ע
+	case HEB_PE    : letter = 'O'; break; // פ
+
+		// other
+	case HEB_YOD   : letter = 'H'; break; // י
+
+	}
+
+	// iterate through keys to find which one was pressed and set direction
+	size_t index = 0;
+	for (char k : keys) { // check which key was pressed and set direction accordingly
+		if (std::toupper((unsigned char)letter) == std::toupper((unsigned char)k)) {
+			if (index == DISPOSE_KEY){    // DISPOSE
+				char disposed = dispose(screen, roomNum);
+				if (disposed == BOMB && gm != nullptr) 
+					gm->setBombTimer(x, y, roomNum);
+			}
+			else setDirection((Direction)index);
+			return;
+		}
+		index++;
+	}
+}
+
+//=========================set direction=================================
+void Point::setDirection(Direction dir) {
+
+	switch (dir) {
+	case Direction::UP:
+		diff_x = 0;
+		diff_y = -1;
+		break;
+	case Direction::RIGHT:
+		diff_x = 1;
+		diff_y = 0;
+		break;
+	case Direction::DOWN:
+		diff_x = 0;
+		diff_y = 1;
+		break;
+	case Direction::LEFT:
+		diff_x = -1;
+		diff_y = 0;
+		break;
+	case Direction::STAY:
+		diff_x = 0;
+		diff_y = 0;
+		break;
+	}
+}
+
+//=========================item to dispose=================================
+char Point::itemToDispose(Screen& screen, int roomNum) const  {
+	char invItem = screen.charAt(inventoryX, inventoryY, roomNum);
+	for (int i = 0; i < Screen::NUM_OF_ROOMS; i++)            // remove item from all rooms' inventories
+		screen.setChar(inventoryX, inventoryY, i, EMPTY_CELL);
+
+	return invItem;
+}
+
+//=========================draw to inventory=================================
+bool Point::drawToInventory(Screen& screen, int roomNum, char item) const  {
+	if (checkInventory(screen, roomNum) == EMPTY_CELL || item == EMPTY_CELL) {
+		if (item == EMPTY_CELL || (diff_x != 0 || diff_y != 0)) {
+			for (int i = 0; i < Screen::NUM_OF_ROOMS; i++) {           // draw item in all rooms' inventories       
+				screen.setChar(inventoryX, inventoryY, i, item);
+			}
+			return true;
+		}
+	}
+	return false;
+}
+
+//=========================check if in inventory=================================
+char Point::checkInventory(const Screen& screen, int roomNum) const {
+	return screen.charAt(inventoryX, inventoryY, roomNum);
+}
+
+void Point::resetInventory(Screen&  screen) const  {
+	for (int i = 0; i < Screen::NUM_OF_ROOMS; ++i)
+		screen.setChar(inventoryX, inventoryY, i, EMPTY_CELL);	
+}
+
+//=========================dispose=================================
+char Point::dispose(Screen& screen, int roomNum) const  {
+	char invItem = itemToDispose(screen, roomNum);
+	if (invItem != EMPTY_CELL)
+		if (screen.charAt(x, y, roomNum) == EMPTY_CELL)
+			screen.setChar(x, y, roomNum, invItem); // place item from inventory to current position
+	drawToInventory(screen, roomNum, ' ');
+	return invItem;
+
+}
+
+//=========================get something=================================
+char Point::getPlayerChar() const {
+	return player;
+}
+int Point::getX() const {
+	return x;
+}
+int Point::getY() const {
+	return y;
+}
+int Point::getNextX() const {
+	return (x + diff_x + MAX_X) % MAX_X;
+}
+int Point::getNextY() const {
+	return (y + diff_y + MAX_Y) % MAX_Y;
+}
+
+//=========================spring thing=================================
+
+void Point::startSpringEffect(int dx, int dy, int speed)
+{
+	beingLaunched = true;
+	launchDirX = dx;
+	launchDirY = dy;
+	launchSpeed = speed;
+	launchCyclesLeft = speed * speed;
+}
+
+void Point::tickSpringEffect()
+{
+	if (!beingLaunched)
+		return;
+
+	launchCyclesLeft--;
+
+	if (launchCyclesLeft <= 0) {
+		beingLaunched = false;
+		launchDirX = launchDirY = 0;
+		launchSpeed = 0;
+		launchCyclesLeft = 0;
+	}
+}
