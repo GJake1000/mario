@@ -9,10 +9,12 @@ void cls();
 
 
 enum class Color {
+    black = 0,
     blue = 1,
     green = 2,
     cyan = 3,
     red = 4,
+    purple = 5,
     brown = 6,
     gray = 8,
     yellow = 12,

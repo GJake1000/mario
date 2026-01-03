@@ -132,6 +132,7 @@
     <ClCompile Include="mario.cpp" />
     <ClCompile Include="Obstacle.cpp" />
     <ClCompile Include="Point.cpp" />
+    <ClCompile Include="Score.cpp" />
     <ClCompile Include="Screen.cpp" />
     <ClCompile Include="Spring.cpp" />
     <ClCompile Include="utils.cpp" />
@@ -143,6 +144,7 @@
     <ClInclude Include="lives.h" />
     <ClInclude Include="Obstacle.h" />
     <ClInclude Include="Point.h" />
+    <ClInclude Include="Score.h" />
     <ClInclude Include="Screen.h" />
     <ClInclude Include="Spring.h" />
     <ClInclude Include="utils.h" />

@@ -1,13 +1,15 @@
 #include "Obstacle.h"
-
+#include "Point.h"
 
 //===============================draw===============================
 void Obstacle::draw(Screen& screen) const {
+	if (Point::isColorChose()) setTextColor(color);
 	for (int i = 0; i < width; ++i) {
 		for (int j = 0; j < height; ++j) {
-			screen.setChar(x + i, y + j, roomNum, OBSTACLE);
+			screen.setChar(x + i, y + j, roomNum, OBSTACLE, color);
 		}
 	}
+	setTextColor(Color::white);
 }
 
 //===============================erase===============================

@@ -10,14 +10,14 @@ class Screen;
 //=========================draw point=================================
 bool Point::colorChose = true;
 
-void Point::draw() {
+void Point::draw() const {
 	draw(player);
 }
 
-void Point::draw(char p) {
+void Point::draw(char p) const  {
 	gotoxy(x, y);
 	if (colorChose)
-		setTextColor(color);
+		setTextColor(color);	
 	else
 		setTextColor(Color::white);
 	std::cout << p << std::flush;
@@ -111,7 +111,7 @@ void Point::setDirection(Direction dir) {
 }
 
 //=========================item to dispose=================================
-char Point::itemToDispose(Screen& screen, int roomNum) {
+char Point::itemToDispose(Screen& screen, int roomNum) const  {
 	char invItem = screen.charAt(inventoryX, inventoryY, roomNum);
 	for (int i = 0; i < Screen::NUM_OF_ROOMS; i++)            // remove item from all rooms' inventories
 		screen.setChar(inventoryX, inventoryY, i, EMPTY_CELL);
@@ -120,7 +120,7 @@ char Point::itemToDispose(Screen& screen, int roomNum) {
 }
 
 //=========================draw to inventory=================================
-bool Point::drawToInventory(Screen& screen, int roomNum, char item) {
+bool Point::drawToInventory(Screen& screen, int roomNum, char item) const  {
 	if (checkInventory(screen, roomNum) == EMPTY_CELL || item == EMPTY_CELL) {
 		if (diff_x != 0 || diff_y != 0) {
 			for (int i = 0; i < Screen::NUM_OF_ROOMS; i++) {           // draw item in all rooms' inventories       
@@ -133,12 +133,17 @@ bool Point::drawToInventory(Screen& screen, int roomNum, char item) {
 }
 
 //=========================check if in inventory=================================
-char Point::checkInventory(Screen& screen, int roomNum) const {
+char Point::checkInventory(const Screen& screen, int roomNum) const {
 	return screen.charAt(inventoryX, inventoryY, roomNum);
 }
 
+void Point::resetInventory(Screen&  screen) const  {
+	for (int i = 0; i < Screen::NUM_OF_ROOMS; ++i)
+		screen.setChar(inventoryX, inventoryY, i, EMPTY_CELL);	
+}
+
 //=========================dispose=================================
-char Point::dispose(Screen& screen, int roomNum) {
+char Point::dispose(Screen& screen, int roomNum) const  {
 	char invItem = itemToDispose(screen, roomNum);
 	if (invItem != EMPTY_CELL)
 		if (screen.charAt(x, y, roomNum) == EMPTY_CELL)

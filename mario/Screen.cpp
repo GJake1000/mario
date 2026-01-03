@@ -54,10 +54,13 @@ void Screen::colorItem(char item) const {
 		setTextColor(Color::cyan);
 		break;
 	case '&':
-		setTextColor(Color::red);
+		setTextColor(Color::green);
 		break;
 	case '$':
 		setTextColor(Color::blue);
+		break;
+	case BOMB:
+		setTextColor(Color::purple);
 		break;
 	default:
 		setTextColor(Color::white);
@@ -127,25 +130,35 @@ bool Screen::isWall(int x, int y, int roomNum) const {
 // =========================set character at (x,y) in room=================================
 void Screen::setChar(int x, int y, int roomNum, char ch) {
 	if (x < 0 || x > Screen::MAX_X || y < 0 || y > Screen::MAX_Y) return;
-	if (x >= 0 && x <= MAX_X && y >= 0 && y <= MAX_Y) {
+	if (x >= 0 && x <= MAX_X && y >= 0 && y <= MAX_Y) 
 		rooms[roomNum][y][x] = ch;
-	}
+	
 	gotoxy(x, y);
 	colorItem(ch);
+
 	std::cout << ch << std::flush;
+}
+
+void Screen::setChar(int x, int y, int roomNum, char ch, Color chClr) {
+	if (x < 0 || x > Screen::MAX_X || y < 0 || y > Screen::MAX_Y) return;
+	rooms[roomNum][y][x] = ch;
+	gotoxy(x, y);
+	if (Point::isColorChose())
+		setTextColor(chClr);
+	std::cout << ch << std::flush;
+	setTextColor(Color::white);
 }
 
 // =========================set room to dark=================================
 const char Screen::EMPTY_ROW[] = "                                                                                "; // row of spaces
 
-void Screen::setDark() const {
+void Screen::setDark() const
+{
 	for (int col = 0; col <= MAX_Y - 2; col++) {
 		gotoxy(0, col);
 		std::cout << EMPTY_ROW << std::flush; // fill each row with spaces to simulate darkness
 	}
 	gotoxy(20, 23);
-	std::cout << "ROOM IS TOO DARK TO SEE" << std::flush;
-	Sleep(60);
 }
 
 // =========================lock the players in place in final room=================================
