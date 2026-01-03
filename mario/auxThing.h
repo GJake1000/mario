@@ -4,6 +4,7 @@
 constexpr char STARDARD_PLAYER_1_KEYS[] = "WDXASE";
 constexpr char STARDARD_PLAYER_2_KEYS[] = "ILMJKO";
 constexpr int DISPOSE_KEY = 5;
+constexpr char WALL = 'W';
 constexpr char TORCH = '!';
 constexpr char SWITCH = '/';
 constexpr char OFF_SWITCH = '\\';

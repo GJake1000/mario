@@ -13,19 +13,21 @@ void game_manager::newGameStarter()
 	currentRoom = 0;
 	turn = 0;
 	resetPoints();
-	gameLives.resetLives();
+	gameLives.resetLives(fileH.getInitialLives());
 	gameLives.draw();
 	gameScore.reset();
 	screen.resetRoom();
 	resetSpringState();
 	springDefFromMap(currentRoom);
-	obsDef();
+	obstacles = fileH.createObstacles(screen, currentRoom);
 	loadRiddles("riddles.txt");
 }
 
 void game_manager::resetPoints() {
-	points[0].setPosition(1, 15);
-	points[1].setPosition(1, 17);
+	std::pair<int, int> startPos1 = screen.getPlayerStartPos(1);
+	std::pair<int, int> startPos2 = screen.getPlayerStartPos(2);
+	points[0].setPosition(startPos1.first, startPos1.second);
+	points[1].setPosition(startPos2.first, startPos2.second);
 	points[0].resetInventory(screen);
 	points[1].resetInventory(screen);
 }
@@ -34,12 +36,20 @@ void game_manager::resetPoints() {
 game_manager::game_manager() : points{
 	// initial positions	
 	Point(1 ,15, '&', STARDARD_PLAYER_1_KEYS, Color::green, 10),  // w - up, d - right, x - down, a - left, s - stay
-	Point(1 ,17, '$', STARDARD_PLAYER_2_KEYS, Color::blue, 75)  // i - up, l - right, m - down, j - left, k - stay
+	Point(1 ,17, '$', STARDARD_PLAYER_2_KEYS, Color::blue, 76)  // i - up, l - right, m - down, j - left, k - stay
 	}, gameLives()
 {
+	fileH.loadGlobal("global.txt");
+	fileH.loadRiddles();
+
+	points[0].setKeys(fileH.getP1Keys());
+	points[1].setKeys(fileH.getP2Keys());
+    
 	// set game manager for each point
 	points[0].setGameManager(this);
 	points[1].setGameManager(this);
+
+	gameOver = false;
 }
 
 //=========================run game manager=================================
@@ -186,11 +196,11 @@ void game_manager::eraseOutput() const {
 
 bool game_manager::handleKB() {
 	if (_kbhit()) {
-		char key = _getwch();
+	char key = _getwch();
 		if (key == ESC) {
 			if (printPauseScreen()) return true; // pause menu
 		}
-		else {
+		else if (!gameOver) {
 			for (auto& p : points) {
 				p.handleKeyPressed(key, screen, currentRoom); // update direction based on key press
 			}
@@ -237,6 +247,10 @@ void game_manager::initilDefine() {
 	screen.draw(currentRoom);
 	drawObs();
 	gameLives.draw();
+	if (screen.isDark(currentRoom))
+		screen.setDark();
+	if (screen.isLastRoom(currentRoom))
+		gameOver = true;
 }
 
 bool game_manager::gameFlow(bool& dark) {
@@ -298,7 +312,7 @@ void game_manager::handleSpacialItem(Point& p, int x, int y, char item) {
 	case '1':		//door to 1
 	case '2':
 	case '3':       //door ??? win maybe?
-		handleDoor(p, item); //only if has key == true
+		handleDoor(p, x, y); //only if has key == true
 		break;
 	}
 }
@@ -315,7 +329,7 @@ bool game_manager::hasTorch() const {
 }
 
 void game_manager::onOffLight(bool& dark) {
-	if (currentRoom != 1) {
+	if (!screen.isDark(currentRoom)) {
 		dark = false;
 		return;
 	}
@@ -358,24 +372,8 @@ void game_manager::turnOff(int x, int y, int roomNum) {
 
 //=========================handle riddle=================================
 void game_manager::handleRiddle(Point& p, int x, int y) {
-	
-	char correct = printRiddle(currentRoom); // for now, always the first riddle
-	while (true) {
-		if (_kbhit()) {
-			char ans = _getch();
-			if ('4' < ans || '0' > ans) continue;  // not in boundries
-			bool wasRight = handleAnswer(correct, ans, p);
-			if (wasRight) screen.setChar(x, y, currentRoom, ' ');
-			cls();
-			screen.draw(currentRoom);
-			drawObs();
-			gameLives.draw();
-
-			if (currentRoom == 1 && !hasTorch())
-				screen.setDark();
-
-			return;
-		}
+	if (solveRiddle(p)) {
+		screen.setChar(x, y, currentRoom, EMPTY_CELL); // remove riddle from the room
 	}
 }
 
@@ -383,7 +381,7 @@ bool game_manager::handleAnswer(char correct, char ans, Point& p) {
 	if (ans == correct) {
 		std::cout << "\n\n\n\n\n\n          CORRECT!";
 		Sleep(2000);
-		gameScore.add(150);
+		gameScore.add(fileH.getRidScore());
 		return true;
 	}
 	else {
@@ -393,6 +391,26 @@ bool game_manager::handleAnswer(char correct, char ans, Point& p) {
 		if (isDead) return false;
 		p.setDirection(Direction::STAY);
 		return false;
+	}
+}
+
+bool game_manager::solveRiddle(Point& p) {
+	char correct = printRiddle(currentRoom); // for now, always the first riddle
+	while (true) {
+		if (_kbhit()) {
+			char ans = _getch();
+			if ('4' < ans || '1' > ans) continue;  // not in boundries
+			bool wasRight = handleAnswer(correct, ans, p);
+			cls();
+			screen.draw(currentRoom);
+			drawObs();
+			gameLives.draw();
+
+			if (currentRoom == 1 && !hasTorch())
+				screen.setDark();
+
+			return wasRight;
+		}
 	}
 }
 
@@ -420,7 +438,7 @@ void game_manager::loadRiddles(const char* fileName) {
 }
 
 char game_manager::printRiddle(int index) const {
-	if (index < 0 || index >= riddles.size())
+	if (index < 0 || index >= fileH.getRidCnt())
 		return '\0'; // invalid index
 	cls();
 	std::cout << riddles[index];
@@ -447,10 +465,9 @@ bool game_manager::playerHit(int bombX, int bombY, int radius) const  {
 			int dx = p.getX() - bombX;
 			int dy = p.getY() - bombY;
 			int distanceSquared = dx * dx + dy * dy;
-			if (distanceSquared <= radius * radius) { // radius squared (3*3)
+			if (distanceSquared <= radius * radius) // radius squared (3*3)
 				return true;
 
-			}
 		}
 	}
 	return false;
@@ -458,7 +475,7 @@ bool game_manager::playerHit(int bombX, int bombY, int radius) const  {
 
 void game_manager::activateBomb(Screen& screen, int x, int y, int roomNum) {
 	// explode bomb at (x,y) in roomNum
-	int radius = 3; // radius of explosion
+	int radius = fileH.getBombRadius(); // radius of explosion
 	for (int row = y - radius; row <= y + radius; row++) {
 		for (int col = x - radius; col <= x + radius; col++) {
 			int distX = col - x;
@@ -483,7 +500,7 @@ void game_manager::setBombTimer(int x, int y, int roomNum) {
 }
 
 void game_manager::checkBombActivation() {
-	if (bombDisposalTime != -1 && turn - bombDisposalTime >= 5) {
+	if (bombDisposalTime != -1 && turn - bombDisposalTime >= fileH.getBombTimer()) {
 		activateBomb(screen, bombX, bombY, bombRoom);
 		bombDisposalTime = -1; // reset bomb timer
 	}
@@ -524,10 +541,10 @@ Obstacle* game_manager::findObs(int x, int y) {
 void game_manager::obsDef() {
 	obstacles.clear();
 	// Define obstacles here if needed
-	obstacles.push_back(Obstacle(36, 16, 2, 1, 1, Color::brown)); // obstacle 1
+	const auto& obsList = screen.getObstacleData(currentRoom);
 	
-	for (const auto& obs : obstacles)
-		obs.draw(screen);
+	for (const auto& obs : obsList)
+		obstacles.push_back(Obstacle(obs.x, obs.y, obs.width, obs.height, currentRoom, Color::brown));
 }
 
 void game_manager::drawObs() {
@@ -809,46 +826,68 @@ int game_manager::traverseSpringTowardWallEnd(const Spring& spr, int startX, int
 
 
 //===========================handle door=================================
-void game_manager::handleDoor(Point& currentPlayer, char doorNum) {
+void game_manager::handleDoor(Point& currentPlayer, int x, int y) {
+	DoorInfo* door = const_cast<DoorInfo*>(screen.getDoor(currentRoom, x, y));
+	if (!door) return;
+	
+	int doorNum = door->leadsToRoom;
+	char doorChar = door->doorChar;
 	char inv1 = '\0', inv2 = '\0';
-	if (!bothPlayersAtSameChar(currentPlayer, doorNum, inv1, inv2)) {
-		textAppears = printOutput("Both players must be at the door to enter !");
+	if (!bothPlayersAtSameChar(currentPlayer, doorChar, inv1, inv2)) {
+		textAppears = printOutput("Both players must be at the door to enter!");
 		return;
 	}
 
-	if (screen.searchItem(currentRoom, KEY) && doorNum - '0' > currentRoom) {		// if not all the keys been collected, the door will not open
-		textAppears = printOutput("Door is locked !");
+	bool hasKey = false;
+	bool needsRiddle = false;
+
+	if (!checkCond(hasKey, needsRiddle, currentPlayer, inv1, inv2, door))
 		return;
+
+	if (hasKey) {
+		removeKeyAfterUse(inv1, inv2, currentPlayer); // remove key from inventory if used
+		for (size_t i = 0; i < door->conditions.size(); ++i) {
+			if (door->conditions[i] == "KEY") {
+				door->conditions.erase(door->conditions.begin() + i); // remove key condition after use
+				--i;
+			}
+		}
 	}
+	resetThingsAfterDoor(doorNum, door);
+}
 
-	if (screen.searchItem(currentRoom, RIDDLE) && doorNum - '0' > currentRoom) {
-		textAppears = printOutput("Must answer correctly to the riddle to enter!");
-		return;
-	}
-
-	removeKeyAfterUse(inv1, inv2, currentPlayer); // remove key from inventory if used
-
-	posSetAfterDoor(doorNum); // set players position after door
-
-	currentRoom = doorNum - '0'; //update current room
+void game_manager::resetThingsAfterDoor(int doorNum, const DoorInfo* door) {
+	currentRoom = doorNum; //update current room
+	obstacles = fileH.createObstacles(screen, currentRoom);
+	points[0].setPosition(door->xLead, door->yLead);
+	points[1].setPosition(door->xLead, door->yLead - 2);
 	cls();
 	screen.draw(currentRoom);
 	drawObs();
 	gameLives.draw();
 
-	if (currentRoom == 3)
-		screen.helpLockPlayers();
+	if (screen.isLastRoom(currentRoom))
+		gameOver = true;
 }
 
-void game_manager::posSetAfterDoor(char doorNum) {
-	if (doorNum - '0' < currentRoom) { //go back a floor (as of now it's only possible from floor 1 to floor 0)
-		points[0].setPosition(77, 20);
-		points[1].setPosition(77, 21);
+bool game_manager::checkCond(bool& needKey, bool& needRiddle, Point& p, const char inv1, const char inv2, DoorInfo* door) {
+	for (size_t i = 0; i < door->conditions.size(); ++i) {
+		std::string cond = door->conditions[i];
+		if (cond == "KEY") {
+			if (inv1 != KEY && inv2 != KEY) {
+				textAppears = printOutput("Need a key to enter!");
+				return false;
+			}
+			needKey = true;
+		}
+		else if (cond == "RIDDLE") {
+			if (!solveRiddle(p))
+				return false;
+			door->conditions.erase(door->conditions.begin() + i); // remove riddle condition after solving
+			--i;
+		}
 	}
-	else {
-		points[0].setPosition(2, 19);
-		points[1].setPosition(2, 21);
-	}
+	return true;
 }
 
 bool game_manager::bothPlayersAtSameChar(Point& pyr1, char checker, char& inv1, char& inv2) const  {
@@ -866,10 +905,11 @@ bool game_manager::bothPlayersAtSameChar(Point& pyr1, char checker, char& inv1, 
 }
 
 void game_manager::removeKeyAfterUse(char inv1, char inv2, Point& currentPlayer) {
-	if (inv1 == KEY || inv2 == KEY) { // remove key from inventory if used
-		if (inv1 == KEY)
-			currentPlayer.drawToInventory(screen, currentRoom, EMPTY_CELL);
-		else
-			points[(currentPlayer.getPlayerChar() == points[0].getPlayerChar()) ? 1 : 0].drawToInventory(screen, currentRoom, EMPTY_CELL);
+	if (inv1 == KEY) {
+		currentPlayer.drawToInventory(screen, currentRoom, EMPTY_CELL);
+	}
+	else if (inv2 == KEY) {
+		Point& secPyr = (currentPlayer.getPlayerChar() == points[0].getPlayerChar()) ? points[1] : points[0];
+		secPyr.drawToInventory(screen, currentRoom, EMPTY_CELL);
 	}
 }

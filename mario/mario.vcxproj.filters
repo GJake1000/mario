@@ -42,6 +42,12 @@
     <ClCompile Include="Score.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="screenLoad.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="fileHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="game_manager.h">
@@ -74,9 +80,25 @@
     <ClInclude Include="Score.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ScreensData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="screenLoad.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="fileHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="screens.txt" />
     <Text Include="riddles.txt" />
+    <Text Include="adv-world_01.screen" />
+    <Text Include="adv-world_02.screen" />
+    <Text Include="global.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="adv-world_03.screen" />
+    <None Include="adv-world_04.screen" />
   </ItemGroup>
 </Project>

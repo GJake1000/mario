@@ -2,7 +2,7 @@
 #include "Direction.h"
 #include "utils.h"
 #include "auxThing.h"
-
+#include <string>
 
 class Screen;
 class game_manager;
@@ -43,6 +43,7 @@ public:
 	void setGameManager(game_manager* game) {
 		gm = game;
 	}
+	void setKeys(const std::string& my_keys);
 	void draw() const;
 	void draw(char p) const;
 	void move(bool canMove);

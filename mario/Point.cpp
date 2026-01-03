@@ -7,6 +7,11 @@
 
 class Screen;
 
+void Point::setKeys(const std::string& my_keys) {
+	for (size_t i = 0; i < NUM_KEYS && i < my_keys.length(); i++)
+		keys[i] = my_keys[i];
+}
+
 //=========================draw point=================================
 bool Point::colorChose = true;
 
@@ -122,7 +127,7 @@ char Point::itemToDispose(Screen& screen, int roomNum) const  {
 //=========================draw to inventory=================================
 bool Point::drawToInventory(Screen& screen, int roomNum, char item) const  {
 	if (checkInventory(screen, roomNum) == EMPTY_CELL || item == EMPTY_CELL) {
-		if (diff_x != 0 || diff_y != 0) {
+		if (item == EMPTY_CELL || (diff_x != 0 || diff_y != 0)) {
 			for (int i = 0; i < Screen::NUM_OF_ROOMS; i++) {           // draw item in all rooms' inventories       
 				screen.setChar(inventoryX, inventoryY, i, item);
 			}

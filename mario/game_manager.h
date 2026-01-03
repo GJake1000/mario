@@ -1,9 +1,11 @@
 #pragma once
 #include "Screen.h"
+#include "ScreensData.h"
 #include "Point.h"
 #include "Obstacle.h"
 #include "lives.h"
 #include "Score.h"
+#include "fileHandler.h"
 #include <iostream>
 #include "Spring.h"
 #include <vector>
@@ -22,6 +24,8 @@ class game_manager {
 	int bombX = -1, bombY = -1, bombRoom = -1;
 	lives gameLives;
 	Score gameScore;
+	bool gameOver = false;
+	fileHandler fileH;
 public:
 	//========flow control========
 	game_manager();
@@ -57,6 +61,7 @@ public:
 	void handleRiddle(Point& p, int x, int y);
 	char printRiddle(int index) const;
 	bool handleAnswer(char correct, char ans, Point& p);
+	bool solveRiddle(Point& p);
 
 	//bomb mechanics
 	void handleBomb(Point& p, int x, int y);
@@ -67,15 +72,15 @@ public:
 
 	//obstacle mechanics
 	void handleObstacle(Point& p, int x, int y);
-	void moveObstacle(int left, int right, int down, int up);
 	void drawObs();
 
 	//door mechanics
-	void handleDoor(Point& currentPlayer, char doorNum);
+	void handleDoor(Point& currentPlayer, int x, int y);
+	void resetThingsAfterDoor(int doorNum, const DoorInfo* door);
+	bool checkCond(bool& needKey, bool& needRiddle, Point& p, const char inv1, const char inv2, DoorInfo* door);
 	void handleKey(Point& p, int x, int y);
 	bool bothPlayersAtSameChar(Point& pyr1, char checker, char& inv1, char& inv2) const;
 	void removeKeyAfterUse(char inv1, char inv2, Point& currentPlayer);
-	void posSetAfterDoor(char doorNum);
 	
 	
 
@@ -131,5 +136,4 @@ private:
 
 	std::vector<Riddle> riddles;
 	void loadRiddles(const char* fileName);
-	char presentRiddle(int riddleIndex);
 }; 

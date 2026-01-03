@@ -1,4 +1,5 @@
 #pragma once
+
 class Score {
 	int additionalScore = 0;
 	const int scoreX = 60, scoreY = 23;

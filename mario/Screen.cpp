@@ -1,190 +1,232 @@
 #include "Screen.h"
 #include "Point.h" 
 #include "utils.h"
+#include "screenLoad.h"
 #include <iostream>
 #include <windows.h> 
 #include <cstring>
 #include <fstream>
 #include <string>
 
-
-
-//==============================load screens from file==============================
-void Screen::loadScreens(const char* fileName) {
-	std::ifstream file(fileName);
-	if (!file.is_open()) {
-		std::cerr << "Error: Could not open file " << fileName << std::endl;
-		return;
-	}
-	std::string line;
-	for (int roomNum = 0; roomNum < NUM_OF_ROOMS; ++roomNum) {
-		for (int y = 0; y <= MAX_Y; ++y) {
-			if (std::getline(file, line)) {
-				int len = line.length();
-				for (int x = 0; x < len && x < MAX_X + 1; ++x) 
-					initialRooms[roomNum][y][x] = line[x];
-				
-				initialRooms[roomNum][y][len] = '\0'; // null-terminate the string
-			}
-		}
-	}
-	file.close();
+// ========================= Get Obstacle Positions =========================
+const std::vector<obsData>& Screen::getObstaclePositions(int roomNum) const {
+	if (roomNum >= 0 && roomNum < loadedRooms.size())
+		return loadedRooms[roomNum].obstaclePositions;
+	static std::vector<obsData> empty; 
+	return empty;
 }
 
-//==============================color item==============================
+// ========================= Get Spring Positions =========================
+const std::vector<std::pair<int, int>>& Screen::getSpringPositions(int roomNum) const {
+	if (roomNum >= 0 && roomNum < loadedRooms.size())
+		return loadedRooms[roomNum].springPositions;
+	static std::vector<std::pair<int, int>> empty; return empty;
+}
+
+// ============================== Color Item ==============================
 void Screen::colorItem(char item) const {
-	if (!Point::isColorChose())
-		return;
+	if (!Point::isColorChose()) return;
 
 	switch (item) {
-	case TORCH:
-		setTextColor(Color::yellow);
+	case TORCH: 
+		setTextColor(Color::yellow); 
 		break;
 	case SWITCH:
-	case OFF_SWITCH:
-		setTextColor(Color::green);
+	case OFF_SWITCH:		
+	setTextColor(Color::green);
 		break;
-	case DOOR:
-	case '1':
-	case '2':
-	case '3':
-		setTextColor(Color::brown);
+	case DOOR: 
+	case '1': 
+	case '2': 
+	case '3': 
+		setTextColor(Color::brown); 
 		break;
-	case RIDDLE:
-		setTextColor(Color::cyan);
+	case RIDDLE: 
+		setTextColor(Color::cyan); 
 		break;
-	case '&':
-		setTextColor(Color::green);
+	case '&': 
+		setTextColor(Color::green); 
 		break;
-	case '$':
-		setTextColor(Color::blue);
+	case '$': 
+		setTextColor(Color::blue); 
 		break;
-	case BOMB:
-		setTextColor(Color::purple);
+	case BOMB: 
+		setTextColor(Color::purple); 
 		break;
-	default:
-		setTextColor(Color::white);
+	default: 
+		setTextColor(Color::white); 
 		break;
 	}
 }
 
-// =========================Screen constructor=================================
+// ========================= Constructor =================================
 Screen::Screen() {
-	loadScreens("screens.txt");
-	resetRoom();
+	screenLoad loader;
+	loadedRooms = loader.loadScreens();
 }
 
-// =========================reset rooms to initial state=================================
+// ========================= Reset Rooms =================================
 void Screen::resetRoom() {
-	for (int i = 0; i < NUM_OF_ROOMS; ++i) {
-		for (int j = 0; j < MAX_Y + 1; ++j) {
-			for (int k = 0; k < MAX_X + 2; ++k) {
-				rooms[i][j][k] = initialRooms[i][j][k];
-			}
-		}
+	for (size_t i = 0; i < loadedRooms.size(); ++i) {
+		resetRoom((int)i);
 	}
 }
 
 void Screen::resetRoom(int roomNum) {
-	for (int j = 0; j < MAX_Y + 1; ++j) {
-		for (int k = 0; k < MAX_X + 2; ++k) {
-			rooms[roomNum][j][k] = initialRooms[roomNum][j][k];
+	if (roomNum < 0 || roomNum >= loadedRooms.size()) return;
+	for (int j = 0; j <= MAX_Y; ++j) { 
+		for (int k = 0; k <= MAX_X + 1; ++k) {
+			loadedRooms[roomNum].map[j][k] = loadedRooms[roomNum].initialMap[j][k];
 		}
 	}
 }
 
-// =========================char at=================================
+// ========================= Char At =================================
 char Screen::charAt(const Point& p, int roomNum) const {
-	return rooms[roomNum][p.getY()][p.getX()];
+	return charAt(p.getX(), p.getY(), roomNum);
 }
 
 char Screen::charAt(int x, int y, int roomNum) const {
-	if (x >= 0 && x <= MAX_X && y >= 0 && y <= MAX_Y) {
-		return rooms[roomNum][y][x];
+	if (roomNum >= 0 && roomNum < loadedRooms.size()) {
+		if (x >= 0 && x <= MAX_X && y >= 0 && y <= MAX_Y) {
+			return loadedRooms[roomNum].map[y][x];
+		}
 	}
 	return ' ';
 }
 
-// =========================draw room to console with colors=================================
+// ========================= Draw =================================
 void Screen::draw(int roomNum) const {
+	if (roomNum < 0 || roomNum >= loadedRooms.size()) return;
+
 	int y = 0;
-	for (const auto& row : rooms[roomNum]) {
+	for (int i = 0; i <= MAX_Y; ++i) {
 		gotoxy(0, y++);
-		for (int i = 0; row[i] != '\0'; i++) {
-			char item = row[i];
-			colorItem(item);
-			std::cout << item;
+		const char* row = loadedRooms[roomNum].map[i];
+		for (int j = 0; row[j] != '\0'; ++j) {
+			char ch = row[j];
+			colorItem(ch);
+			std::cout << ch;
 		}
 	}
 	std::cout << std::flush;
 }
 
-// =========================checks of we are going to bump in to a wall =================================
+// ========================= Is Wall =================================
 bool Screen::isWall(int x, int y, int roomNum) const {
-	if (x >= 0 && x <= MAX_X && y >= 0 && y <= MAX_Y) {
-		return rooms[roomNum][y][x] == 'W' || rooms[roomNum][y][x] == 'D' || rooms[roomNum][y][x] == OBSTACLE;
-	}
-	return true; // out of bounds is considered a wall
+	if (roomNum < 0 || roomNum >= loadedRooms.size()) return true;
+	if (x < 0 || x > MAX_X || y < 0 || y > MAX_Y) return true;
+
+	char ch = loadedRooms[roomNum].map[y][x];
+	return (ch == WALL || ch == DOOR_D || ch == OBSTACLE);
 }
 
-// =========================set character at (x,y) in room=================================
+// ========================= Set Char =================================
 void Screen::setChar(int x, int y, int roomNum, char ch) {
-	if (x < 0 || x > Screen::MAX_X || y < 0 || y > Screen::MAX_Y) return;
-	if (x >= 0 && x <= MAX_X && y >= 0 && y <= MAX_Y) 
-		rooms[roomNum][y][x] = ch;
-	
-	gotoxy(x, y);
-	colorItem(ch);
+	if (roomNum < 0 || roomNum >= loadedRooms.size()) return;
 
-	std::cout << ch << std::flush;
+	if (x >= 0 && x <= MAX_X && y >= 0 && y <= MAX_Y) {
+		loadedRooms[roomNum].map[y][x] = ch;
+		gotoxy(x, y);
+		colorItem(ch);
+		std::cout << ch << std::flush;
+	}
 }
 
 void Screen::setChar(int x, int y, int roomNum, char ch, Color chClr) {
-	if (x < 0 || x > Screen::MAX_X || y < 0 || y > Screen::MAX_Y) return;
-	rooms[roomNum][y][x] = ch;
-	gotoxy(x, y);
-	if (Point::isColorChose())
-		setTextColor(chClr);
-	std::cout << ch << std::flush;
-	setTextColor(Color::white);
+	if (roomNum < 0 || roomNum >= loadedRooms.size()) return;
+
+	if (x >= 0 && x <= MAX_X && y >= 0 && y <= MAX_Y) {
+		loadedRooms[roomNum].map[y][x] = ch;
+		gotoxy(x, y);
+		if (Point::isColorChose()) setTextColor(chClr);
+		std::cout << ch << std::flush;
+		setTextColor(Color::white);
+	}
 }
 
-// =========================set room to dark=================================
-const char Screen::EMPTY_ROW[] = "                                                                                "; // row of spaces
+// ========================= Set Dark =================================
+const char Screen::EMPTY_ROW[] = "                                                                                ";
 
-void Screen::setDark() const
-{
+void Screen::setDark() const {
 	for (int col = 0; col <= MAX_Y - 2; col++) {
 		gotoxy(0, col);
-		std::cout << EMPTY_ROW << std::flush; // fill each row with spaces to simulate darkness
+		std::cout << EMPTY_ROW << std::flush;
 	}
 	gotoxy(20, 23);
 }
 
-// =========================lock the players in place in final room=================================
-void Screen::helpLockPlayers() const {
-
-	for (int col = 18; col <= 21; col++) {
-		for (int row = 1; row <= 3; row++) {
-			gotoxy(row, col);
-			std::cout << " " << std::flush; // fill each row with spaces to simulate spaces instead if walls
-		}
-	}
-}
-
-// =========================get initial character at (x,y) in room=================================
+// ========================= Get Initial Char =================================
 char Screen::getInitialChar(int x, int y, int roomNum) const {
-	if (x >= 0 && x <= MAX_X && y >= 0 && y <= MAX_Y) {
-		return initialRooms[roomNum][y][x];
+	if (roomNum >= 0 && roomNum < loadedRooms.size()) {
+		if (x >= 0 && x <= MAX_X && y >= 0 && y <= MAX_Y) {
+			return loadedRooms[roomNum].initialMap[y][x];
+		}
 	}
 	return ' ';
 }
 
-// =========================search item=================================
+// ========================= Search Item =================================
 bool Screen::searchItem(int roomNum, char item) const {
-	for (int col = 0; col <= MAX_X; col++)
-		for (int row = 0; row <= MAX_Y - 2; row++)
-			if (rooms[roomNum][row][col] == item)
+	if (roomNum < 0 || roomNum >= loadedRooms.size()) return false;
+
+	for (int row = 0; row <= MAX_Y; ++row) {
+		const char* mapRow = loadedRooms[roomNum].map[row];
+		for (int col = 0; col <= MAX_X; ++col) {
+			if (mapRow[col] == item)
 				return true;
+		}
+	}
 	return false;
+}
+
+bool Screen::isDark(int roomNum) const {
+	if (roomNum >= 0 && roomNum < loadedRooms.size())
+		return loadedRooms[roomNum].isDark;
+	return false;
+}
+
+// ========================= Get Target Room =================================
+int Screen::getTargetRoom(int roomNum, int x, int y) const {
+	if (roomNum < 0 || roomNum >= loadedRooms.size()) return -1;
+	for (const auto& door : loadedRooms[roomNum].doors) {
+		if (door.x == x && door.y == y) {
+			return door.leadsToRoom;
+		}
+	}
+	return -1;
+}
+
+const DoorInfo* Screen::getDoor(int roomNum, int x, int y) {
+	if (roomNum < 0 || roomNum >= loadedRooms.size()) return nullptr;
+	for (const auto& door : loadedRooms[roomNum].doors) {
+		if (door.x == x && door.y == y) {
+			return &door;
+		}
+	}
+	return nullptr;
+}
+
+bool Screen::isLastRoom(int roomNum) {
+	if (roomNum >= 0 && roomNum < loadedRooms.size())
+		return loadedRooms[roomNum].isLastRoom;
+	return false;
+}
+
+std::pair<int, int> Screen::getPlayerStartPos(int playerIdx) const
+{
+	if(loadedRooms.empty()) 
+		return { 1,1 };
+	if (playerIdx == 1)
+		return { loadedRooms[0].startX1, loadedRooms[0].startY1 };
+	else if (playerIdx == 2)
+		return { loadedRooms[0].startX2, loadedRooms[0].startY2 };
+	return std::pair<int, int>();
+}
+
+const std::vector<obsData>& Screen::getObstacleData(int roomNum) const {
+	if (roomNum >= 0 && roomNum < loadedRooms.size())
+		return loadedRooms[roomNum].obstaclePositions;
+	static std::vector<obsData> empty;
+	return empty;
 }

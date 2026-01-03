@@ -127,6 +127,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="fileHandler.cpp" />
     <ClCompile Include="game_manager.cpp" />
     <ClCompile Include="lives.cpp" />
     <ClCompile Include="mario.cpp" />
@@ -134,24 +135,35 @@
     <ClCompile Include="Point.cpp" />
     <ClCompile Include="Score.cpp" />
     <ClCompile Include="Screen.cpp" />
+    <ClCompile Include="screenLoad.cpp" />
     <ClCompile Include="Spring.cpp" />
     <ClCompile Include="utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="auxThing.h" />
     <ClInclude Include="DIrection.h" />
+    <ClInclude Include="fileHandler.h" />
     <ClInclude Include="game_manager.h" />
     <ClInclude Include="lives.h" />
     <ClInclude Include="Obstacle.h" />
     <ClInclude Include="Point.h" />
     <ClInclude Include="Score.h" />
     <ClInclude Include="Screen.h" />
+    <ClInclude Include="screenLoad.h" />
+    <ClInclude Include="ScreensData.h" />
     <ClInclude Include="Spring.h" />
     <ClInclude Include="utils.h" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="adv-world_01.screen" />
+    <Text Include="adv-world_02.screen" />
+    <Text Include="global.txt" />
     <Text Include="riddles.txt" />
     <Text Include="screens.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="adv-world_03.screen" />
+    <None Include="adv-world_04.screen" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
