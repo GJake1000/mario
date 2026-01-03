@@ -12,14 +12,14 @@ W   W   W              W         W          W      W            W              W
 W   W   WWWWWWWWWWW    WWWWWW               W      WWWWWWWWWWWWWWWW    WWWWW   W
 W   W   W    W                                                             W   W
 W       W    WWWWWWWWWWWWWWWWWWWWWWWW       WWWWWWWWWWWWWWWWWWWWWWWWWW     W   W
-W       W                          ?                             W         W   W
+W       W####                      ?                             W         W   W
 W       W              WWWWWWWWWWWWWWWWWWWWWWWWWWWW          W   W         W   W
 W       WWWWWWWWWWW    W                W         W          W   WWWWWWW   W   W
 W                      W        W       W   WWWWWWWWWWW      W   W         W   W
 WWWWWWWWWW   WWWWWWWWWWW        WWWW    W   W                W   W         W   W
 W                 W             W       W   WWW   WWWWWWWWWWWW   W             W
 W                 W             W       W   W                W                1W
-W                               W           W                W                1W
+W####                       ####W           W                W                1W
 WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
                                      LIVE  |  SCORE                                     
 Player &:                             INVENTORY                   Player $:     
@@ -41,10 +41,10 @@ W  WWW             WWWW   WW    WW      DDD            WWWW    WW   WWDDDDDDDDDW
 W  WWW                    WW    WW      WWWWWWWWW      WWWW    WW   WW         W
 WWWWWWWWWWWWWW     WWWW   WW    WWWW  WWWWW  ?  W      WWWW    WW   WW         W
 WWWWWWWWWWWWWW     WWWW   WW            WWW  W  W   WWWWWWWWWWWWW   WW         W
-W        /  WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW  W  W   WWWWWWWWWWWWW   WWWWWWWWWWWW
-W    WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW  W  W                   WWWWW      W
-W0          WWWWW             WWWWWWWWW      W  WWWWWWWWWWWWWWWWW   WWWWWW    2W
-W0      WW          WWWWWWW                  W                      WWWWWWW   2W
+W        /  WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW  W  W   WWWWWWWWWWWWW  #WWWWWWWWWWWW
+W    WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW  W  W                  #WWWWW      W
+W0          WWWWW             WWWWWWWWW     #W  WWWWWWWWWWWWWWWWW  #WWWWWW    2W
+W0      WW          WWWWWWW                 #W                     #WWWWWWW   2W
 WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
                                    LIVE  |  SCORE                                        
 Player &:                            INVENTORY                   Player $:      
