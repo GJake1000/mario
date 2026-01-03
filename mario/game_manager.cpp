@@ -99,10 +99,8 @@ void game_manager::run() {
 					}
 				}
 				/////////////////////////////////////////////////
-				
 				turn++;	//counts turns in the game
 				Sleep(50);
-
 			}
 		}
 	}
@@ -427,7 +425,6 @@ void game_manager::handleObstacle(Point& p, int x, int y) {
 	}
 }
 
-
 //===========================handle spring=================================
 
 void game_manager::handleSpring(Point& p, int x, int y)
@@ -698,8 +695,6 @@ int game_manager::traverseSpringTowardWallEnd(const Spring& spr, int startX, int
 
 	return (count > 0) ? count : 1;
 }
-
-
 
 //===========================find obstacle=================================
 Obstacle* game_manager::findObs(int x, int y) {
