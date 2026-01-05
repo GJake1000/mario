@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\Others">
+      <UniqueIdentifier>{ee4c89f6-a76a-4c20-be3b-af92e9efcf4a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="mario.cpp">
@@ -89,6 +92,9 @@
     <ClInclude Include="fileHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Coordinates.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="screens.txt" />
@@ -96,6 +102,12 @@
     <Text Include="adv-world_01.screen" />
     <Text Include="adv-world_02.screen" />
     <Text Include="global.txt" />
+    <Text Include="readme.txt">
+      <Filter>Source Files\Others</Filter>
+    </Text>
+    <Text Include="bonus.txt">
+      <Filter>Source Files\Others</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <None Include="adv-world_03.screen" />

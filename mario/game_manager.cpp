@@ -4,6 +4,7 @@
 #include <windows.h> 
 #include <string>
 #include <fstream>
+#include <queue>
 
 
 //=========================new game starter=================================
@@ -17,9 +18,14 @@ void game_manager::newGameStarter()
 	gameLives.draw();
 	gameScore.reset();
 	screen.resetRoom();
-	resetSpringState();
+
+
+	springs.clear();
 	springDefFromMap(currentRoom);
-	obstacles = fileH.createObstacles(screen, currentRoom);
+	resetSpringState();
+	
+	obsDefFromMap(currentRoom);
+
 	loadRiddles("riddles.txt");
 }
 
@@ -175,7 +181,7 @@ bool game_manager::printOutput(const char* output) const  {
 	int len = strlen(output);
 	int spaces_to_center = (Screen::MAX_X - len) / 2;
 
-	gotoxy(spaces_to_center, 23);
+	gotoxyLegendSafe(spaces_to_center, 23);
 
 	for (int i = 0; i < len; i++) {
 		std::cout << output[i];
@@ -186,11 +192,11 @@ bool game_manager::printOutput(const char* output) const  {
 }
 
 void game_manager::eraseOutput() const {
-	gotoxy(0, 23);
+	gotoxyLegendSafe(0, 23);
 	std::cout << std::string(Screen::MAX_X, ' ');
 	gameLives.draw();
 	gameScore.draw(turn, gameLives.getLives());
-	gotoxy(35, 23);
+	gotoxyLegendSafe(35, 23);
 	std::cout << "LIVE | SCORE";
 }
 
@@ -510,7 +516,7 @@ void game_manager::checkBombActivation() {
 bool game_manager::removeLife() {
 	if (!gameLives.loseLife()) {
 		cls();
-		gotoxy(30, 10);
+		gotoxyLegendSafe(30, 10);
 		std::cout << "GAME OVER!";
 		Sleep(2000);
 		return true;
@@ -522,22 +528,79 @@ bool game_manager::removeLife() {
 void game_manager::handleObstacle(Point& p, int x, int y) {
 	Obstacle* obs = findObs(x, y);
 
-	Point& secPyr = (p.getPlayerChar() == points[0].getPlayerChar()) ? points[1] : points[0];
-	bool secPush = obs->loc(secPyr.getNextX(), secPyr.getNextY(), currentRoom);
-	bool sameDir = (p.getDifX() == secPyr.getDifX() && p.getDifY() == secPyr.getDifY());
+	if (!obs) 
+		return;
 
-	if (secPush && sameDir) { // both players are pushing the obstacle in the same direction
+
+	Point& secPyr = (p.getPlayerChar() == points[0].getPlayerChar()) ? points[1] : points[0];
+
+	bool secPush = obs->contains(Coord(secPyr.getNextX(), secPyr.getNextY()));
+	bool sameDir = (p.getDifX() == secPyr.getDifX() && p.getDifY() == secPyr.getDifY());
+	
+	//player1 + player1.speed + player2 + player2.speed
+	int force = (1) + p.getSpringSpeed();
+
+	if (secPush && sameDir)	//if the other player is pushing too in the same direction
+		force += (1) + secPyr.getSpringSpeed();
+
+	if (force >= obs->getVolume()) { //if the force is enough to move the obstacle
 		obs->tryMove(p.getDifX(), p.getDifY(), screen);
 	}
 }
 
 Obstacle* game_manager::findObs(int x, int y) {
 	for (auto& obs : obstacles)
-		if (obs.loc(x, y, currentRoom))
+		if (obs.getRoom() == currentRoom && obs.contains(Coord(x, y)))
 			return &obs;
 	return nullptr;
 }
 
+
+void game_manager::obsDefFromMap(int roomNum)
+{
+	obstacles.clear();
+
+	std::vector<std::vector<bool>> vis(Screen::MAX_Y + 1, std::vector<bool>(Screen::MAX_X + 1, false));
+	
+
+	for (int y = 0; y <= Screen::MAX_Y; y++) {
+		for (int x = 0; x <= Screen::MAX_X; x++) {
+
+			if ((vis[y][x]) || (screen.getInitialChar(x, y, roomNum) != OBSTACLE))	//if we already cheched or if it's not an obstacle	
+				continue;
+
+			std::vector<Coord> cells;
+			std::queue<Coord> q;	//queue for BFS	
+
+			q.push(Coord(x, y));
+			vis[y][x] = true;	//mark as visited
+
+			while (!q.empty()) {
+				Coord cur = q.front(); 
+				q.pop();
+				cells.push_back(cur);
+
+				static const int dirX[4] = { 1, -1, 0, 0 };
+				static const int dirY[4] = { 0, 0, 1, -1 };
+
+				for (int k = 0; k < 4; k++) {
+					int nx = cur.x + dirX[k];
+					int ny = cur.y + dirY[k];
+
+					if (!(nx >= 0 && nx <= Screen::MAX_X && ny >= 0 && ny <= Screen::MAX_Y) || (vis[ny][nx]) || (screen.getInitialChar(nx, ny, roomNum) != OBSTACLE)) 
+						continue;//if out of bounds OR already visited OR not an obstacle cell, go to next
+
+					vis[ny][nx] = true;	//mark as visited
+					q.push(Coord(nx, ny));	//push to queue	
+				}
+			}
+			obstacles.emplace_back(std::move(cells), Color::brown, roomNum); //create obstacle from the collected cells	
+		}
+	}
+}
+
+
+/*
 void game_manager::obsDef() {
 	obstacles.clear();
 	// Define obstacles here if needed
@@ -546,7 +609,7 @@ void game_manager::obsDef() {
 	for (const auto& obs : obsList)
 		obstacles.push_back(Obstacle(obs.x, obs.y, obs.width, obs.height, currentRoom, Color::brown));
 }
-
+*/
 void game_manager::drawObs() {
 	for (const auto& obs : obstacles)
 		if (obs.getRoom() == currentRoom)
@@ -605,7 +668,6 @@ Spring* game_manager::findSpring(int x, int y)
 
 void game_manager::springDefFromMap(int roomNum)
 {
-	springs.clear();
 
 	for (int y = 0; y <= Screen::MAX_Y; y++) {
 		for (int x = 0; x <= Screen::MAX_X; x++) {
@@ -680,6 +742,33 @@ void game_manager::applyLaunchMovementIfNeeded(Point& p)
 	for (int i = 0; i < speed; i++) {
 		int nx = p.getX() + dx;		//new x
 		int ny = p.getY() + dy;		//new y
+
+
+		if (screen.charAt(nx, ny, currentRoom) == OBSTACLE) {
+			Obstacle* obs = findObs(nx, ny);
+			if (!obs) 
+				break;
+
+			int force = 1 + speed;  // launched player's contribution
+
+			bool secPush = obs->contains(Coord(otherP->getX() + dx, otherP->getY() + dy));
+			bool sameDir = (dx == otherP->getDifX() && dy == otherP->getDifY());
+
+			if (secPush && sameDir)
+				force += 1 + otherP->getSpringSpeed();
+
+			if (force >= obs->getVolume()) {
+				if (!obs->tryMove(dx, dy, screen))
+					break;
+			}
+			else {
+				break;
+			}
+
+			// after moving the obstacle, the cell should be empty; if not, stop
+			if (screen.charAt(nx, ny, currentRoom) == OBSTACLE)
+				break;
+		}
 
 		if (screen.isWall(nx, ny, currentRoom))
 			break;
@@ -858,7 +947,13 @@ void game_manager::handleDoor(Point& currentPlayer, int x, int y) {
 
 void game_manager::resetThingsAfterDoor(int doorNum, const DoorInfo* door) {
 	currentRoom = doorNum; //update current room
-	obstacles = fileH.createObstacles(screen, currentRoom);
+
+	springs.clear();
+	springDefFromMap(currentRoom);
+	resetSpringState();
+
+
+	obsDefFromMap(currentRoom);
 	points[0].setPosition(door->xLead, door->yLead);
 	points[1].setPosition(door->xLead, door->yLead - 2);
 	cls();

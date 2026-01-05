@@ -1,0 +1,10 @@
+
+
+-Enabled the use of hebrew letters in the game
+-Abstact size of obstacles. 
+	An obstacle eniity is defined by all the parts that are connected to each other horizontally or vertically
+
+-printing to the screen is done letter by letter: nicer way to see the output
+
+-can jump from spring to the other spring in an infinite loop: it's fun!
+

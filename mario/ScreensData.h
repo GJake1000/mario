@@ -24,7 +24,7 @@ struct DoorInfo {
 };
 
 struct roomData {
-	char map[MAX_Y + 1][MAX_X + 2]; 
+	char map[MAX_Y + 1][MAX_X + 2];
 	char initialMap[MAX_Y + 1][MAX_X + 2];
 	bool isDark = false;
 	bool isLastRoom = false;
@@ -34,4 +34,7 @@ struct roomData {
 	std::vector<DoorInfo> doors;
 	std::vector<obsData> obstaclePositions; // positions of obstacles in the room
 	std::vector<std::pair<int, int>> springPositions;   // positions of springs in the room
+
+
+	int legendY = -1;
 };

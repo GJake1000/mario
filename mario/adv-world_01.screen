@@ -6,22 +6,23 @@ W  WW       W  /  W        WWWWWWWWWW             W    W    W   W       W      W
 W   W       W     WWWWWWWWWW            W         W    W    W   W       W  @   W
 W   W       W          W     WWW        W         W    W    W   W   WWWWWWWWWWWW
 WWWWW   WWWWWWWWWWW    W         W      W         W    W    W   W              W
-W       W              W         W      W         W         W   WWWWWWWWWWWW   W
-W   WWWWW              WWWWWW    WWWWWWWWWWWWWWWWWWWWW          W              W
+W       W              W         W                W         W   WWWWWWWWWWWW   W
+W   WWWWW              WWWWWW    WWWWW     WWWWWWWWWWW          W              W
 W   W   W              W         W          W      W            W              W
 W   W   WWWWWWWWWWW    WWWWWW               W      WWWWWWWWWWWWWWWW    WWWWW   W
-W   W   W    W                                                             W   W
-W       W    WWWWWWWWWWWWWWWWWWWWWWWW       WWWWWWWWWWWWWWWWWWWWWWWWWW     W   W
-W       W                          ?                             W         W   W
+W   W   W####                       **                                     W   W
+W       W                           ***     WWWWWWWWWWWWWWWWWWWWWWWWWW     W   W
+W       W####                       *           ?                W         W   W
 W       W              WWWWWWWWWWWWWWWWWWWWWWWWWWWW          W   W         W   W
-W       WWWWWWWWWWW    W                W         W          W   WWWWWWW   W   W
+W       WWWWWWWWWWW    W#               W         W          W   WWWWWWW   W   W
 W                      W        W       W   WWWWWWWWWWW      W   W         W   W
 WWWWWWWWWW   WWWWWWWWWWW        WWWW    W   W                W   W         W   W
-W                 W             W       W   WWW   WWWWWWWWWWWW   W             W
-W                 W             W       W   W                W                 W
-W                               W           W                W                1W
+W###         *    W   #         W       W   WWW   WWWWWWWWWWWW   W             W
+W               ##W       #     W       W   W                W                 W
+W####             *             W           W                W                1W
 WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
-                                     LIVE  |  SCORE                             
-Player &:                             INVENTORY                   Player $:     
-DOOR 78 21 2 1 3 21 KEY RIDLLE
+L
+
+
+DOOR 78 21 2 1 3 21 KEY RIDDLE
 START 1 15 1 17

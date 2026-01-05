@@ -99,9 +99,20 @@ char Screen::charAt(int x, int y, int roomNum) const {
 void Screen::draw(int roomNum) const {
 	if (roomNum < 0 || roomNum >= loadedRooms.size()) return;
 
-	int y = 0;
+
+	const int legendY = loadedRooms[roomNum].legendY;
+	setCurrentLegendY(legendY);
+
+	// 1) Print legend in its real place (raw gotoxy, not LegendSafe)
+	if (legendY >= 0 && legendY < MAX_Y) {   // need two lines: legendY and legendY+1
+		gotoxy(0, legendY);
+		std::cout << screenLoad::legend;
+	}
+
+
 	for (int i = 0; i <= MAX_Y; ++i) {
-		gotoxy(0, y++);
+		gotoxyLegendSafe(0, i);
+
 		const char* row = loadedRooms[roomNum].map[i];
 		for (int j = 0; row[j] != '\0'; ++j) {
 			char ch = row[j];
@@ -127,7 +138,7 @@ void Screen::setChar(int x, int y, int roomNum, char ch) {
 
 	if (x >= 0 && x <= MAX_X && y >= 0 && y <= MAX_Y) {
 		loadedRooms[roomNum].map[y][x] = ch;
-		gotoxy(x, y);
+		gotoxyLegendSafe(x, y);
 		colorItem(ch);
 		std::cout << ch << std::flush;
 	}
@@ -138,7 +149,7 @@ void Screen::setChar(int x, int y, int roomNum, char ch, Color chClr) {
 
 	if (x >= 0 && x <= MAX_X && y >= 0 && y <= MAX_Y) {
 		loadedRooms[roomNum].map[y][x] = ch;
-		gotoxy(x, y);
+		gotoxyLegendSafe(x, y);
 		if (Point::isColorChose()) setTextColor(chClr);
 		std::cout << ch << std::flush;
 		setTextColor(Color::white);
@@ -150,10 +161,10 @@ const char Screen::EMPTY_ROW[] = "                                              
 
 void Screen::setDark() const {
 	for (int col = 0; col <= MAX_Y - 2; col++) {
-		gotoxy(0, col);
+		gotoxyLegendSafe(0, col);
 		std::cout << EMPTY_ROW << std::flush;
 	}
-	gotoxy(20, 23);
+	gotoxyLegendSafe(20, 23);
 }
 
 // ========================= Get Initial Char =================================

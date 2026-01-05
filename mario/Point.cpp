@@ -20,7 +20,7 @@ void Point::draw() const {
 }
 
 void Point::draw(char p) const  {
-	gotoxy(x, y);
+	gotoxyLegendSafe(x, y);
 	if (colorChose)
 		setTextColor(color);	
 	else

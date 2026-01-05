@@ -10,11 +10,33 @@
 #include <filesystem>
 
 void resetRoom(roomData& room) {
-	for (int i = 0; i <= MAX_Y; ++i) {
-		std::fill(&room.map[i][0], &room.map[i][0] + MAX_X + 1, ' '); 
-		room.map[i][MAX_X + 1] = '\0';
-		std::fill(&room.initialMap[i][0], &room.initialMap[i][0] + MAX_X + 1, ' ');
-		room.initialMap[i][MAX_X + 1] = '\0';
+
+	bool legendFound = false;
+	bool skipOnce = false;
+
+	for (int y = 0; y <= MAX_Y; ++y) {
+		/*
+		if (legendFound == false && room.map[y][0] != 'W')
+		{
+			for (int x = 0; x <= MAX_X; x++)	//loop over row to find legend char ('L')
+			{
+				if (room.map[y][x] == 'L')
+				{
+					std::cout << screenLoad::legend << '\n';
+					legendFound = true;
+					skipOnce = true;
+				}
+			}
+		}
+		if (skipOnce) {
+			skipOnce = false;
+			continue;
+		}
+		*/
+		std::fill(&room.map[y][0], &room.map[y][0] + MAX_X + 1, ' '); 
+		room.map[y][MAX_X + 1] = '\0';
+		std::fill(&room.initialMap[y][0], &room.initialMap[y][0] + MAX_X + 1, ' ');
+		room.initialMap[y][MAX_X + 1] = '\0';
 	}
 }
 
@@ -64,16 +86,36 @@ bool isDoor(const std::string& line, roomData& room) {
 }
 
 void mapRow(roomData& room, const std::string& line, int rowIndex) {
+	int lPos = -1;
+
+	for (size_t k = 0; k < line.length() && k <= MAX_X; ++k) {
+		if (line[k] == 'L') {
+			lPos = (int)k;
+			room.legendY = rowIndex;   // you only want Y
+			break;
+		}
+	}
+
 	for (size_t col = 0; col <= MAX_X; ++col) {
 		char c = ' ';
-		if (col < line.length())
-			c = line[col];
+
+		size_t src = col;
+		if (lPos != -1 && (int)col >= lPos)
+			src = col + 1;
+
+		if (src < line.length())
+			c = line[src];
+
+		if (c == 'L')
+			c = ' ';
+
 		room.map[rowIndex][col] = c;
 		room.initialMap[rowIndex][col] = c;
+
 		if (c == OBSTACLE)
-			room.obstaclePositions.push_back({(int)col, rowIndex, 1, 1});
+			room.obstaclePositions.push_back({ (int)col, rowIndex, 1, 1 });
 		else if (c == SPRING)
-			room.springPositions.push_back({(int)col, rowIndex});
+			room.springPositions.push_back({ (int)col, rowIndex });
 	}
 }
 
@@ -119,7 +161,7 @@ bool isStart(const std::string& line, roomData& room) {
 }
 
 bool loadRoom(const std::string& fileName, roomData& room) {
-	std::cout << "DEBUG: Trying to open file: " << fileName << "... ";
+	//std::cout << "DEBUG: Trying to open file: " << fileName << "... ";
 	std::ifstream file(fileName);
 	if (!file.is_open()) {
 		std::cerr << "Error: Could not open file " << fileName << std::endl;

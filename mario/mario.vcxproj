@@ -141,6 +141,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="auxThing.h" />
+    <ClInclude Include="Coordinates.h" />
     <ClInclude Include="DIrection.h" />
     <ClInclude Include="fileHandler.h" />
     <ClInclude Include="game_manager.h" />
@@ -157,7 +158,9 @@
   <ItemGroup>
     <Text Include="adv-world_01.screen" />
     <Text Include="adv-world_02.screen" />
+    <Text Include="bonus.txt" />
     <Text Include="global.txt" />
+    <Text Include="readme.txt" />
     <Text Include="riddles.txt" />
     <Text Include="screens.txt" />
   </ItemGroup>

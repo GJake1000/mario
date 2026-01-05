@@ -9,7 +9,7 @@
 #include <iostream>
 #include "Spring.h"
 #include <vector>
-
+#include "Coordinates.h"
 
 class game_manager {
 	enum { ESC = 27 };
@@ -73,6 +73,7 @@ public:
 	//obstacle mechanics
 	void handleObstacle(Point& p, int x, int y);
 	void drawObs();
+	void obsDefFromMap(int roomNum);
 
 	//door mechanics
 	void handleDoor(Point& currentPlayer, int x, int y);

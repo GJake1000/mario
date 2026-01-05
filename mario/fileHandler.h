@@ -29,7 +29,7 @@ public:
 	bool loadGlobal(const std::string& fName);
 	bool loadRiddles();
 
-	std::vector<Obstacle> createObstacles(const Screen& screen, int roomNum);
+	//std::vector<Obstacle> createObstacles(const Screen& screen, int roomNum);
 
 	const std::string& getP1Keys() const { return p1keys; }
 	const std::string& getP2Keys() const { return p2keys; }

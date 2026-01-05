@@ -34,3 +34,43 @@ void cls()
 void setTextColor(Color color) {
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), (int)color);
 }
+
+//=========================Error handling=================================
+
+void ErrorEncountered(int errNum)
+{
+    cls();
+
+    const char* errorMessages[5];
+
+	errorMessages[0] = "Unknown error occurred.";
+    errorMessages[1] = "maps are unclear!";
+    errorMessages[2] = "Riddle file empty!.";
+
+	std::cout << "Error: " << errorMessages[errNum] << '\n';
+
+    if (errNum <= 1) //critical errors
+    {
+        std::cout << "This error is critical, The program will now exit." << '\n';
+        std::cout << "Exiting program..." << '\n';
+        exit(1);
+    }
+    //else load menu (is after function call)
+}
+
+static int g_currentLegendY = -1;
+
+void setCurrentLegendY(int legendY)
+{
+    g_currentLegendY = legendY;
+}
+
+void gotoxyLegendSafe(int x, int y)
+{
+    if (g_currentLegendY >= 0) {
+        if (y >= g_currentLegendY)   // shift everything at/under legend
+            y += 2;
+    }
+    gotoxy(x, y);
+}
+
