@@ -60,7 +60,7 @@ bool isDoor(const std::string& line, roomData& room) {
 	if (line.substr(0, 4) == "DOOR") {              // find door
 		std::stringstream ss(line);
 		std::string tmp;
-		int dx, dy, target, xl, yl;
+		int dx, dy, target, xl, yl; 
 		char doorChar;
 		ss >> tmp >> dx >> dy >> target >> doorChar >> xl >> yl;
 
