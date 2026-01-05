@@ -7,6 +7,9 @@ fileHandler::fileHandler() {
 	riddleFile = "riddles.txt";
 	riddleScore = 150;
 	bombTimer = 5;
+	bombRadius = 3;
+	initialLives = 3;
+	initialScore = 1500;
 }
 
 bool fileHandler::loadGlobal(const std::string& fName) {
@@ -31,6 +34,8 @@ bool fileHandler::loadGlobal(const std::string& fName) {
 			file >> bombRadius;
 		else if (line == "INITIAL_LIVES")
 			file >> initialLives;
+		else if (line == "INITIAL_SCORE")
+			file >> initialScore;
 	}
 	file.close();
 	return true;

@@ -3,13 +3,13 @@
 class Score {
 	int additionalScore = 0;
 	const int scoreX = 60, scoreY = 23;
-	const int initialScore = 1500;
+	int initialScore = 0;
 	const int lifeBonus = 200; 
 	const int ridBonus = 150;
 	const int timeReduce = 2;
 public:
 	void draw(int time, int lives) const;
 	void add(int amount);
-	void reset();
+	void reset(int initScore);
 	int calc(int time, int lives) const;
 };
