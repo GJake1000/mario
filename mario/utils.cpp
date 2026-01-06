@@ -43,11 +43,11 @@ void ErrorEncountered(int errNum)
 
     const char* errorMessages[5];
 
-	errorMessages[0] = "Unknown error occurred.";
+    errorMessages[0] = "Unknown error occurred.";
     errorMessages[1] = "maps are unclear!";
     errorMessages[2] = "Riddle file empty!.";
 
-	std::cout << "Error: " << errorMessages[errNum] << '\n';
+    std::cout << "Error: " << errorMessages[errNum] << '\n';
 
     if (errNum <= 1) //critical errors
     {
@@ -73,4 +73,3 @@ void gotoxyLegendSafe(int x, int y)
     }
     gotoxy(x, y);
 }
-

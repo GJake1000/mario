@@ -15,7 +15,6 @@ public:
 	bool contains(int px, int py, int room) const;
 
 	bool getTowardWallDir(const Screen& screen, int roomN, int& dx, int& dy) const;
-
 	int getX() const { return x; }
 	int getY() const { return y; }
 	int getRoom() const { return roomNum; }

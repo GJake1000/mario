@@ -11,6 +11,7 @@
 #include <vector>
 #include "Coordinates.h"
 
+
 class game_manager {
 	enum { ESC = 27 };
 	Point points[2];
@@ -22,6 +23,7 @@ class game_manager {
 	bool textAppears = false;
 	int bombDisposalTime = -1;
 	int bombX = -1, bombY = -1, bombRoom = -1;
+	int playerAtDoor = -1, playerAtDoorX = -1, playerAtDoorY = -1, waitingRoom = -1;
 	lives gameLives;
 	Score gameScore;
 	bool gameOver = false;
@@ -32,6 +34,7 @@ public:
 	void run();
 	bool gameFlow(bool& dark);
 	void resetPoints();
+	void resetDoorVars();
 	void initilDefine();
 	void movePlayer(Point& p);
 	void textOpt();
@@ -56,6 +59,7 @@ public:
 	//switch mechanics
 	void handleSwitch(int x, int y);
 	void turnOff(int x, int y, int roomNum);
+	bool doorCondSw(DoorInfo* door, size_t& i);
 
 	//riddle mechanics
 	void handleRiddle(Point& p, int x, int y);
@@ -77,10 +81,10 @@ public:
 
 	//door mechanics
 	void handleDoor(Point& currentPlayer, int x, int y);
-	void resetThingsAfterDoor(int doorNum, const DoorInfo* door);
+	bool canUnlock(Point& p, DoorInfo* door);
+	void resetThingsAfterDoor(int doorNum, const DoorInfo* door, bool moveBoth);
 	bool checkCond(bool& needKey, bool& needRiddle, Point& p, const char inv1, const char inv2, DoorInfo* door);
 	void handleKey(Point& p, int x, int y);
-	bool bothPlayersAtSameChar(Point& pyr1, char checker, char& inv1, char& inv2) const;
 	void removeKeyAfterUse(char inv1, char inv2, Point& currentPlayer);
 	
 	
@@ -117,7 +121,7 @@ private:
 	struct Riddle {
 		std::string question;
 		std::string options[4];
-		char correctOption;
+		char correctOption =  ' ';
 
 		friend std::ostream& operator<<(std::ostream& os, const Riddle& riddle) {
 			std::string rid = riddle.question;

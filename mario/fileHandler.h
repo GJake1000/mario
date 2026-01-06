@@ -22,6 +22,7 @@ class fileHandler {
 	int bombTimer;
 	int bombRadius;
 	int initialLives;
+	int initialScore;
 
 	std::vector<Riddle> rids;
 public:
@@ -37,6 +38,7 @@ public:
 	int getBombTimer() const { return bombTimer; }
 	int getBombRadius() const { return bombRadius; }
 	int getInitialLives() const { return initialLives; }
+	int getInitialScore() const { return initialScore; }
 
 	const Riddle& getRid(int idx) const;
 	int getRidCnt() const { return rids.size(); }
