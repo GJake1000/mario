@@ -20,7 +20,7 @@ void game_manager::newGameStarter()
 	springs.clear();
 	springDefFromMap(currentRoom);resetSpringState();
 	springDefFromMap(currentRoom);
-	obstacles = fileH.createObstacles(screen, currentRoom);
+	//obstacles = fileH.createObstacles(screen, currentRoom);
 	resetSpringState();
 
 	obsDefFromMap(currentRoom);loadRiddles("riddles.txt");
@@ -569,12 +569,12 @@ void game_manager::handleObstacle(Point& p, int x, int y) {
 	Obstacle* obs = findObs(x, y);
 
 	Point& secPyr = (p.getPlayerChar() == points[0].getPlayerChar()) ? points[1] : points[0];
-	bool secPush = obs->loc(secPyr.getNextX(), secPyr.getNextY(), currentRoom);
+	//bool secPush = obs->loc(secPyr.getNextX(), secPyr.getNextY(), currentRoom);
 	bool sameDir = (p.getDifX() == secPyr.getDifX() && p.getDifY() == secPyr.getDifY());
 
-	if (secPush && sameDir) { // both players are pushing the obstacle in the same direction
-		obs->tryMove(p.getDifX(), p.getDifY(), screen);
-	}
+	//if (secPush && sameDir) { // both players are pushing the obstacle in the same direction
+	//	obs->tryMove(p.getDifX(), p.getDifY(), screen);
+	//}
 }
 
 Obstacle* game_manager::findObs(int x, int y) {

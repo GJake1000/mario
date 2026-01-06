@@ -38,8 +38,6 @@ void resetRoom(roomData& room) {
 		room.initialMap[y][MAX_X + 1] = '\0';
 	}
 }
-	}
-}
 
 bool isLastRoom(const std::string line, roomData& room) {
 	if (line.find("LAST") != std::string::npos) {
