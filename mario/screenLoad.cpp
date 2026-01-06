@@ -10,7 +10,6 @@
 #include <filesystem>
 
 void resetRoom(roomData& room) {
-
 	bool legendFound = false;
 	bool skipOnce = false;
 
@@ -33,10 +32,12 @@ void resetRoom(roomData& room) {
 			continue;
 		}
 		*/
-		std::fill(&room.map[y][0], &room.map[y][0] + MAX_X + 1, ' '); 
+		std::fill(&room.map[y][0], &room.map[y][0] + MAX_X + 1, ' ');
 		room.map[y][MAX_X + 1] = '\0';
 		std::fill(&room.initialMap[y][0], &room.initialMap[y][0] + MAX_X + 1, ' ');
 		room.initialMap[y][MAX_X + 1] = '\0';
+	}
+}
 	}
 }
 
@@ -60,7 +61,7 @@ bool isDoor(const std::string& line, roomData& room) {
 	if (line.substr(0, 4) == "DOOR") {              // find door
 		std::stringstream ss(line);
 		std::string tmp;
-		int dx, dy, target, xl, yl;
+		int dx, dy, target, xl, yl; 
 		char doorChar;
 		ss >> tmp >> dx >> dy >> target >> doorChar >> xl >> yl;
 
@@ -95,10 +96,8 @@ void mapRow(roomData& room, const std::string& line, int rowIndex) {
 			break;
 		}
 	}
-
 	for (size_t col = 0; col <= MAX_X; ++col) {
 		char c = ' ';
-
 		size_t src = col;
 		if (lPos != -1 && (int)col >= lPos)
 			src = col + 1;
@@ -108,14 +107,12 @@ void mapRow(roomData& room, const std::string& line, int rowIndex) {
 
 		if (c == 'L')
 			c = ' ';
-
 		room.map[rowIndex][col] = c;
 		room.initialMap[rowIndex][col] = c;
-
 		if (c == OBSTACLE)
-			room.obstaclePositions.push_back({ (int)col, rowIndex, 1, 1 });
+			room.obstaclePositions.push_back({(int)col, rowIndex, 1, 1});
 		else if (c == SPRING)
-			room.springPositions.push_back({ (int)col, rowIndex });
+			room.springPositions.push_back({(int)col, rowIndex});
 	}
 }
 
