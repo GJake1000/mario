@@ -21,9 +21,8 @@ W    WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW  W  W                  #WWWWW      W
 W           WWWWW             WWWWWWWWW     #W  WWWWWWWWWWWWWWWWW  #WWWWWW     W
 W0      WW          WWWWWWW                 #W                     #WWWWWWW   2W
 WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
-                                   LIVE  |  SCORE                               
-Player &:                            INVENTORY                   Player $:      
-DOOR 78 21 2 1 3 21 KEY RIDDLE
+L
+DOOR 78 21 3 2 3 21 KEY RIDDLE
 DOOR 1 21 1 0 77 21
 DARK
 START 1 15 1 17

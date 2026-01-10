@@ -31,9 +31,9 @@ void Screen::colorItem(char item) const {
 	case TORCH: 
 		setTextColor(Color::yellow); 
 		break;
-	case SWITCH:
-	case OFF_SWITCH:		
-	setTextColor(Color::green);
+	case SWITCH: 
+	case OFF_SWITCH: 
+		setTextColor(Color::green); 
 		break;
 	case DOOR: 
 	case '1': 
@@ -99,7 +99,6 @@ char Screen::charAt(int x, int y, int roomNum) const {
 void Screen::draw(int roomNum) const {
 	if (roomNum < 0 || roomNum >= loadedRooms.size()) return;
 
-
 	const int legendY = loadedRooms[roomNum].legendY;
 	setCurrentLegendY(legendY);
 
@@ -108,11 +107,8 @@ void Screen::draw(int roomNum) const {
 		gotoxy(0, legendY);
 		std::cout << screenLoad::legend;
 	}
-
-
 	for (int i = 0; i <= MAX_Y; ++i) {
 		gotoxyLegendSafe(0, i);
-
 		const char* row = loadedRooms[roomNum].map[i];
 		for (int j = 0; row[j] != '\0'; ++j) {
 			char ch = row[j];

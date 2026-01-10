@@ -1,12 +1,13 @@
 #pragma once
 
+//int g_currentLegendY;
 
 void gotoxy(int x, int y);
 void hideCursor();
 void cls();
 //void printOutput(const char* output);
 //void eraseOutput();
-  
+
 
 enum class Color {
     black = 0,
@@ -22,8 +23,9 @@ enum class Color {
 };
 
 void setTextColor(Color color);
-
-void ErrorEncountered(int errNum); 
+void ErrorEncountered(int errNum);
 
 void setCurrentLegendY(int legendY);
 void gotoxyLegendSafe(int x, int y);
+int getLegendY();
+

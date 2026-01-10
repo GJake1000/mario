@@ -1,4 +1,4 @@
-
+﻿
 
 -Enabled the use of hebrew letters in the game
 -Abstact size of obstacles. 
@@ -7,4 +7,7 @@
 -printing to the screen is done letter by letter: nicer way to see the output
 
 -can jump from spring to the other spring in an infinite loop: it's fun!
+ 
+ 
+-יש גם קובץ טקסט global שממנו אפשר לשנות מקשים, שם קובץ חידות, ניקוד לחידה, טיימר לפצצה, רדיוס לפצצה, חיים התחלתי, וניקוד התחלתי
 

@@ -43,11 +43,11 @@ void ErrorEncountered(int errNum)
 
     const char* errorMessages[5];
 
-	errorMessages[0] = "Unknown error occurred.";
+    errorMessages[0] = "Unknown error occurred.";
     errorMessages[1] = "maps are unclear!";
     errorMessages[2] = "Riddle file empty!.";
 
-	std::cout << "Error: " << errorMessages[errNum] << '\n';
+    std::cout << "Error: " << errorMessages[errNum] << '\n';
 
     if (errNum <= 1) //critical errors
     {
@@ -58,7 +58,10 @@ void ErrorEncountered(int errNum)
     //else load menu (is after function call)
 }
 
-static int g_currentLegendY = -1;
+///////////////Legend safe functions///////////////////////
+
+// global variable to store the current legend Y position (it is important!) 
+int g_currentLegendY = -1;
 
 void setCurrentLegendY(int legendY)
 {
@@ -74,3 +77,7 @@ void gotoxyLegendSafe(int x, int y)
     gotoxy(x, y);
 }
 
+int getLegendY()
+{
+	return g_currentLegendY;    
+}

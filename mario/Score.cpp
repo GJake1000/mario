@@ -11,8 +11,10 @@ void Score::add(int amount) {
 	additionalScore += amount;
 }
 
-void Score::reset() {
+void Score::reset(int initScore) {
+	
 	additionalScore = 0;
+	initialScore = initScore;
 }
 
 int Score::calc(int time, int lives) const {
