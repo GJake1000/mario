@@ -9,10 +9,12 @@
 #include <iostream>
 #include "Spring.h"
 #include <vector>
+#include <Windows.h>
 #include "Coordinates.h"
 
 
 class game_manager {
+protected:
 	enum { ESC = 27 };
 	Point points[2];
 	Screen screen;
@@ -29,6 +31,10 @@ class game_manager {
 	bool gameOver = false;
 	fileHandler fileH;
 public:
+	//========polymorphyc setup========
+	virtual ~game_manager() {}
+	virtual bool input(char& key) = 0;
+	virtual void updateSleep() { Sleep(50); }
 	//========flow control========
 	game_manager();
 	void run();

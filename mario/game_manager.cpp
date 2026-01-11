@@ -9,7 +9,7 @@
 //=========================new game starter=================================
 void game_manager::newGameStarter()
 {
-	//reset positions
+	// reset positions
 	currentRoom = 0;
 	turn = 0;
 	resetPoints();
@@ -17,17 +17,15 @@ void game_manager::newGameStarter()
 	gameLives.draw();
 	gameScore.reset(fileH.getInitialScore());
 	screen.resetRoom();
-	springs.clear();
-	springDefFromMap(currentRoom);resetSpringState();
-	springDefFromMap(currentRoom);
-	//obstacles = fileH.createObstacles(screen, currentRoom);
-	resetSpringState();
 
-	obsDefFromMap(currentRoom);loadRiddles("riddles.txt");
-	resetDoorVars();
+	// Spring & Obstacle setup
+	springs.clear();
+	springDefFromMap(currentRoom);
+	resetSpringState();
 	obsDefFromMap(currentRoom);
 
 	loadRiddles("riddles.txt");
+	resetDoorVars();
 }
 
 void game_manager::resetPoints() {
@@ -57,7 +55,7 @@ game_manager::game_manager() : points{
 
 	points[0].setKeys(fileH.getP1Keys());
 	points[1].setKeys(fileH.getP2Keys());
-    
+
 	// set game manager for each point
 	points[0].setGameManager(this);
 	points[1].setGameManager(this);
@@ -93,7 +91,7 @@ bool game_manager::loadMenu()
 	// initialize a new game menu
 
 	newGameStarter(); // reset game state
-	char choice;
+	char choice = 0;
 
 	while (true)
 	{
@@ -102,7 +100,7 @@ bool game_manager::loadMenu()
 		std::cout << "(2) Start a new game colors" << "\n";
 		std::cout << "(8) Present instructions and keys" << "\n";
 		std::cout << "(9) EXIT" << "\n";
-		choice = _getch();
+		while (!input(choice)); // wait for valid input
 
 		switch (choice) {
 		case '1': {    //get back to "run" function and start the game
@@ -121,7 +119,8 @@ bool game_manager::loadMenu()
 		case '8': {		//print the keys and continue the loop
 			printInstructionAndKeys();
 			std::cout << "Press any key to return the menu:\n";
-			(void)_getch();
+			char tmp;
+			while (!input(tmp));
 			break;
 		}
 
@@ -166,9 +165,10 @@ bool game_manager::printPauseScreen()
 {
 	cls();
 	std::cout << "\n\n\n\n\n\n\nGame Paused. Press ESC to continue or H to go back to main menu...\n";
-	int key = _getwch();
+	char key = 0;
+	while (!input(key));
 	while (key != ESC && key != 'H' && key != 'h' && key != HEB_YOD)
-		key = _getwch();
+		while (!input(key));
 
 	if (key == 'H' || key == 'h' || key == HEB_YOD)
 		return true;
@@ -208,16 +208,17 @@ void game_manager::eraseOutput() const {
 }
 
 bool game_manager::handleKB() {
-	if (_kbhit()) {
-	char key = (char)_getwch();
+	char key = 0;
+	if (input(key)) {
 		if (key == ESC) {
-			if (printPauseScreen()) return true; // pause menu
+			if (printPauseScreen())
+				return true;          // go back to menu
 		}
 		else if (!gameOver) {
-			for (auto& p : points) {
-				p.handleKeyPressed(key, screen, currentRoom); // update direction based on key press
-			}
+			for (auto& p : points)
+				p.handleKeyPressed(key, screen, currentRoom);
 		}
+			
 	}
 	return false;
 }
@@ -267,7 +268,7 @@ void game_manager::initilDefine() {
 	hideCursor();
 	screen.draw(currentRoom);
 	drawObs();
-	gameLives.draw();
+	eraseOutput(); 
 	if (screen.isDark(currentRoom))
 		screen.setDark();
 	if (screen.isLastRoom(currentRoom))
@@ -291,7 +292,7 @@ bool game_manager::gameFlow(bool& dark) {
 
 	turn++;	//counts turns in the game
 	gameScore.draw(turn, gameLives.getLives());
-	Sleep(50);
+	updateSleep();
 	return true;
 }
 
@@ -442,9 +443,9 @@ bool game_manager::handleAnswer(char correct, char ans, Point& p) {
 
 bool game_manager::solveRiddle(Point& p) {
 	char correct = printRiddle(currentRoom); 
+	char ans = 0;
 	while (true) {
-		if (_kbhit()) {
-			char ans = _getch();
+		if (input(ans)) {
 			if ('4' < ans || '1' > ans) continue;  // not in boundries
 			bool wasRight = handleAnswer(correct, ans, p);
 			cls();

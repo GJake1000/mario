@@ -47,35 +47,10 @@ void Point::setPosition(int newX, int newY) {
 
 //=========================handle key pressed=================================
 void Point::handleKeyPressed(int key, Screen& screen, int roomNum) {
-	unsigned char hebrew = (unsigned char)key;
-	char letter = key;
-	/*gotoxy(0, 0);
-	std::cout << (int)hebrew;*/
-	switch (hebrew) { // handle hebrew letters
-		// player 1
-	case HEB_VAV   : letter = 'W'; break; // ו
-	case HEB_ZAYIN : letter = 'X'; break; // ז
-	case HEB_HET   : letter = 'D'; break; // ח
-	case HEB_TET   : letter = 'A'; break; // ט'
-	case HEB_GERESH: letter = 'S'; break; // י
-	case HEB_CAF   : letter = 'E'; break; // כ
-		// player 2
-	case HEB_LAMED : letter = 'I'; break; // ל
-	case HEB_MEM   : letter = 'M'; break; // מ
-	case HEB_NUN   : letter = 'L'; break; // נ
-	case HEB_SAMECH: letter = 'J'; break; // ס
-	case HEB_AYIN  : letter = 'K'; break; // ע
-	case HEB_PE    : letter = 'O'; break; // פ
-
-		// other
-	case HEB_YOD   : letter = 'H'; break; // י
-
-	}
-
 	// iterate through keys to find which one was pressed and set direction
 	size_t index = 0;
 	for (char k : keys) { // check which key was pressed and set direction accordingly
-		if (std::toupper((unsigned char)letter) == std::toupper((unsigned char)k)) {
+		if (std::toupper((unsigned char)key) == std::toupper((unsigned char)k)) {
 			if (index == DISPOSE_KEY){    // DISPOSE
 				char disposed = dispose(screen, roomNum);
 				if (disposed == BOMB && gm != nullptr) 
