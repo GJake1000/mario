@@ -1,4 +1,5 @@
 #include "kbGame.h"
+#include "menuManager.h"
 #include <cctype>
 
 char kbGame::translateToEnglish(int k) {
@@ -27,9 +28,11 @@ char kbGame::translateToEnglish(int k) {
 		return (char)k;
 	}
 }
-kbGame::kbGame(bool load) : isLoading(load) {
+
+kbGame::kbGame(bool silent, bool load) : game_manager(silent), isLoading(load) {
 	if (isLoading) {
 		stepsFile.open("adv-world.steps");
+		resFile.open("adv-world.result");
 	}
 }
 
@@ -45,4 +48,26 @@ bool kbGame::input(char& key) {
 		return true;
 	}
 	return false;
+}
+
+void kbGame::reportEvent(const std::string& event) {
+	if (resFile.is_open())
+		resFile << turn << ": " << event << std::endl;
+}
+
+void kbGame::run() {
+	bool displayMenu = true;
+	while (displayMenu) {
+		char choice = menuManager::printMenu();
+		if (choice == '9')
+			displayMenu = false;
+		else {
+			bool colors = (choice == '2');
+			Point::setColorChose(colors);
+			gameLives.setColor(colors);
+			genericRun();
+		}
+	}
+	cls();
+	menuManager::printCredits(turn);
 }

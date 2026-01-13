@@ -133,6 +133,7 @@
     <ClCompile Include="kbGame.cpp" />
     <ClCompile Include="lives.cpp" />
     <ClCompile Include="mario.cpp" />
+    <ClCompile Include="menuManager.cpp" />
     <ClCompile Include="Obstacle.cpp" />
     <ClCompile Include="Point.cpp" />
     <ClCompile Include="Score.cpp" />
@@ -150,6 +151,7 @@
     <ClInclude Include="game_manager.h" />
     <ClInclude Include="kbGame.h" />
     <ClInclude Include="lives.h" />
+    <ClInclude Include="menuManager.h" />
     <ClInclude Include="Obstacle.h" />
     <ClInclude Include="Point.h" />
     <ClInclude Include="Score.h" />

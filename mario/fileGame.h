@@ -8,10 +8,16 @@ class fileGame : public game_manager {
 	std::ifstream stepsFile;
 	int stepIndex = -1;
 	char keyInFile = '\0';
+	std::ifstream resFile;
+	int errors = 0;
 public: 
 	fileGame(bool silent);
-	~fileGame() { if (stepsFile.is_open()) stepsFile.close(); }
+	~fileGame();
 	virtual bool input(char& key) override;
 	virtual void updateSleep() override { if (!silent) Sleep(10); }
+	virtual void reportEvent(const std::string& event) override;
+	virtual void run() override;
+	virtual bool canPause() const override { return false; }
+	virtual bool handleKB() override;
 };
 
