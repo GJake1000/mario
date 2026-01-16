@@ -29,8 +29,8 @@ char kbGame::translateToEnglish(int k) {
 	}
 }
 
-kbGame::kbGame(bool silent, bool load) : game_manager(silent), isLoading(load) {
-	if (isLoading) {
+kbGame::kbGame(bool silent, bool save) : game_manager(silent), isSave(save) {
+	if (isSave) {
 		stepsFile.open("adv-world.steps");
 		resFile.open("adv-world.result");
 	}
@@ -41,7 +41,7 @@ bool kbGame::input(char& key) {
 		int k = _getwch();
 		char engKey = translateToEnglish(k);
 		key = (char)std::toupper((unsigned char)engKey);
-		if (isLoading && stepsFile.is_open()) {
+		if (isSave && stepsFile.is_open()) {
 			// format: [turn No.]   [key pressed]   
 			stepsFile << turn << ' ' << key << std::endl;
 		}
@@ -51,7 +51,7 @@ bool kbGame::input(char& key) {
 }
 
 void kbGame::reportEvent(const std::string& event) {
-	if (resFile.is_open())
+	if (isSave && resFile.is_open())
 		resFile << turn << ": " << event << std::endl;
 }
 
