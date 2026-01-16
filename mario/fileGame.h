@@ -14,7 +14,7 @@ public:
 	fileGame(bool silent);
 	~fileGame();
 	virtual bool input(char& key) override;
-	virtual void updateSleep() override { if (!silent) Sleep(10); }
+	virtual void updateSleep() const override { if (!silent) Sleep(10); }
 	virtual void reportEvent(const std::string& event) override;
 	virtual void run() override;
 	virtual bool canPause() const override { return false; }

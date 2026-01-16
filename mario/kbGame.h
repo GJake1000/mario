@@ -15,6 +15,7 @@ public:
 	virtual bool input(char& key) override;
 	virtual void reportEvent(const std::string& event) override;
 	virtual void run() override;
+	virtual void updateSleep() const override { Sleep(50); }
 
 };
 

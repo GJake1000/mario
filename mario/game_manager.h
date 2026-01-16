@@ -44,7 +44,7 @@ public:
 	//========polymorphyc setup========
 	virtual ~game_manager() {}
 	virtual bool input(char& key) = 0;
-	virtual void updateSleep() { Sleep(50); }
+	virtual void updateSleep() const = 0;
 	virtual void reportEvent(const std::string& event) {}
 	virtual void run() = 0;
 	virtual bool canPause() const { return true; }
