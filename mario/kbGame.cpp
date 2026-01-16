@@ -9,21 +9,21 @@ char kbGame::translateToEnglish(int k) {
 		return k;
 	switch (k) { // handle hebrew letters
 		// player 1
-	case HEB_VAV   : return 'W'; // ?
-	case HEB_ZAYIN : return 'X'; // ?
-	case HEB_HET   : return 'D'; // ?
-	case HEB_TET   : return 'A'; // ?'
-	case HEB_GERESH: return 'S'; // ?
-	case HEB_CAF   : return 'E'; // ?
+	case HEB_GERESH     : return 'W';
+	case HEB_GIMEL      : return 'D';
+	case HEB_SAMECH     : return 'X';
+	case HEB_SHIN       : return 'A';
+	case HEB_DALET      : return 'S';
+	case HEB_QOF        : return 'E';
 		// player 2
-	case HEB_LAMED : return 'I'; // ?
-	case HEB_MEM   : return 'M'; // ?
-	case HEB_NUN   : return 'L'; // ?
-	case HEB_SAMECH: return 'J'; // ?
-	case HEB_AYIN  : return 'K'; // ?
-	case HEB_PE    : return 'O'; // ?
+	case HEB_NUN_SOFIT  : return 'I';
+	case HEB_KHAF_SOFIT : return 'L';
+	case HEB_TSADI      : return 'M';
+	case HEB_HET        : return 'J';
+	case HEB_LAMED      : return 'K';
+	case HEB_MEM_SOFIT  : return 'O';
 		// other
-	case HEB_YOD   : return 'H'; // ?
+	case HEB_YOD        : return 'H'; 
 	default:
 		return (char)k;
 	}

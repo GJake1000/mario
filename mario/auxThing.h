@@ -18,19 +18,19 @@ constexpr char OBSTACLE = '*';
 constexpr char SPRING = '#';
 
 
-constexpr int HEB_VAV    = 39;  // ו
-constexpr int HEB_ZAYIN  = 225; // ז
-constexpr int HEB_HET    = 210; // ח
-constexpr int HEB_TET    = 233; // ט
-constexpr int HEB_GERESH = 211; // י
-constexpr int HEB_CAF    = 231; // כ
+constexpr int HEB_GERESH     = 39;   // ' 
+constexpr int HEB_GIMEL      = 1490; // ג
+constexpr int HEB_SAMECH     = 1505; // ס
+constexpr int HEB_SHIN       = 1513; // ש
+constexpr int HEB_DALET      = 1491; // ד
+constexpr int HEB_QOF        = 1511; // ק
 
-constexpr int HEB_LAMED  = 223; // ל
-constexpr int HEB_MEM    = 230; // מ
-constexpr int HEB_NUN    = 218; // נ
-constexpr int HEB_SAMECH = 215; // ס
-constexpr int HEB_AYIN   = 220; // ע
-constexpr int HEB_PE     = 221; // פ
+constexpr int HEB_NUN_SOFIT  = 1503; // ן
+constexpr int HEB_KHAF_SOFIT = 1498; // ך
+constexpr int HEB_TSADI      = 1510; // צ
+constexpr int HEB_HET        = 1495; // ח
+constexpr int HEB_LAMED      = 1500; // ל
+constexpr int HEB_MEM_SOFIT  = 1501; // ם
 
-constexpr int HEB_YOD    = 1497; // י 
+constexpr int HEB_YOD        = 1497; // י 
 
