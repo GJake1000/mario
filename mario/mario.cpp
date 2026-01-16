@@ -3,7 +3,7 @@
 #include "fileGame.h"
 #include <string>
 
-game_manager* initGame(int argc, char* argv[]) {
+static game_manager* initGame(int argc, char* argv[]) {
 	bool isLoading = false;
 	bool isSave = false;
 	bool silent = false;

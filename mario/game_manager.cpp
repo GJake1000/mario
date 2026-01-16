@@ -97,20 +97,24 @@ void game_manager::eraseOutput() const {
 bool game_manager::handleKB() {
 	char key = 0;
 	if (input(key)) {
-		if (key == ESC && canPause()) {
-			bool menu = menuManager::printPauseScreen();
-			if (menu) return true;				// go back to menu
-			if (!isSilent) {
-				cls();
-				screen.draw(currentRoom);
-				drawObs();
-				gameLives.draw();
+		if (key == ESC) {
+			if (canPause()) {
+				bool menu = menuManager::printPauseScreen();
+				if (menu) return true;				// go back to menu
+				if (!isSilent) {
+					cls();
+					screen.draw(currentRoom);
+					drawObs();
+					gameLives.draw();
 
-				
-				if (screen.isDark(currentRoom) && !hasTorch()) {
-					screen.setDark();
+
+					if (screen.isDark(currentRoom) && !hasTorch()) {
+						screen.setDark();
+					}
 				}
 			}
+			else
+				return true;
 		}
 		else if (!gameOver) {
 			for (auto& p : points)
