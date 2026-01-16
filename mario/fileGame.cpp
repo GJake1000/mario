@@ -11,6 +11,7 @@ fileGame::fileGame(bool silent) : game_manager(silent) {
 fileGame::~fileGame() {
 	if (resFile.is_open())
 		resFile.close();
+	gotoxy(0, errors + 1);
 	std::cout << "errors amount: " << errors << std::endl;
 }
 
@@ -33,20 +34,25 @@ void fileGame::reportEvent(const std::string& event) {
 
 	if (std::getline(resFile, line)) {
 		if (line != inRes) {
+			gotoxy(0, errors + 1);
 			std::cerr << "error at turn: " << turn << ", got: " << line <<
 				", but should get: " << inRes << std::endl;
 			++errors;
 		}
 	}
-	else
+	else {
+		gotoxy(0, errors + 1);
+		std::cerr << "error at turn: " << turn 
+			<< "resaults file ended earlier than expected." << std::endl;
 		++errors;
+	}
 }
 
 void fileGame::run() {
 	Point::setColorChose(false);
 	gameLives.setColor(false);
 	genericRun();
-	cls();
+	//cls();
 }
 
 bool fileGame::handleKB() {

@@ -161,7 +161,7 @@ bool loadRoom(const std::string& fileName, roomData& room) {
 		std::cerr << "Error: Could not open file " << fileName << std::endl;
 		return false;
 	}
-	std::cout << "SUCCESS!" << std::endl;
+	//std::cout << "SUCCESS!" << std::endl;
 	resetRoom(room);
 	std::string line;
 	int rowIndex = 0;
