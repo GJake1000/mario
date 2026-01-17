@@ -21,8 +21,6 @@ bool Obstacle::contains(const Coord& crd) const {
 	return false;
 }
 
-
-
 //===============================erase===============================
 void Obstacle::erase(Screen& screen) const {
 	for (const auto& c : cords) {

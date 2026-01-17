@@ -50,7 +50,7 @@ void menuManager::printInstructions() {
 		std::cout << "Dispose element : " << keys[i][5] << "\n";
 	}
 	std::cout << "\nPress any key to return to menu...";
-	_getch();
+	(void)_getch();
 }
 
 void menuManager::printCredits(int turns) {

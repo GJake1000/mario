@@ -1,5 +1,6 @@
 ﻿
-
+OLD BONUSES
+-----------
 -Enabled the use of hebrew letters in the game
 -Abstact size of obstacles. 
 	An obstacle eniity is defined by all the parts that are connected to each other horizontally or vertically
@@ -11,3 +12,7 @@
  
 -יש גם קובץ טקסט global שממנו אפשר לשנות מקשים, שם קובץ חידות, ניקוד לחידה, טיימר לפצצה, רדיוס לפצצה, חיים התחלתי, וניקוד התחלתי
 
+
+NEW BONUSES
+-----------
+- 

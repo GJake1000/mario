@@ -520,6 +520,7 @@ Obstacle* game_manager::findObs(int x, int y) {
 			return &obs;
 	return nullptr;
 }
+
 void game_manager::obsDefFromMap(int roomNum)
 {
 	obstacles.clear();
@@ -563,26 +564,14 @@ void game_manager::obsDefFromMap(int roomNum)
 	}
 }
 
-
-/*
-void game_manager::obsDef() {
-	obstacles.clear();
-	// Define obstacles here if needed
-	const auto& obsList = screen.getObstacleData(currentRoom);
-
-	for (const auto& obs : obsList)
-		obstacles.push_back(Obstacle(obs.x, obs.y, obs.width, obs.height, currentRoom, Color::brown));
-}
-*/
-
 void game_manager::drawObs() {
 	for (const auto& obs : obstacles)
 		if (obs.getRoom() == currentRoom)
 			obs.draw(screen);
 }
 
-//===========================handle spring=================================
 
+//===========================handle spring=================================
 void game_manager::handleSpring(Point& p, int x, int y)
 {
 	Spring* spr = findSpring(x, y);
