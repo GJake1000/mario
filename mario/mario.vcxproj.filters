@@ -51,6 +51,15 @@
     <ClCompile Include="fileHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="kbGame.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="fileGame.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="menuManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="game_manager.h">
@@ -93,6 +102,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Coordinates.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="kbGame.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="fileGame.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="menuManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -127,10 +127,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="fileGame.cpp" />
     <ClCompile Include="fileHandler.cpp" />
     <ClCompile Include="game_manager.cpp" />
+    <ClCompile Include="kbGame.cpp" />
     <ClCompile Include="lives.cpp" />
     <ClCompile Include="mario.cpp" />
+    <ClCompile Include="menuManager.cpp" />
     <ClCompile Include="Obstacle.cpp" />
     <ClCompile Include="Point.cpp" />
     <ClCompile Include="Score.cpp" />
@@ -143,9 +146,12 @@
     <ClInclude Include="auxThing.h" />
     <ClInclude Include="Coordinates.h" />
     <ClInclude Include="DIrection.h" />
+    <ClInclude Include="fileGame.h" />
     <ClInclude Include="fileHandler.h" />
     <ClInclude Include="game_manager.h" />
+    <ClInclude Include="kbGame.h" />
     <ClInclude Include="lives.h" />
+    <ClInclude Include="menuManager.h" />
     <ClInclude Include="Obstacle.h" />
     <ClInclude Include="Point.h" />
     <ClInclude Include="Score.h" />

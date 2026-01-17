@@ -156,13 +156,12 @@ bool isStart(const std::string& line, roomData& room) {
 }
 
 bool loadRoom(const std::string& fileName, roomData& room) {
-	//std::cout << "DEBUG: Trying to open file: " << fileName << "... ";
 	std::ifstream file(fileName);
 	if (!file.is_open()) {
 		std::cerr << "Error: Could not open file " << fileName << std::endl;
 		return false;
 	}
-	std::cout << "SUCCESS!" << std::endl;
+	//std::cout << "SUCCESS!" << std::endl;
 	resetRoom(room);
 	std::string line;
 	int rowIndex = 0;
