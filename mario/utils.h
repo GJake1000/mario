@@ -25,7 +25,21 @@ enum class Color {
 void setTextColor(Color color);
 void ErrorEncountered(int errNum);
 
+
+extern int g_currentLegendY;
+
 void setCurrentLegendY(int legendY);
 void gotoxyLegendSafe(int x, int y);
 int getLegendY();
 
+
+/*
+class Legend {
+    int g_currentLegendY = -1;
+    
+public:
+    void setCurrentLegendY(int legendY);
+    void gotoxyLegendSafe(int x, int y);
+    int getLegendY();
+};
+*/

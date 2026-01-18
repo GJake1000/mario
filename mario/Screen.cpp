@@ -1,12 +1,14 @@
 #include "Screen.h"
-#include "Point.h" 
-#include "utils.h"
-#include "screenLoad.h"
+
 #include <iostream>
 #include <windows.h> 
 #include <cstring>
 #include <fstream>
 #include <string>
+
+#include "screenLoad.h"
+#include "Point.h" 
+#include "utils.h"
 
 // ========================= Get Obstacle Positions =========================
 const std::vector<obsData>& Screen::getObstaclePositions(int roomNum) const {
@@ -73,11 +75,16 @@ void Screen::resetRoom() {
 }
 
 void Screen::resetRoom(int roomNum) {
-	if (roomNum < 0 || roomNum >= loadedRooms.size()) return;
+	if (roomNum < 0 || roomNum >= loadedRooms.size()) 
+		return;
+
 	for (int j = 0; j <= MAX_Y; ++j) { 
 		for (int k = 0; k <= MAX_X + 1; ++k) {
 			loadedRooms[roomNum].map[j][k] = loadedRooms[roomNum].initialMap[j][k];
 		}
+	}
+	for (auto& d : loadedRooms[roomNum].doors) {
+		d.conditions = d.initialConditions;
 	}
 }
 
@@ -129,7 +136,7 @@ bool Screen::isWall(int x, int y, int roomNum) const {
 }
 
 // ========================= Set Char =================================
-void Screen::setChar(int x, int y, int roomNum, char ch) {
+void Screen::setChar(int x, int y, int roomNum, char ch) { 
 	if (roomNum < 0 || roomNum >= loadedRooms.size()) return;
 
 	if (x >= 0 && x <= MAX_X && y >= 0 && y <= MAX_Y) {
@@ -237,3 +244,18 @@ const std::vector<obsData>& Screen::getObstacleData(int roomNum) const {
 	static std::vector<obsData> empty;
 	return empty;
 }
+
+
+// ========================= Legend stuff =================================
+void Screen::setLegendChar(int x, int y, char ch) const
+{
+	gotoxy(x, y);
+	std::cout << ch;
+}
+
+void Screen::clearLegendAreaChar(int x, int y) const
+{
+	gotoxy(x, y);
+	std::cout << ' ';
+}
+

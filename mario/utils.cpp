@@ -1,4 +1,5 @@
 #include "utils.h"
+
 #include <iostream>
 #include <windows.h>
 #include <cstdlib>
@@ -61,7 +62,8 @@ void ErrorEncountered(int errNum)
 ///////////////Legend safe functions///////////////////////
 
 // global variable to store the current legend Y position (it is important!) 
-int g_currentLegendY = -1;
+
+int g_currentLegendY = 0;   //0 means legend not set yet (fixes an error as well)
 
 void setCurrentLegendY(int legendY)
 {
@@ -79,5 +81,27 @@ void gotoxyLegendSafe(int x, int y)
 
 int getLegendY()
 {
-	return g_currentLegendY;    
+    return g_currentLegendY;
 }
+
+
+/*
+void Legend::setCurrentLegendY(int legendY)
+{
+    g_currentLegendY = legendY;
+}
+
+void Legend::gotoxyLegendSafe(int x, int y)
+{
+    if (g_currentLegendY >= 0) {
+        if (y >= g_currentLegendY)   // shift everything at/under legend
+            y += 2;
+    }
+    gotoxy(x, y);
+}
+
+int getLegendY()
+{
+    return g_currentLegendY;
+}
+*/

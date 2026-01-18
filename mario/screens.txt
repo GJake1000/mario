@@ -47,7 +47,7 @@ W0          WWWWW             WWWWWWWWW      W  WWWWWWWWWWWWWWWWW   WWWWWW    2W
 W0      WW          WWWWWWW                  W                      WWWWWWW   2W
 WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
                                    LIVE  |  SCORE                                        
-Player &:                            INVENTORY                   Player $:      
+Player &: K                          INVENTORY                   Player $:      
 WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW 
 W   W      K               W                                                   W 
 W   WWWWWWWWWWWWWWWWWW     WWWWWWWWWWWWWWWWWWWW       WWWWWWWWWWWWWWWWWWWW     W 

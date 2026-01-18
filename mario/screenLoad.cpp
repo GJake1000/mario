@@ -1,6 +1,5 @@
 #include "screenLoad.h"
-#include "auxThing.h"
-#include "ScreensData.h"
+
 #include <fstream>
 #include <sstream>
 #include <iostream>
@@ -8,6 +7,10 @@
 #include <algorithm>
 #include <iomanip>
 #include <filesystem>
+
+#include "auxThing.h"
+#include "ScreensData.h"
+
 
 void resetRoom(roomData& room) {
 	bool legendFound = false;
@@ -77,6 +80,8 @@ bool isDoor(const std::string& line, roomData& room) {
 		
 		if (door.conditions.empty())
 			door.conditions.push_back("NONE");
+
+		door.initialConditions = door.conditions;///////////////
 
 		room.doors.push_back(door); // convert to right index
 		return true;
@@ -202,3 +207,4 @@ std::vector<roomData> screenLoad::loadScreens() {
 	}
 	return rooms;
 }
+

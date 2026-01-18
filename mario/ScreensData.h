@@ -1,4 +1,5 @@
 #pragma once
+
 #include <vector>
 #include <utility>
 #include <string>
@@ -21,6 +22,7 @@ struct DoorInfo {
 	int xLead;
 	int yLead;
 	std::vector<std::string> conditions; // e.g., "KEY", "NONE"
+	std::vector<std::string> initialConditions; // original (for reset) (lets see if needed)
 };
 
 struct roomData {

@@ -1,4 +1,9 @@
 #pragma once
+#include <iostream>
+#include <vector>
+#include <Windows.h>
+
+#include "Coordinates.h"
 #include "Screen.h"
 #include "ScreensData.h"
 #include "Point.h"
@@ -6,12 +11,7 @@
 #include "lives.h"
 #include "Score.h"
 #include "fileHandler.h"
-#include <iostream>
 #include "Spring.h"
-#include <vector>
-#include <Windows.h>
-#include "Coordinates.h"
-
 
 class game_manager {
 protected:
@@ -106,7 +106,6 @@ public:
 private:
 	std::vector<Obstacle> obstacles;
 	Obstacle* findObs(int x, int y);
-	void obsDef();
 
 	//spring stuff
 	std::vector<Spring> springs;

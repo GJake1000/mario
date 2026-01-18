@@ -1,9 +1,11 @@
 #pragma once
+
+#include <vector>
+
 #include "ScreensData.h"
 #include "auxThing.h"
 #include "utils.h"
 #include "screenLoad.h"
-#include <vector>
 
 
 class Point;
@@ -46,4 +48,8 @@ public:
 	void setDark() const;
 
 	static const char EMPTY_ROW[];
+
+	//Legend things
+	void setLegendChar(int x, int y, char ch) const;
+	void clearLegendAreaChar(int x, int y) const;
 };

@@ -1,7 +1,10 @@
 #pragma once
-#include "game_manager.h"
+
 #include <conio.h>
 #include <fstream>
+
+#include "game_manager.h"
+
 
 class kbGame : public game_manager {
 	bool isSave;

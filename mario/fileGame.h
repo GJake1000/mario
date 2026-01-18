@@ -1,7 +1,9 @@
 #pragma once
-#include "game_manager.h"
+
 #include <fstream>
 #include <windows.h>
+
+#include "game_manager.h"
 
 class fileGame : public game_manager {
 	bool silent;

@@ -68,14 +68,3 @@ const Riddle& fileHandler::getRid(int idx) const {
 		return rids[idx];
 	return emptyRid;
 }
-
-/*
-std::vector<Obstacle> fileHandler::createObstacles(const Screen& screen, int roomNum) {
-	std::vector<Obstacle> obstacles;
-	const auto& obsList = screen.getObstacleData(roomNum);
-	for (const auto& obs : obsList) {
-		obstacles.push_back(Obstacle(obs.x, obs.y, obs.width, obs.height, roomNum, Color::brown));
-	}
-	return obstacles;
-}
-*/

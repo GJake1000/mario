@@ -2,7 +2,7 @@
 
 //===================================draw===================================
 void lives::draw() const {
-	gotoxyLegendSafe(livesX, livesY);
+	gotoxy(livesX, g_currentLegendY);
 	if (color)
 		setTextColor(Color::red);
 	

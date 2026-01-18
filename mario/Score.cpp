@@ -1,8 +1,10 @@
 #include "Score.h"
 #include "utils.h"
 #include <iostream>
+
+
 void Score::draw(int time, int lives) const {
-	gotoxyLegendSafe(scoreX, scoreY);
+	gotoxy(scoreX, g_currentLegendY);
 	int score = calc(time, lives);
 	std::cout << score << "    "; // extra spaces to clear previous longer scores
 }

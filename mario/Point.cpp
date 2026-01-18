@@ -1,8 +1,10 @@
 ﻿#include "Point.h"
-#include "Screen.h"
-#include "game_manager.h"
+
 #include <iostream>
 #include <cctype>
+
+#include "Screen.h"
+#include "game_manager.h"
 
 
 class Screen;
@@ -55,6 +57,9 @@ void Point::handleKeyPressed(int key, Screen& screen, int roomNum) {
 				char disposed = dispose(screen, roomNum);
 				if (disposed == BOMB && gm != nullptr) 
 					gm->setBombTimer(x, y, roomNum);
+				
+				if (gm != nullptr)
+					gm->eraseOutput();
 			}
 			else setDirection((Direction)index);
 			return;
@@ -91,46 +96,57 @@ void Point::setDirection(Direction dir) {
 }
 
 //=========================item to dispose=================================
-char Point::itemToDispose(Screen& screen, int roomNum) const  {
-	char invItem = screen.charAt(inventoryX, inventoryY, roomNum);
-	for (int i = 0; i < Screen::NUM_OF_ROOMS; i++)            // remove item from all rooms' inventories
-		screen.setChar(inventoryX, inventoryY, i, EMPTY_CELL);
-
-	return invItem;
+char Point::itemToDispose(Screen&, int)
+{
+	char tmp = heldItem;
+	heldItem = EMPTY_CELL;
+	return tmp;
 }
 
 //=========================draw to inventory=================================
-bool Point::drawToInventory(Screen& screen, int roomNum, char item) const  {
-	if (checkInventory(screen, roomNum) == EMPTY_CELL || item == EMPTY_CELL) {
-		if (item == EMPTY_CELL || (diff_x != 0 || diff_y != 0)) {
-			for (int i = 0; i < Screen::NUM_OF_ROOMS; i++) {           // draw item in all rooms' inventories       
-				screen.setChar(inventoryX, inventoryY, i, item);
-			}
-			return true;
-		}
+bool Point::drawToInventory(Screen&, int, char item)
+{
+	// allow clearing
+	if (item == EMPTY_CELL) {
+		heldItem = EMPTY_CELL;
+		return true;
 	}
-	return false;
+
+	// already holding something
+	if (heldItem != EMPTY_CELL)
+		return false;
+
+	// keep your existing “must be moving” rule if you had it
+	if (diff_x == 0 && diff_y == 0)
+		return false;
+
+	heldItem = item;
+	return true;
 }
 
 //=========================check if in inventory=================================
-char Point::checkInventory(const Screen& screen, int roomNum) const {
-	return screen.charAt(inventoryX, inventoryY, roomNum);
+char Point::checkInventory(const Screen& screen, int) const {
+	return heldItem;
 }
 
-void Point::resetInventory(Screen&  screen) const  {
-	for (int i = 0; i < Screen::NUM_OF_ROOMS; ++i)
-		screen.setChar(inventoryX, inventoryY, i, EMPTY_CELL);	
+void Point::resetInventory(Screen&)
+{
+	heldItem = EMPTY_CELL;
 }
 
 //=========================dispose=================================
-char Point::dispose(Screen& screen, int roomNum) const  {
-	char invItem = itemToDispose(screen, roomNum);
-	if (invItem != EMPTY_CELL)
+char Point::dispose(Screen& screen, int roomNum)
+{
+	char item = itemToDispose(screen, roomNum);
+	if (item != EMPTY_CELL) {
+		// drop at current position only if empty (or your rule)
 		if (screen.charAt(x, y, roomNum) == EMPTY_CELL)
-			screen.setChar(x, y, roomNum, invItem); // place item from inventory to current position
-	drawToInventory(screen, roomNum, ' ');
-	return invItem;
-
+			screen.setChar(x, y, roomNum, item);
+		else {
+			// if you have different dropping rules, apply them here
+		}
+	}
+	return item;
 }
 
 //=========================get something=================================

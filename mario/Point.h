@@ -1,8 +1,11 @@
 #pragma once
+
+#include <string>
+
 #include "Direction.h"
 #include "utils.h"
 #include "auxThing.h"
-#include <string>
+
 
 class Screen;
 class game_manager;
@@ -10,6 +13,8 @@ class game_manager;
 class Point {
 	enum { MAX_X = 79, MAX_Y = 24 };
 	static constexpr int NUM_KEYS = 6;
+
+	char heldItem = EMPTY_CELL;
 
 	int x, y;
 	int diff_x = 0, diff_y = 0; // defualt for begin (STAY)
@@ -29,7 +34,7 @@ class Point {
 
 public:
 	Point(int x1, int y1, char p, const char(&my_keys)[NUM_KEYS + 1],
-		Color clr, int myInventoryX, int myInventoryY = MAX_Y) {
+		Color clr, int myInventoryX, int myInventoryY = 0) {//start by initializing it to 0
 		player = p;
 		for (int i = 0; i < NUM_KEYS; i++) 
 			keys[i] = my_keys[i];
@@ -49,11 +54,11 @@ public:
 	void move(bool canMove);
 	void handleKeyPressed(int key, Screen& screen, int roomNum);
 	void setDirection(Direction dir);
-	char itemToDispose(Screen& screen, int roomNum) const;
-	bool drawToInventory(Screen& screen, int roomNum, char item) const;
+	char itemToDispose(Screen& screen, int roomNum);////////
+	bool drawToInventory(Screen& screen, int roomNum, char item);////
 	char checkInventory(const Screen& screen, int roomNum) const;
-	void resetInventory(Screen& screen) const;
-	char dispose(Screen& screen, int roomNum) const;
+	void resetInventory(Screen& screen);///////
+	char dispose(Screen& screen, int roomNum);///////
 	void setPosition(int newX, int newY);
 	char getPlayerChar() const;
 	int getX() const;
@@ -81,5 +86,8 @@ public:
 
 	void startSpringEffect(int dx, int dy, int speed);
 	void tickSpringEffect();
+
+
+	int getInventoryX() const { return inventoryX; }
 
 };

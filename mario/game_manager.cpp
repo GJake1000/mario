@@ -1,11 +1,12 @@
-#include "game_manager.h"
-#include "menuManager.h"
 #include <iostream>
 #include <conio.h>  
 #include <windows.h> 
 #include <string>
 #include <fstream>
 #include <queue>
+
+#include "game_manager.h"
+#include "menuManager.h"
 
 //=========================new game starter=================================
 void game_manager::newGameStarter()
@@ -75,7 +76,7 @@ bool game_manager::printOutput(const char* output) const  {
 	int len = strlen(output);
 	int spaces_to_center = (Screen::MAX_X - len) / 2;
 
-	gotoxyLegendSafe(spaces_to_center, 23);
+	gotoxy(spaces_to_center, g_currentLegendY + 1);
 
 	for (int i = 0; i < len; i++) {
 		std::cout << output[i];
@@ -86,12 +87,30 @@ bool game_manager::printOutput(const char* output) const  {
 }
 
 void game_manager::eraseOutput() const {
-	gotoxyLegendSafe(0, 23);
-	std::cout << std::string(Screen::MAX_X, ' ');
+	
+	//gotoxyLegendSafe(0, 23);
+	gotoxy(11, g_currentLegendY + 1);
+
+	std::cout << std::string(64, ' ');	//length of output area
 	gameLives.draw();
 	gameScore.draw(turn, gameLives.getLives());
-	gotoxyLegendSafe(35, 23);
+	
+	//Print row0 of Legend
+	gotoxy(35, g_currentLegendY);
 	std::cout << "LIVE | SCORE";
+
+	//Print row1 of Legend
+	gotoxy(0, g_currentLegendY + 1);	//player1
+	std::cout << "Player &:";
+
+	gotoxy(66, g_currentLegendY + 1);	//player2
+	std::cout << "Player $:";
+
+	// draw player inventories in legend area (UI only)
+	const int invY = g_currentLegendY + 1;
+
+	screen.setLegendChar(points[0].getInventoryX(), invY, points[0].checkInventory(screen, currentRoom));
+	screen.setLegendChar(points[1].getInventoryX(), invY, points[1].checkInventory(screen, currentRoom));
 }
 
 bool game_manager::handleKB() {
@@ -105,8 +124,8 @@ bool game_manager::handleKB() {
 					cls();
 					screen.draw(currentRoom);
 					drawObs();
-					gameLives.draw();
-
+					//gameLives.draw(); maybe remove
+					eraseOutput();
 
 					if (screen.isDark(currentRoom) && !hasTorch()) {
 						screen.setDark();
@@ -257,6 +276,7 @@ void game_manager::handleTorch(Point& p, int x, int y) {
 	if (p.drawToInventory(screen, currentRoom, TORCH)) {
 		reportEvent("picked up torch");
 		screen.setChar(x, y, currentRoom, EMPTY_CELL); // remove torch from the room 
+		eraseOutput();                                   // repaint legend inventory once
 	}
 }
 
@@ -376,7 +396,8 @@ bool game_manager::solveRiddle(Point& p) {
 				cls();
 				screen.draw(currentRoom);
 				drawObs();
-				gameLives.draw();
+				//gameLives.draw(); maybe remove
+				eraseOutput();
 
 				if (screen.isDark(currentRoom) && !hasTorch())
 					screen.setDark();
@@ -421,9 +442,11 @@ char game_manager::printRiddle(int index) const {
 
 //=========================handle key=================================
 void game_manager::handleKey(Point& p, int x, int y) {
+
 	if (p.drawToInventory(screen, currentRoom, KEY)) {
 		reportEvent("picked up key");
-		screen.setChar(x, y, currentRoom, EMPTY_CELL); // remove key from the room
+		screen.setChar(x, y, currentRoom, EMPTY_CELL); // remove key from world
+		eraseOutput();                                   // repaint legend inventory once
 	}
 }
 
@@ -432,6 +455,7 @@ void game_manager::handleBomb(Point& p, int x, int y) {
 	if (p.drawToInventory(screen, currentRoom, BOMB)) {
 		reportEvent("picked up bomb");
 		screen.setChar(x, y, currentRoom, EMPTY_CELL); // remove bomb from the room
+		eraseOutput();                                   // repaint legend inventory once
 	}
 }
 
@@ -962,8 +986,10 @@ bool game_manager::checkCond(bool& needKey, bool& needRiddle, Point& p, const ch
 		std::string cond = door->conditions[i];
 
 		if (cond == "SWITCH") {
-			if(!doorCondSw(door, i)) 
+			if (!doorCondSw(door, i)) {
+				textAppears = printOutput("Need press the switch in order to enter!");
 				return false;
+			}
 		}
 		else if (cond == "KEY") {
 			if (inv1 != KEY && inv2 != KEY) {
@@ -973,8 +999,11 @@ bool game_manager::checkCond(bool& needKey, bool& needRiddle, Point& p, const ch
 			needKey = true;
 		}
 		else if (cond == "RIDDLE") {
-			if (screen.searchItem(currentRoom, RIDDLE))
+			if (screen.searchItem(currentRoom, RIDDLE)) {
+				textAppears = printOutput("Need to solve the riddle in order to enter!");
 				return false;
+			}
+			needRiddle = true;/////////////
 			door->conditions.erase(door->conditions.begin() + i); // remove riddle condition after solving
 			--i;
 		}
@@ -985,8 +1014,9 @@ bool game_manager::checkCond(bool& needKey, bool& needRiddle, Point& p, const ch
 void game_manager::removeKeyAfterUse(char inv1, char inv2, Point& currentPlayer) {
 	if (currentPlayer.checkInventory(screen, currentRoom) == KEY) {
 		currentPlayer.drawToInventory(screen, currentRoom, EMPTY_CELL);
+		eraseOutput();
 	}
-	else{
+	else {
 		Point& otherPlayer = (currentPlayer.getPlayerChar() == points[0].getPlayerChar()) ? points[1] : points[0];
 		otherPlayer.drawToInventory(screen, currentRoom, EMPTY_CELL);
 	}
