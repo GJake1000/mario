@@ -40,6 +40,7 @@ protected:
 			if (!gameFlow(dark))
 				break;
 	}
+	int currRidIdx = 0;
 public:
 	//========polymorphyc setup========
 	virtual ~game_manager() {}

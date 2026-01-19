@@ -27,6 +27,7 @@ void game_manager::newGameStarter()
 	resetSpringState();
 	obsDefFromMap(currentRoom);
 
+	currRidIdx = 0;
 	loadRiddles("riddles.txt");
 	resetDoorVars();
 }
@@ -386,7 +387,8 @@ bool game_manager::handleAnswer(char correct, char ans, Point& p) {
 }
 
 bool game_manager::solveRiddle(Point& p) {
-	char correct = printRiddle(currentRoom); 
+	char correct = printRiddle(currRidIdx % riddles.size());
+	currRidIdx++;
 	char ans = 0;
 	while (true) {
 		if (input(ans)) {
@@ -431,7 +433,7 @@ void game_manager::loadRiddles(const char* fileName) {
 }
 
 char game_manager::printRiddle(int index) const {
-	if (index < 0 || index >= fileH.getRidCnt())
+	if (index < 0 || index >= riddles.size())
 		return '\0'; // invalid index
 	if (!isSilent) {
 		cls();
@@ -482,7 +484,7 @@ void game_manager::activateBomb(Screen& screen, int x, int y, int roomNum) {
 			int distX = col - x;
 			int distY = row - y;
 			int distanceSquared = distX * distX + distY * distY;
-			bool isOuterWall = (col == 0 || col == Screen::MAX_X || row == 0 || row == Screen::MAX_Y - 3);
+			bool isOuterWall = (col == 0 || col == Screen::MAX_X || row == 0 || row == Screen::MAX_Y - 2);
 			if (!isOuterWall && distanceSquared <= radius * radius) { // do not destroy outer walls
 				screen.setChar(col, row, roomNum, EMPTY_CELL);
 			}
