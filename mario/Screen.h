@@ -40,6 +40,7 @@ public:
 	bool isLastRoom(int roomNum);
 	std::pair<int, int> getPlayerStartPos(int playerIdx) const;
 	const std::vector<obsData>& getObstacleData(int roomNum) const;
+    size_t getNumScreens() const { return loadedRooms.size(); }
 
 	//drawing
 	void draw(int roomNum) const;

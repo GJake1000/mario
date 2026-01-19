@@ -27,6 +27,7 @@ void game_manager::newGameStarter()
 	resetSpringState();
 	obsDefFromMap(currentRoom);
 
+	currRidIdx = 0;
 	loadRiddles("riddles.txt");
 	resetDoorVars();
 }
@@ -144,6 +145,14 @@ bool game_manager::handleKB() {
 			
 	}
 	return false;
+}
+
+std::string game_manager::catchError() const {
+	if (screen.getNumScreens() == 0)
+		return "Error: no screens found in text file";
+	if (fileH.getRidCnt() == 0)
+		return "Warning: no riddles found in text files";
+	return ""; // no errors found
 }
 
 void game_manager::textOpt() {
@@ -388,7 +397,10 @@ bool game_manager::handleAnswer(char correct, char ans, Point& p) {
 }
 
 bool game_manager::solveRiddle(Point& p) {
-	char correct = printRiddle(currentRoom); 
+	if (riddles.size() == 0)
+		return true;          // no riddles 
+	char correct = printRiddle(currRidIdx % riddles.size());
+	currRidIdx++;
 	char ans = 0;
 	while (true) {
 		if (input(ans)) {
@@ -432,7 +444,7 @@ void game_manager::loadRiddles(const char* fileName) {
 }
 
 char game_manager::printRiddle(int index) const {
-	if (index < 0 || index >= fileH.getRidCnt())
+	if (index < 0 || index >= riddles.size())
 		return '\0'; // invalid index
 	if (!isSilent) {
 		cls();

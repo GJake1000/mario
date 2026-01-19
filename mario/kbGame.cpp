@@ -59,10 +59,10 @@ void kbGame::run() {
 	bool displayMenu = true;
 	while (displayMenu) {
 		char choice = menuManager::printMenu();
-		if (choice == '9')
+		if (choice == EXIT)
 			displayMenu = false;
 		else {
-			bool colors = (choice == '2');
+			bool colors = (choice == START_COLOR);
 			Point::setColorChose(colors);
 			gameLives.setColor(colors);
 			genericRun();
