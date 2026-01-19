@@ -14,18 +14,19 @@
 #include "Spring.h"
 
 class game_manager {
+	bool textAppears = false;
+	int output_time = 0;
+	int bombDisposalTime = -1;
+	int bombX = -1, bombY = -1, bombRoom = -1;
+	int playerAtDoor = -1, playerAtDoorX = -1, playerAtDoorY = -1, waitingRoom = -1;
+	int currRidIdx = 0;
 protected:
 	enum { ESC = 27 };
 	Point points[2];
 	Screen screen;
 	int currentRoom = 0;
 	int turn = 0;
-	int output_time = 0;
 	void newGameStarter();
-	bool textAppears = false;
-	int bombDisposalTime = -1;
-	int bombX = -1, bombY = -1, bombRoom = -1;
-	int playerAtDoor = -1, playerAtDoorX = -1, playerAtDoorY = -1, waitingRoom = -1;
 	lives gameLives;
 	Score gameScore;
 	bool gameOver = false;
@@ -40,7 +41,6 @@ protected:
 			if (!gameFlow(dark))
 				break;
 	}
-	int currRidIdx = 0;
 public:
 	//========polymorphyc setup========
 	virtual ~game_manager() {}
