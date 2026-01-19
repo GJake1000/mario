@@ -395,6 +395,8 @@ bool game_manager::handleAnswer(char correct, char ans, Point& p) {
 }
 
 bool game_manager::solveRiddle(Point& p) {
+	if (riddles.size() == 0)
+		return true;          // no riddles 
 	char correct = printRiddle(currRidIdx % riddles.size());
 	currRidIdx++;
 	char ans = 0;
