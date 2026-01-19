@@ -58,6 +58,7 @@ public:
 	void movePlayer(Point& p);
 	void textOpt();
 	virtual bool handleKB();
+	std::string catchError() const;
 
 	//=========game mechanics=========
 	//general mechanics

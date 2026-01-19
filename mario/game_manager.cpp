@@ -145,6 +145,14 @@ bool game_manager::handleKB() {
 	return false;
 }
 
+std::string game_manager::catchError() const {
+	if (screen.getNumScreens() == 0)
+		return "Error: no screens found in text file";
+	if (fileH.getRidCnt() == 0)
+		return "Warning: no riddles found in text files";
+	return ""; // no errors found
+}
+
 void game_manager::textOpt() {
 	if (textAppears == true) {
 		output_time++;
