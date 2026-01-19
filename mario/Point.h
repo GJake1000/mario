@@ -54,11 +54,11 @@ public:
 	void move(bool canMove);
 	void handleKeyPressed(int key, Screen& screen, int roomNum);
 	void setDirection(Direction dir);
-	char itemToDispose(Screen& screen, int roomNum);////////
-	bool drawToInventory(Screen& screen, int roomNum, char item);////
+	char itemToDispose(Screen& screen, int roomNum);
+	bool drawToInventory(Screen& screen, int roomNum, char item);
 	char checkInventory(const Screen& screen, int roomNum) const;
-	void resetInventory(Screen& screen);///////
-	char dispose(Screen& screen, int roomNum);///////
+	void resetInventory(Screen& screen);
+	char dispose(Screen& screen, int roomNum);
 	void setPosition(int newX, int newY);
 	char getPlayerChar() const;
 	int getX() const;

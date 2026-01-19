@@ -15,4 +15,4 @@ OLD BONUSES
 
 NEW BONUSES
 -----------
-- 
+- items and colored by the last player that touched them (pretty cool)

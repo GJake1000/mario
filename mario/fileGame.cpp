@@ -5,7 +5,6 @@ fileGame::fileGame(bool silent) : game_manager(silent) {
 	if(!(stepsFile >> stepIndex >> keyInFile))
 		stepIndex = -1;
 	resFile.open("adv-world.result");
-
 }
 
 fileGame::~fileGame() {
@@ -52,7 +51,6 @@ void fileGame::run() {
 	Point::setColorChose(false);
 	gameLives.setColor(false);
 	genericRun();
-	//cls();
 }
 
 bool fileGame::handleKB() {

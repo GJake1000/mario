@@ -1,8 +1,9 @@
 #pragma once
+#include <vector>
+
 #include "Screen.h"
 #include "utils.h"
 #include "Coordinates.h"
-#include <vector>
 
 
 class Obstacle {

@@ -46,18 +46,22 @@ bool fileHandler::loadRiddles() {
 	std::ifstream file(riddleFile);
 	if (!file.is_open())
 		return false;
+
 	rids.clear();
 	Riddle rid;
-	std::string line;
-	while (std::getline(file, rid.question)) {
-		if (rid.question.empty())
+	std::string correct;
+
+	while (std::getline(file, rid.question())) {
+		if (rid.question().empty())
 			continue;
-		std::string correct;
+
 		std::getline(file, correct);
 		if (!correct.empty())
-			rid.correctOption = correct[0];
+			rid.correctOption() = correct[0];
+
 		rids.push_back(rid);
 	}
+
 	file.close();
 	return true;
 }

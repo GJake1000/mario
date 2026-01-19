@@ -83,25 +83,3 @@ int getLegendY()
 {
     return g_currentLegendY;
 }
-
-
-/*
-void Legend::setCurrentLegendY(int legendY)
-{
-    g_currentLegendY = legendY;
-}
-
-void Legend::gotoxyLegendSafe(int x, int y)
-{
-    if (g_currentLegendY >= 0) {
-        if (y >= g_currentLegendY)   // shift everything at/under legend
-            y += 2;
-    }
-    gotoxy(x, y);
-}
-
-int getLegendY()
-{
-    return g_currentLegendY;
-}
-*/

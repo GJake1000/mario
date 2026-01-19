@@ -1,7 +1,7 @@
 WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
 W     W                                                                        W
 WWWWWWW                WWWWWWWWWWWWWWWWWWWWW                        WW         W
-W                      WW      WWWWWWWWWWWWW             WWWW       WW         W
+W          *   **      WW      WWWWWWWWWWWWW             WWWW       WW         W
 W                      WW  WW  W         WWW             W     WW   WW         W
 W                      WW  WW  W  !   W  WWWWWWWWWWWWWWWWW   WWWW   WW         W
 W    WWWWWWWWWW            WW  W      W  DDD                WWWWW   WW         W
@@ -14,7 +14,7 @@ W  WWW   WWW              WW    WW   K  WWW   WWWWWW   WWWW    WW              W
 W  WWW   WWW       WWWW   WW    WW      WWW   WWWWWW   WWWW    WW              W
 W  WWW             WWWW   WW    WW      WWW            WWWW    WW   WWDDDDDDDDDW
 W  WWW                    WW    WW      WWWWWWWWW      WWWW    WW   WW         W
-WWWWWWWWWWWWWW     WWWW   WW    WWWW  WWWWW  ?  W      WWWW    WW   WW         W
+WWWWWWWWWWWWWW     WWWW   WW    WWWW**WWWWW  ?  W      WWWW    WW   WW         W
 WWWWWWWWWWWWWW     WWWW   WW            DDD  W  W   WWWWWWWWWWWWW   WW         W
 W        /  WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW  W  W   WWWWWWWWWWWWW  #WWWWWWWWWWWW
 W    WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW  W  W                  #WWWWW      W
@@ -26,4 +26,3 @@ DOOR 78 21 3 2 3 21 KEY RIDDLE
 DOOR 1 21 1 0 77 21
 DARK
 START 1 15 1 17
-OBS 36 16 2 1

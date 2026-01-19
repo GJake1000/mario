@@ -13,6 +13,7 @@
 #include "fileHandler.h"
 #include "Spring.h"
 
+
 class game_manager {
 protected:
 	enum { ESC = 27 };
@@ -129,29 +130,7 @@ private:
 	void resetSpringState();
 
 	int traverseSpringTowardWallEnd(const Spring& spr, int startX, int startY, Point* pToMove);
-
-
-	struct Riddle {
-		std::string question;
-		std::string options[4];
-		char correctOption =  ' ';
-
-		friend std::ostream& operator<<(std::ostream& os, const Riddle& riddle) {
-			std::string rid = riddle.question;
-			size_t pos = 0;
-			while ((pos = rid.find('|', pos)) != std::string::npos) {
-				rid.replace(pos, 1, "\n          ");
-				pos += 10; // Move past the newly inserted underscores
-			}
-			os << "\n\n\n          Riddle:\n";
-			os << "          " << rid << "\n\n";
-			for (int i = 0; i < 4; ++i) {
-				os << "          (" << (i + 1) << ") " << riddle.options[i] << "\n";
-			}
-			return os;
-		}
-	};
-
+	
 	std::vector<Riddle> riddles;
 	void loadRiddles(const char* fileName);
 }; 

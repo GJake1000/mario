@@ -1,12 +1,8 @@
 #pragma once
 
-//int g_currentLegendY;
-
 void gotoxy(int x, int y);
 void hideCursor();
 void cls();
-//void printOutput(const char* output);
-//void eraseOutput();
 
 
 enum class Color {
@@ -25,21 +21,8 @@ enum class Color {
 void setTextColor(Color color);
 void ErrorEncountered(int errNum);
 
-
 extern int g_currentLegendY;
 
 void setCurrentLegendY(int legendY);
 void gotoxyLegendSafe(int x, int y);
 int getLegendY();
-
-
-/*
-class Legend {
-    int g_currentLegendY = -1;
-    
-public:
-    void setCurrentLegendY(int legendY);
-    void gotoxyLegendSafe(int x, int y);
-    int getLegendY();
-};
-*/

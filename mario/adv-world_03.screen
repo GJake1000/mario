@@ -1,13 +1,13 @@
 WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
 W   W      K               W                                                   W
 W   WWWWWWWWWWWWWWWWWW     WWWWWWWWWWWWWWWWWWWW       WWWWWWWWWWWWWWWWWWWW     W
-W   W                W         W                      W      W    / W  K W     W
+W   W               WW         W                      W      W    / W  K W     W
 W   W     WWWWWWWWWWWWWWWWW    W    W  WWWWWWWWWWWWWWWW      W      W    W     W
 W   W     W                    W    W                        W      W    W     W
 W   W     W       WWWWWWWWWWWWWW    WWWWWWWWWWWWWWWWWWWWWWWW   W    W    W     W
 W   W     W       W                 W                      W   W    WDDDDW     W
 W   W     W       W                 W                      W   W    W          W
-W         W       W    WWWWWWWWWWWWWW WWWWWWWWWWWWWWWWWW   W   W    WWWWWWWWWWWW
+W     **  W       W    WWWWWWWWWWWWWW WWWWWWWWWWWWWWWWWW   W   W    WWWWWWWWWWWW
 W         W       W    W    W     W    W      W       W    W   W               W
 W         W       W    W    W     W    W WWWWWW       W  ? W   W        W      W
 W         W       W    W          W    W            WWWWWWWWWWWWWWWWWW  W      W
@@ -16,10 +16,10 @@ W   W     W       W    W          W    W       W          W     WWWWWWWWW      W
 W   W     W       W    W    W     W    WWWWWW  W          W       W            W
 W   W     W#      W    W    W     W         W  WWWWWW     W       WWWWWWWWWW   W
 W   W     W#      W         W     W         W             W                    W
-W   WWWWWWW#      WWWWWWWWWWW     WWWWW  WWWWWWWWWWWW     WWWWWWWWWWWWWW       W
+W   WWWWWWW#      WWWWWWWWWWW     WWWWW**WWWWWWWWWWWW     WWWWWWWWWWWWWW       W
 W         W#               W                     W                     W       W
-W     WWWWWWWWWWWWW        WWWWWWWWWWWWWW      WWWWWWWWWWWWWWWW        W       W
-W1                                                                  ###W      3W
+W   * WWWWWWWWWWWWW        WWWWWWWWWWWWWW      WWWWWWWWWWWWWWWW        W       W
+W1                                                                #####W      3W
 WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
 L
 DOOR 78 21 4 3 3 21 KEY KEY RIDDLE 

@@ -54,12 +54,3 @@ bool Obstacle::tryMove(int dx, int dy, Screen& screen) {
 	draw(screen);
 	return true;
 }
-/*
-//========================check if location is inside obstacle========================
-bool Obstacle::loc(int cx, int cy, int curRoom) const {
-	if (curRoom != roomNum)
-		return false;
-	return (cx >= x && cx < x + width && cy >= y && cy < y + height);
-}
-
-*/

@@ -46,6 +46,7 @@ void game_manager::resetDoorVars() {
 	playerAtDoorY = -1;
 	waitingRoom = -1;
 }
+
 //=========================game manager constructor=================================
 game_manager::game_manager(bool silent) : isSilent(silent), points{
 	// initial positions	
@@ -88,14 +89,15 @@ bool game_manager::printOutput(const char* output) const  {
 
 void game_manager::eraseOutput() const {
 	
-	//gotoxyLegendSafe(0, 23);
 	gotoxy(11, g_currentLegendY + 1);
 
 	std::cout << std::string(64, ' ');	//length of output area
 	gameLives.draw();
 	gameScore.draw(turn, gameLives.getLives());
 	
-	//Print row0 of Legend
+	gotoxy(0, g_currentLegendY);
+	std::cout << std::string(25, ' ');	//patch to fix an error
+
 	gotoxy(35, g_currentLegendY);
 	std::cout << "LIVE | SCORE";
 
@@ -396,7 +398,6 @@ bool game_manager::solveRiddle(Point& p) {
 				cls();
 				screen.draw(currentRoom);
 				drawObs();
-				//gameLives.draw(); maybe remove
 				eraseOutput();
 
 				if (screen.isDark(currentRoom) && !hasTorch())
@@ -417,14 +418,14 @@ void game_manager::loadRiddles(const char* fileName) {
 	Riddle riddle;
 	std::string line;
 
-	while (std::getline(file, riddle.question)) {
+	while (std::getline(file, riddle.question())) {
 		for (int i = 0; i < 4; ++i) {
-			std::getline(file, riddle.options[i]);
+			std::getline(file, riddle.option(i));
 		}
 		std::string correct;
 		std::getline(file, correct);
 		if (!correct.empty())
-			riddle.correctOption = correct[0];
+			riddle.correctOption() = correct[0];
 		riddles.push_back(riddle);
 	}
 	file.close();
@@ -437,7 +438,7 @@ char game_manager::printRiddle(int index) const {
 		cls();
 		std::cout << riddles[index];
 	}
-	return riddles[index].correctOption;
+	return riddles[index].correctOption();
 }
 
 //=========================handle key=================================
@@ -482,7 +483,7 @@ void game_manager::activateBomb(Screen& screen, int x, int y, int roomNum) {
 			int distX = col - x;
 			int distY = row - y;
 			int distanceSquared = distX * distX + distY * distY;
-			bool isOuterWall = (col == 0 || col == Screen::MAX_X || row == 0 || row == Screen::MAX_Y - 3);
+			bool isOuterWall = (col == 0 || col == Screen::MAX_X || row == 0 || row == Screen::MAX_Y - 2);
 			if (!isOuterWall && distanceSquared <= radius * radius) { // do not destroy outer walls
 				screen.setChar(col, row, roomNum, EMPTY_CELL);
 			}
@@ -528,15 +529,38 @@ bool game_manager::removeLife() {
 //===========================handle obstacle=================================
 void game_manager::handleObstacle(Point& p, int x, int y) {
 	Obstacle* obs = findObs(x, y);
+	if (!obs)
+		return;
 
-	Point& secPyr = (p.getPlayerChar() == points[0].getPlayerChar()) ? points[1] : points[0];
-	//bool secPush = obs->loc(secPyr.getNextX(), secPyr.getNextY(), currentRoom);
-	bool sameDir = (p.getDifX() == secPyr.getDifX() && p.getDifY() == secPyr.getDifY());
+	// Direction the current player is trying to move (push direction)
+	int dx = p.getDifX();
+	int dy = p.getDifY();
+	if (dx == 0 && dy == 0)
+		return;
 
-	//if (secPush && sameDir) { // both players are pushing the obstacle in the same direction
-	//	obs->tryMove(p.getDifX(), p.getDifY(), screen);
-	//}
+	// Find the other player
+	int otherIdx = (p.getPlayerChar() == points[0].getPlayerChar()) ? 1 : 0;
+	Point& otherP = points[otherIdx];
+
+	// Other player contributes only if:
+	// 1) moving in the same direction
+	// 2) their NEXT cell is also part of the SAME obstacle (i.e., they are pushing it too)
+	bool otherSameDir = (otherP.getDifX() == dx && otherP.getDifY() == dy);
+	bool otherAlsoTouchingThisObstacle =
+		obs->contains(Coord(otherP.getNextX(), otherP.getNextY()));
+
+	int force = 1 + ((otherSameDir && otherAlsoTouchingThisObstacle) ? 1 : 0);
+
+	// Your obstacle "weight" is its volume (number of cells)
+	if (force < obs->getVolume()) {
+		// optional: printOutput("Need both players to push!");
+		return;
+	}
+
+	// Try to move obstacle; movePlayer() will then allow player movement this turn
+	obs->tryMove(dx, dy, screen);
 }
+
 
 Obstacle* game_manager::findObs(int x, int y) {
 	for (auto& obs : obstacles)
@@ -555,7 +579,7 @@ void game_manager::obsDefFromMap(int roomNum)
 	for (int y = 0; y <= Screen::MAX_Y; y++) {
 		for (int x = 0; x <= Screen::MAX_X; x++) {
 
-			if ((vis[y][x]) || (screen.getInitialChar(x, y, roomNum) != OBSTACLE))	//if we already cheched or if it's not an obstacle	
+			if ((vis[y][x]) || (screen.charAt(x, y, roomNum) != OBSTACLE))	//if we already cheched or if it's not an obstacle	
 				continue;
 
 			std::vector<Coord> cells;
@@ -576,7 +600,9 @@ void game_manager::obsDefFromMap(int roomNum)
 					int nx = cur.x + dirX[k];
 					int ny = cur.y + dirY[k];
 
-					if (!(nx >= 0 && nx <= Screen::MAX_X && ny >= 0 && ny <= Screen::MAX_Y) || (vis[ny][nx]) || (screen.getInitialChar(nx, ny, roomNum) != OBSTACLE))
+					if (!(nx >= 0 && nx <= Screen::MAX_X && ny >= 0 && ny <= Screen::MAX_Y) ||
+						(vis[ny][nx]) ||
+						(screen.charAt(nx, ny, roomNum) != OBSTACLE))						
 						continue;//if out of bounds OR already visited OR not an obstacle cell, go to next
 
 					vis[ny][nx] = true;	//mark as visited
@@ -677,8 +703,7 @@ void game_manager::springDefFromMap(int roomNum)
 			else if (!left && !right && !up && !down) {
 				len = 1;
 				springs.push_back(Spring(x, y, len, roomNum, false));
-				//what if i add here also vertical spring of len 1?
-				//how do i do that :(
+
 			}
 		}
 	}
@@ -957,6 +982,7 @@ void game_manager::resetThingsAfterDoor(int doorNum, const DoorInfo* door, bool 
 	springs.clear();
 	springDefFromMap(currentRoom);
 	resetSpringState();
+	obsDefFromMap(currentRoom);
 
 
 	if (moveBoth) {
@@ -1003,7 +1029,7 @@ bool game_manager::checkCond(bool& needKey, bool& needRiddle, Point& p, const ch
 				textAppears = printOutput("Need to solve the riddle in order to enter!");
 				return false;
 			}
-			needRiddle = true;/////////////
+			needRiddle = true;
 			door->conditions.erase(door->conditions.begin() + i); // remove riddle condition after solving
 			--i;
 		}

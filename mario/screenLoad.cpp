@@ -119,13 +119,26 @@ void mapRow(roomData& room, const std::string& line, int rowIndex) {
 	}
 }
 
-bool isObs(const std::string& line, roomData& room) {
+bool isObs(const std::string& line, roomData& room) {////////////////////////////////////
 	if (line.substr(0, 3) == "OBS") {
 		std::stringstream ss(line);
 		std::string tmp;
 		obsData obs;
 		ss >> tmp >> obs.x >> obs.y >> obs.width >> obs.height;
+
 		room.obstaclePositions.push_back(obs);
+
+		// IMPORTANT: stamp obstacle cells into the actual maps
+		// so obstacles exist as '*' in map/initialMap (needed for collision + obsDefFromMap).
+		for (int yy = obs.y; yy < obs.y + obs.height; ++yy) {
+			for (int xx = obs.x; xx < obs.x + obs.width; ++xx) {
+				if (xx >= 0 && xx <= MAX_X && yy >= 0 && yy <= MAX_Y) {
+					room.map[yy][xx] = OBSTACLE;
+					room.initialMap[yy][xx] = OBSTACLE;
+				}
+			}
+		}
+
 		return true;
 	}
 	return false;
@@ -166,7 +179,7 @@ bool loadRoom(const std::string& fileName, roomData& room) {
 		std::cerr << "Error: Could not open file " << fileName << std::endl;
 		return false;
 	}
-	//std::cout << "SUCCESS!" << std::endl;
+	//std::cout << "SUCCESS!" << std::endl; //debug
 	resetRoom(room);
 	std::string line;
 	int rowIndex = 0;
