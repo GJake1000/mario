@@ -19,10 +19,10 @@ char menuManager::printMenu() {
 		std::cout << "(9) EXIT" << "\n";
 		char choice = _getch();
 
-		if (choice == '1' || choice == '9' || choice == '2') {
+		if (choice == START_NO_COLOR || choice == START_COLOR || choice == EXIT) {
 			return choice;
 		}
-		else if (choice == '8') {
+		else if (choice == INSTRUCTIONS) {
 			printInstructions();
 		}
 		else {

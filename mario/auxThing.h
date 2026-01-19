@@ -34,3 +34,7 @@ constexpr int HEB_MEM_SOFIT  = 1501; // ם
 
 constexpr int HEB_YOD        = 1497; // י 
 
+static constexpr char START_NO_COLOR = '1';
+static constexpr char START_COLOR    = '2';
+static constexpr char INSTRUCTIONS   = '8';
+static constexpr char EXIT           = '9';
