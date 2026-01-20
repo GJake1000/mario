@@ -1,0 +1,569 @@
+===========================================
+STEPS
+
+31 W
+37 D
+44 W
+47 D
+53 W
+62 D
+77 X
+84 W
+85 D
+89 A
+94 W
+98 A
+101 A
+109 X
+119 A
+124 X
+131 A
+136 X
+145 D
+146 J
+175 K
+187 L
+225 W
+229 D
+230 U
+255 D
+269 U
+293 I
+300 J
+308 M
+312 L
+317 M
+329 I
+335 J
+349 M
+354 I
+362 J
+372 L
+383 I
+388 J
+395 I
+398 L
+403 M
+410 L
+414 M
+422 J
+456 W
+458 D
+467 X
+474 D
+500 W
+503 D
+509 W
+516 D
+519 W
+527 A
+568 K
+571 U
+575 K
+591 I
+596 L
+603 M
+609 L
+613 M
+616 L
+642 I
+647 L
+655 I
+659 J
+671 I
+678 J
+682 M
+690 J
+697 I
+700 J
+707 I
+714 J
+722 L
+733 M
+741 L
+747 M
+751 L
+756 I
+765 L
+767 M
+773 M
+779 L
+780 D
+796 M
+797 X
+818 J
+822 I
+824 L
+825 2
+835 A
+851 D
+867 J
+886 N
+909 J
+918 H
+923 N
+931 H
+944 M
+967 H
+973 J
+979 I
+987 J
+1001 4
+1001 L
+1020 M
+1028 L
+1051 A
+1062 D
+1074 J
+1088 L
+1105 J
+1117 L
+1125 J
+1135 L
+1145 J
+1154 L
+1194 W
+1201 D
+1207 A
+1216 X
+1219 L
+1234 J
+1241 M
+1257 I
+1272 M
+1279 W
+1295 A
+1303 W
+1316 W
+1317 A
+1321 W
+1327 A
+1330 X
+1334 A
+1343 X
+1345 A
+1348 W
+1357 D
+1374 X
+1382 W
+1386 A
+1404 X
+1414 D
+1420 W
+1428 D
+1433 X
+1443 A
+1445 X
+1452 D
+1467 D
+1471 X
+1486 L
+1502 M
+1515 D
+1516 L
+1526 W
+1527 I
+1531 L
+1532 D
+1539 M
+1540 X
+1544 L
+1545 A
+1556 D
+1557 I
+1562 L
+1574 W
+1579 D
+1591 X
+1592 L
+1604 D
+1605 L
+1614 M
+1615 X
+1620 L
+1635 W
+1637 L
+1648 D
+1656 W
+1657 I
+1671 D
+1672 2
+1710 X
+1717 D
+1736 W
+1743 D
+1751 W
+1753 D
+1765 X
+1774 A
+1787 D
+1794 E
+1796 A
+1810 W
+1816 A
+1824 X
+1825 A
+1833 X
+1847 A
+1867 W
+1874 A
+1880 X
+1884 A
+1897 D
+1899 W
+1902 D
+1906 D
+1908 W
+1910 A
+1918 W
+1921 D
+1922 A
+1932 X
+1934 A
+1941 W
+1942 A
+1951 D
+1958 A
+1965 W
+1971 D
+1973 W
+1996 J
+2009 J
+2015 M
+2018 I
+2019 J
+2028 I
+2030 J
+2042 K
+2045 J
+2053 M
+2056 J
+2058 I
+2065 J
+2069 M
+2072 J
+2074 I
+2085 M
+2088 J
+2090 I
+2106 M
+2110 I
+2114 I
+2117 J
+2124 K
+2127 J
+2135 K
+2150 M
+2161 I
+2165 J
+2173 I
+2182 L
+2184 I
+2196 A
+2198 W
+2202 D
+2215 X
+2217 A
+2225 D
+2227 W
+2228 A
+2251 L
+2258 I
+2259 J
+2270 L
+2273 I
+2274 J
+2308 W
+2314 D
+2322 X
+2330 A
+2332 X
+2340 A
+2347 W
+2348 E
+2357 A
+2362 X
+2374 W
+2379 D
+2386 W
+2389 D
+2396 X
+2402 D
+2408 W
+2418 D
+2422 W
+2428 A
+2438 X
+2441 A
+2442 W
+2444 D
+2450 D
+2456 X
+2463 L
+2471 M
+2479 A
+2480 L
+2483 M
+2484 X
+2497 J
+2501 M
+2507 L
+2509 M
+2520 D
+2523 X
+2532 D
+2533 L
+2541 W
+2542 I
+2544 D
+2545 L
+2548 M
+2549 X
+2557 L
+2558 D
+2581 I
+2582 W
+2589 D
+2590 L
+2605 W
+2607 D
+2619 X
+2620 M
+2661 L
+2666 M
+2681 D
+2696 W
+2703 D
+2707 A
+2709 W
+2718 A
+2724 W
+2742 D
+2756 W
+2761 A
+2765 W
+2772 A
+2785 D
+2802 X
+2808 A
+2810 X
+2815 D
+2821 X
+2826 A
+2839 X
+2859 J
+2862 M
+2868 L
+2895 D
+2901 X
+2908 I
+2913 J
+2931 L
+2942 I
+2951 D
+2973 W
+2975 A
+2979 W
+2990 A
+2991 W
+3003 J
+3010 I
+3018 L
+3021 I
+3028 J
+3030 I
+3036 L
+3038 I
+3045 J
+3047 I
+3053 L
+3055 I
+3056 J
+3066 L
+3069 I
+3077 J
+3078 I
+3087 L
+3107 M
+3111 1
+3124 J
+3132 L
+3153 L
+3167 X
+3169 A
+3170 X
+3175 A
+3183 W
+3189 A
+3195 X
+3200 A
+3205 W
+3213 D
+3225 W
+3229 D
+3239 W
+3246 D
+3254 X
+3259 A
+3262 X
+3269 D
+3290 X
+3295 D
+3300 W
+3303 X
+3312 D
+3313 W
+3315 W
+3321 D
+3328 W
+3330 D
+3338 W
+3344 A
+3373 L
+3376 I
+3383 J
+3405 M
+3417 L
+3421 M
+3431 M
+3440 J
+3443 M
+3448 L
+3451 M
+3458 L
+3460 J
+3461 H
+3463 M
+3467 L
+3472 J
+3487 I
+3493 J
+3497 M
+3505 J
+3512 I
+3520 L
+3528 I
+3532 L
+3544 I
+3550 L
+3558 M
+3563 J
+3567 M
+3582 I
+3587 L
+3599 I
+3603 L
+3629 M
+3638 J
+3645 I
+3653 L
+3657 M
+3688 E
+3694 W
+3707 J
+3719 L
+3724 I
+3726 J
+3735 M
+3741 O
+3747 M
+3750 J
+3758 I
+3765 L
+3769 M
+3783 X
+3785 W
+3794 D
+3801 X
+3814 L
+3821 I
+3824 J
+3832 L
+3837 J
+3838 I
+3846 J
+3872 M
+3878 J
+3890 M
+3900 J
+3902 M
+3909 L
+3933 M
+3937 L
+3942 I
+3948 L
+3950 M
+3967 L
+3968 D
+3974 W
+3975 I
+3977 D
+3978 L
+3988 M
+3989 X
+4011 W
+4012 I
+4014 J
+4015 D
+4017 L
+4018 W
+4020 A
+4021 M
+4023 X
+4025 L
+4026 W
+4039 
+
+
+===================================================
+RESAULTS
+
+86: picked up key
+400: switch turned on
+721: picked up torch
+825: riddle answerd: 2 result: correct
+846: switch turned on
+848: switch turned on
+854: switch turned off
+856: switch turned off
+974: switch turned on
+1001: riddle answerd: 4 result: correct
+1029: switch turned off
+1031: switch turned on
+1062: switch turned off
+1085: switch turned on
+1087: switch turned on
+1089: switch turned off
+1091: switch turned off
+1116: switch turned on
+1118: switch turned off
+1132: switch turned on
+1134: switch turned on
+1136: switch turned off
+1138: switch turned off
+1152: switch turned on
+1154: switch turned on
+1156: switch turned off
+1167: both players moved to room1
+1207: switch turned on
+1243: both players moved to room0
+1378: picked up bomb
+1487: both players moved to room1
+1672: riddle answerd: 2 result: correct
+1794: bomb set at: 1 x: 77 y: 17
+1797: picked up bomb
+1799: bomb exploaded at 1
+1799: player hit by bomb
+1799: lost life
+2348: bomb set at: 1 x: 30 y: 16
+2353: bomb exploaded at 1
+2447: picked up key
+2629: both players moved to room2
+2785: picked up key
+3111: riddle answerd: 1 result: correct
+3345: switch turned on
+3767: picked up key
+3787: picked up key
+3798: switch turned off
+4000: both players moved to room3
+

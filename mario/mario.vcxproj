@@ -165,6 +165,9 @@
     <Text Include="adv-world_01.screen" />
     <Text Include="adv-world_02.screen" />
     <Text Include="bonus.txt" />
+    <Text Include="Exe1_steps_and_res.txt" />
+    <Text Include="Exe2_steps_and_res.txt" />
+    <Text Include="Exe3_steps_and_res.txt" />
     <Text Include="global.txt" />
     <Text Include="readme.txt" />
     <Text Include="riddles.txt" />

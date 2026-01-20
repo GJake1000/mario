@@ -380,6 +380,7 @@ bool game_manager::handleAnswer(char correct, char ans, Point& p) {
 			std::cout << "\n\n\n\n\n\n          CORRECT!";
 			Sleep(2000);
 		}
+		currRidIdx++; 
 		gameScore.add(fileH.getRidScore());
 		return true;
 
@@ -400,7 +401,7 @@ bool game_manager::solveRiddle(Point& p) {
 	if (riddles.size() == 0)
 		return true;          // no riddles 
 	char correct = printRiddle(currRidIdx % riddles.size());
-	currRidIdx++;
+	
 	char ans = 0;
 	while (true) {
 		if (input(ans)) {

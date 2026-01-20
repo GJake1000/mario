@@ -1,0 +1,165 @@
+===========================================
+STEPS
+
+12 D
+17 X
+33 K
+49 L
+72 W
+75 A
+79 W
+83 D
+88 W
+92 D
+98 W
+105 D
+121 X
+126 W
+129 A
+143 X
+147 A
+151 X
+155 A
+159 X
+168 D
+169 K
+188 W
+201 A
+209 W
+211 D
+216 X
+220 A
+223 X
+230 D
+237 X
+246 U
+247 W
+250 K
+251 D
+284 I
+286 J
+287 L
+296 I
+298 J
+299 L
+310 M
+317 J
+359 W
+361 D
+369 X
+379 D
+386 W
+388 A
+392 D
+397 X
+404 W
+411 D
+415 X
+425 I
+431 L
+435 M
+443 J
+446 M
+452 L
+456 M
+460 L
+466 D
+467 L
+485 I
+486 W
+489 L
+490 D
+499 I
+500 W
+503 A
+504 J
+516 W
+517 I
+527 J
+528 X
+532 A
+541 W
+547 A
+551 X
+553 M
+563 W
+564 J
+568 I
+569 D
+586 D
+596 L
+612 M
+620 L
+655 I
+663 O
+675 J
+697 M
+709 J
+712 I
+719 L
+722 I
+723 J
+731 I
+733 J
+741 I
+749 J
+758 L
+769 M
+778 L
+783 M
+789 L
+796 I
+808 X
+809 L
+820 W
+826 D
+833 W
+835 D
+840 X
+843 M
+846 A
+856 J
+862 M
+863 X
+869 L
+870 D
+884 M
+885 X
+895 J
+908 M
+912 I
+913 J
+921 I
+922 L
+929 3
+940 A
+943 D
+952 J
+957 L
+963 2
+974 J
+987 M
+992 J
+994 I
+1003 J
+1019 3
+
+
+===========================================
+RESAULTS
+
+123: picked up key
+213: switch turned on
+622: picked up bomb
+663: bomb set at: 0 x: 78 y: 1
+668: bomb exploaded at 0
+668: player hit by bomb
+668: lost life
+756: picked up torch
+929: riddle answerd: 3 result: wrong
+929: lost life
+963: riddle answerd: 2 result: correct
+993: switch turned on
+1019: riddle answerd: 3 result: wrong
+1019: lost life
+1020: lost all lives

@@ -126,6 +126,9 @@
     <Text Include="bonus.txt">
       <Filter>Source Files\Others</Filter>
     </Text>
+    <Text Include="Exe1_steps_and_res.txt" />
+    <Text Include="Exe2_steps_and_res.txt" />
+    <Text Include="Exe3_steps_and_res.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include="adv-world_03.screen" />
